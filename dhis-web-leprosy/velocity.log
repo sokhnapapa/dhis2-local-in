@@ -1,0 +1,117 @@
+2009-06-10 16:48:03,060 - Trying to use logger class org.apache.velocity.runtime.log.Log4JLogChute
+2009-06-10 16:48:03,060 - Using logger class org.apache.velocity.runtime.log.Log4JLogChute
+2009-06-10 16:48:03,063 - Default ResourceManager initializing. (class org.apache.velocity.runtime.resource.ResourceManagerImpl)
+2009-06-10 16:48:03,066 - ResourceLoader instantiated: org.apache.velocity.runtime.resource.loader.FileResourceLoader
+2009-06-10 16:48:03,066 - Do unicode file recognition:  false
+2009-06-10 16:48:03,066 - FileResourceLoader : adding path 'D:\Projects\dhis\trunk\local\in\dhis-web-leprosy\target\work\webapp'
+2009-06-10 16:48:03,067 - ResourceLoader instantiated: com.opensymphony.webwork.views.velocity.WebWorkResourceLoader
+2009-06-10 16:48:03,072 - ResourceCache: initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl)
+2009-06-10 16:48:03,073 - Loaded System Directive: org.apache.velocity.runtime.directive.Literal
+2009-06-10 16:48:03,074 - Loaded System Directive: org.apache.velocity.runtime.directive.Macro
+2009-06-10 16:48:03,076 - Loaded System Directive: org.apache.velocity.runtime.directive.Parse
+2009-06-10 16:48:03,077 - Loaded System Directive: org.apache.velocity.runtime.directive.Include
+2009-06-10 16:48:03,078 - Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ActionDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.BeanDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.CheckBoxDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.CheckBoxListDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ComboBoxDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ComponentDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DateDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DatePickerDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DebugDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DivDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DoubleSelectDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.FileDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.FormDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.HeadDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.HiddenDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.AnchorDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.I18nDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.IncludeDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.LabelDirective
+2009-06-10 16:48:03,078 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.PanelDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ParamDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.PasswordDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.PushDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.PropertyDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.RadioDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.SelectDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.SetDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.SubmitDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ResetDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TabbedPanelDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TextAreaDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TextDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TextFieldDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TokenDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TreeDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TreeNodeDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.URLDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.WebTableDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ActionErrorDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ActionMessageDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.FieldErrorDirective
+2009-06-10 16:48:03,079 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.OptionTransferSelectDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.UpDownSelectDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ActionDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.BeanDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.CheckBoxDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.CheckBoxListDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ComboBoxDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ComponentDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DateDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DatePickerDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DebugDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DivDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.DoubleSelectDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.FileDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.FormDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.HeadDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.HiddenDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.AnchorDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.I18nDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.IncludeDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.LabelDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.PanelDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ParamDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.PasswordDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.PushDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.PropertyDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.RadioDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.SelectDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.SetDirective
+2009-06-10 16:48:03,080 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.SubmitDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ResetDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TabbedPanelDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TextAreaDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TextDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TextFieldDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TokenDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TreeDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.TreeNodeDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.URLDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.WebTableDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ActionErrorDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.ActionMessageDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.FieldErrorDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.OptionTransferSelectDirective
+2009-06-10 16:48:03,081 - Loaded User Directive: com.opensymphony.webwork.views.velocity.components.UpDownSelectDirective
+2009-06-10 16:48:03,106 - Created '20' parsers.
+2009-06-10 16:48:03,112 - Velocimacro : "velocimacro.library" is not set.  Trying default library: VM_global_library.vm
+2009-06-10 16:48:03,113 - Velocimacro : Default library not found.
+2009-06-10 16:48:03,113 - Velocimacro : allowInline = true : VMs can be defined inline in templates
+2009-06-10 16:48:03,113 - Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
+2009-06-10 16:48:03,113 - Velocimacro : allowInlineLocal = false : VMs defined inline will be global in scope if allowed.
+2009-06-10 16:48:03,113 - Velocimacro : autoload off : VM system will not automatically reload global library macros
+2009-06-10 16:48:03,138 - ResourceManager : found /main.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+2009-06-10 16:48:03,225 - ResourceManager : found settings.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+2009-06-10 16:48:03,237 - Velocimacro : added #objectList(  objectName objects ) : source = macros.vm
+2009-06-10 16:48:03,237 - Velocimacro : added #alternate(  mark ) : source = macros.vm
+2009-06-10 16:48:03,238 - Velocimacro : added #formatBool(  bool ) : source = macros.vm
+2009-06-10 16:48:03,240 - Velocimacro : added #formatAggregationOperator(  operator ) : source = macros.vm
+2009-06-10 16:48:03,240 - Velocimacro : added #formatType(  type ) : source = macros.vm
+2009-06-10 16:48:03,241 - ResourceManager : found macros.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+2009-06-10 16:48:03,252 - ResourceManager : found /dhis-web-leprosy/menu.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+2009-06-10 16:48:03,253 - ResourceManager : found /dhis-web-leprosy/homepage.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
+2009-06-10 16:48:08,371 - ResourceManager : found /dhis-web-leprosy/patientRegister.vm with loader org.apache.velocity.runtime.resource.loader.FileResourceLoader
