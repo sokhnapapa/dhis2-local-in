@@ -31,7 +31,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.target.DeTargetMapping;
 import org.hisp.dhis.target.DeTargetMappingService;
@@ -61,10 +61,10 @@ public class SaveMappingAction
         this.deTargetMappingService = deTargetMappingService;
     }
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryOptionComboService;
 
     public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    		DataElementCategoryService dataElementCategoryOptionComboService )
     {
         this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
     }
