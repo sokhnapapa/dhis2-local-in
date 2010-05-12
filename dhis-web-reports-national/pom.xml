@@ -39,10 +39,12 @@
       <artifactId>dhis-in-service-configuration</artifactId>
       <version>${version}</version>
     </dependency>
+	<!--
     <dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-jdbc</artifactId>
     </dependency>
+	-->
 	<dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-patient</artifactId>
@@ -70,10 +72,12 @@
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-datamart-default</artifactId>
     </dependency>	
+	<!--
 	<dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-user-hibernate</artifactId>
     </dependency>
+	-->
 	<dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-aggregationengine-default</artifactId>
@@ -128,11 +132,12 @@
     </dependency>
     
     <!-- Other -->
-    
+    <!--
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring</artifactId>
     </dependency>
+	-->
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>

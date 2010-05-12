@@ -26,10 +26,12 @@
       <artifactId>dhis-in-api</artifactId>
 	  <version>${version}</version>
     </dependency>	
+	<!--
     <dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-jdbc</artifactId>
     </dependency>
+	-->
     <dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-core</artifactId>
