@@ -2,7 +2,7 @@ package org.hisp.dhis.linelisting;
 
 
 import java.io.Serializable;
-import org.hisp.dhis.common.MetaObject;
+import org.hisp.dhis.common.IdentifiableObject;
 
 /*
  * Copyright (c) 2004-2009, University of Oslo
@@ -31,7 +31,9 @@ import org.hisp.dhis.common.MetaObject;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-public class LineListElementOptions implements Serializable, MetaObject
+public class LineListElementOptions
+    extends IdentifiableObject
+    implements Serializable
 {
 
     public int getId()

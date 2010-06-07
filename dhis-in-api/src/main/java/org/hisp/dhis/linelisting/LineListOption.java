@@ -29,10 +29,12 @@ package org.hisp.dhis.linelisting;
 
 import java.io.Serializable;
 
-import org.hisp.dhis.common.MetaObject;
+import org.hisp.dhis.common.IdentifiableObject;
 
 @SuppressWarnings("serial")
-public class LineListOption implements Serializable, MetaObject
+public class LineListOption 
+    extends IdentifiableObject
+    implements Serializable
 {
     /**
      * The unique identifier for this LineListing Option

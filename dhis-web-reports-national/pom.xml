@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.hisp.dhis</groupId>
     <artifactId>dhis-web</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.0.5-SNAPSHOT</version>
   </parent>
   
   <artifactId>dhis-web-reports-national</artifactId>
@@ -39,10 +39,6 @@
       <artifactId>dhis-in-service-configuration</artifactId>
       <version>${version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.hisp.dhis</groupId>
-      <artifactId>dhis-service-jdbc</artifactId>
-    </dependency>
   	<!--<dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-organisationunit</artifactId>
@@ -66,7 +62,7 @@
     </dependency>	
 	<dependency>
       <groupId>org.hisp.dhis</groupId>
-      <artifactId>dhis-service-user-hibernate</artifactId>
+      <artifactId>dhis-service-core</artifactId>
     </dependency>
 	<dependency>
       <groupId>org.hisp.dhis</groupId>
@@ -125,7 +121,7 @@
     
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring</artifactId>
+      <artifactId>spring-orm</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>

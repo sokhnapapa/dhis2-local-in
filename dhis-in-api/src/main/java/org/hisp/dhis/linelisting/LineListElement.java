@@ -31,10 +31,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hisp.dhis.common.MetaObject;
+import org.hisp.dhis.common.IdentifiableObject;
 
 @SuppressWarnings("serial")
-public class LineListElement implements Serializable, MetaObject
+public class LineListElement
+    extends IdentifiableObject
+    implements Serializable
 {
     public static final String TYPE_STRING = "string";
 

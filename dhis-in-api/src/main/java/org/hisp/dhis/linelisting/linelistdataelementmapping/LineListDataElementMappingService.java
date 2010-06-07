@@ -33,7 +33,7 @@ import java.util.Set;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.Operand;
+import org.hisp.dhis.dataelement.DataElementOperand;
 import org.hisp.dhis.linelisting.LineListElement;
 import org.hisp.dhis.linelisting.LineListGroup;
 import org.hisp.dhis.linelisting.LineListOption;
@@ -129,7 +129,7 @@ public interface LineListDataElementMappingService
      * @param expression The expression string.
      * @return A Set of Operands.
      */
-    Set<Operand> getOperandsInDataElementExpression( String dataElementExpression );
+    Set<DataElementOperand> getOperandsInDataElementExpression( String dataElementExpression );
     
     /**
      * Returns all operands included in an expression string. The operand is on

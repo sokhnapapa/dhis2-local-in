@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.Operand;
+import org.hisp.dhis.dataelement.DataElementOperand;
 import org.hisp.dhis.i18n.I18nService;
 import org.hisp.dhis.linelisting.LineListElement;
 import org.hisp.dhis.linelisting.LineListGroup;
@@ -135,7 +135,7 @@ public class DefaultLineListDataElementMappingService
         return null;
     }
 
-    public Set<Operand> getOperandsInDataElementExpression( String arg0 )
+    public Set<DataElementOperand> getOperandsInDataElementExpression( String arg0 )
     {
         // TODO Auto-generated method stub
         return null;
