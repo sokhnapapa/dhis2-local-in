@@ -28,7 +28,7 @@ import org.hisp.dhis.period.comparator.PeriodComparator;
 
 import com.opensymphony.xwork2.Action;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 import org.amplecode.quick.StatementManager;
 
 public class GenerateNullReporterResultAction

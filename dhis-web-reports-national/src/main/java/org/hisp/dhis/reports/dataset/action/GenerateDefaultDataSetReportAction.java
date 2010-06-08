@@ -39,10 +39,9 @@ import java.util.TreeMap;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategory;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementCategoryOption;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
 import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.datamart.DataMartStore;
@@ -187,7 +186,7 @@ public class GenerateDefaultDataSetReportAction
         this.dataElementOrderManager = dataElementOrderManager;
     }
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+   /* private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
 
     public void setDataElementCategoryOptionComboService(
         DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
@@ -200,7 +199,7 @@ public class GenerateDefaultDataSetReportAction
     public void setDataElementCategoryComboService( DataElementCategoryComboService dataElementCategoryComboService )
     {
         this.dataElementCategoryComboService = dataElementCategoryComboService;
-    }
+    }*/
 
     private DataElementCategoryService dataElementCategoryService;
 
@@ -336,8 +335,7 @@ public class GenerateDefaultDataSetReportAction
                 {
                     int colCount = 0;
 
-                    Collection<DataElementCategoryOptionCombo> optionCombos = dataElementCategoryOptionComboService
-                        .sortDataElementCategoryOptionCombos( catCombo );
+                    Collection<DataElementCategoryOptionCombo> optionCombos = dataElementCategoryService.sortOptionCombos( catCombo );
 
                     collectedDataElements.add( dataElement.getName() );
 
@@ -355,7 +353,7 @@ public class GenerateDefaultDataSetReportAction
                         String value;
                         DataValue dataValue;
 
-                        if ( dataElement.getType().equals( DataElement.TYPE_INT ) )
+                        if ( dataElement.getType().equals( DataElement.VALUE_TYPE_INT ) )
                         {
                             double aggregatedValue;
 
@@ -370,7 +368,7 @@ public class GenerateDefaultDataSetReportAction
                                 aggregatedValue = dataMartStore.getAggregatedValue( dataElement, optionCombo, period,
                                     orgUnit );
 
-                                value = (aggregatedValue != DataMartStore.NO_VALUES_REGISTERED) ? NumberUtils
+                                value = (aggregatedValue != -1) ? NumberUtils
                                     .formatDataValue( aggregatedValue ) : "";
                             }
                             else
@@ -469,7 +467,7 @@ public class GenerateDefaultDataSetReportAction
                     DataValue dataValue;
 
                     if ( dataElementService.getDataElement( reportElement.getElementId() ).getType().equals(
-                        DataElement.TYPE_INT ) )
+                        DataElement.VALUE_TYPE_INT ) )
                     {
                         double aggregatedValue;
 
@@ -487,7 +485,7 @@ public class GenerateDefaultDataSetReportAction
                                 .getDataElement( reportElement.getElementId() ), dataElements.iterator().next()
                                 .getCategoryCombo().getOptionCombos().iterator().next(), period, orgUnit );
 
-                            value = (aggregatedValue != DataMartStore.NO_VALUES_REGISTERED) ? NumberUtils
+                            value = (aggregatedValue != -1) ? NumberUtils
                                 .formatDataValue( aggregatedValue ) : "";
                         }
                     }
@@ -621,7 +619,7 @@ public class GenerateDefaultDataSetReportAction
 
         DataElementCategoryCombo catCombo = sampleDataElement.getCategoryCombo();
 
-        orderedCategories = dataElementCategoryComboService.getOrderCategories( catCombo );
+        orderedCategories = catCombo.getCategories();
 
         // ---------------------------------------------------------------------
         // Calculating the number of times each category is supposed to be
@@ -650,7 +648,7 @@ public class GenerateDefaultDataSetReportAction
 
         for ( DataElementCategory dec : orderedCategories )
         {
-            Collection<DataElementCategoryOption> options = dataElementCategoryService.getOrderedOptions( dec );
+            Collection<DataElementCategoryOption> options = dec.getCategoryOptions();
 
             Collection<DataElementCategoryOption> allOptions = new ArrayList<DataElementCategoryOption>();
 

@@ -45,6 +45,8 @@ import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.hisp.dhis.aggregation.AggregationService;
 import org.hisp.dhis.chart.Chart;
 import org.hisp.dhis.chart.ChartService;
+import org.hisp.dhis.dataelement.DataElement;
+import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.i18n.I18nFormat;
 import org.hisp.dhis.indicator.Indicator;
 import org.hisp.dhis.indicator.comparator.IndicatorNameComparator;
@@ -447,4 +449,11 @@ public class DefaultChartService
     {
         return chartService.getChartByTitle( name );
     }
+
+    @Override
+    public JFreeChart getJFreeChartHistory( DataElement dataElement, DataElementCategoryOptionCombo categoryOptionCombo, Period lastPeriod, OrganisationUnit organisationUnit, int historyLength, I18nFormat format )
+    {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
 }

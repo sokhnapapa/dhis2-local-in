@@ -3,7 +3,6 @@ package org.hisp.dhis.dbmanager.mysql;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -27,8 +26,7 @@ import org.hisp.dhis.period.comparator.PeriodComparator;
 import org.hisp.dhis.source.Source;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 import org.hisp.dhis.organisationunit.OrganisationUnitService;
 
 public class MySQLDataBaseManager

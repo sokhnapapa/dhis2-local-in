@@ -57,7 +57,7 @@ import org.hisp.dhis.config.ConfigurationService;
 import org.hisp.dhis.config.Configuration_IN;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.datavalue.DataValue;
 import org.hisp.dhis.datavalue.DataValueService;
@@ -79,7 +79,7 @@ import org.hisp.dhis.period.YearlyPeriodType;
 
 import com.opensymphony.xwork2.Action;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 public class GenerateTabularAnalysisResultAction
     implements Action
@@ -118,12 +118,11 @@ public class GenerateTabularAnalysisResultAction
         this.organisationUnitService = organisationUnitService;
     }
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     private DataElementService dataElementService;
@@ -525,7 +524,7 @@ public class GenerateTabularAnalysisResultAction
                     
                     if( deSelection.equalsIgnoreCase( "optioncombo" ) )
                     {
-                        selDecoc = dataElementCategoryOptionComboService.getDataElementCategoryOptionCombo( Integer.parseInt( partsOfService[2] ) );
+                        selDecoc = dataElementCategoryService.getDataElementCategoryOptionCombo( Integer.parseInt( partsOfService[2] ) );
                         if( rowCount == 1 )
                         {
                             if( aggPeriodCB == null )
@@ -596,7 +595,7 @@ public class GenerateTabularAnalysisResultAction
                     {
                         if( deSelection.equalsIgnoreCase( "optioncombo" ) )
                         {
-                            if( selDataElement.getType().equalsIgnoreCase( DataElement.TYPE_INT ) )
+                            if( selDataElement.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_INT ) )
                             {
                                 tempAggVal = aggregationService.getAggregatedDataValue( selDataElement, selDecoc, sDate, eDate, ou );
                                 if(tempAggVal == -1 ) tempAggVal = 0.0;
@@ -632,7 +631,7 @@ public class GenerateTabularAnalysisResultAction
                             List<DataElementCategoryOptionCombo> optionCombos = new ArrayList<DataElementCategoryOptionCombo>(
                                 selDataElement.getCategoryCombo().getOptionCombos() );
 
-                            if( selDataElement.getType().equalsIgnoreCase( DataElement.TYPE_INT ) )
+                            if( selDataElement.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_INT ) )
                             {
                                 Iterator<DataElementCategoryOptionCombo> optionComboIterator = optionCombos.iterator();
                                 while ( optionComboIterator.hasNext() )
@@ -690,7 +689,7 @@ public class GenerateTabularAnalysisResultAction
                         }
                         else
                         {
-                            if( selDataElement.getType().equalsIgnoreCase( DataElement.TYPE_INT ) )
+                            if( selDataElement.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_INT ) )
                             {
                                 sheet0.addCell( new Number( colCount, headerRow+1+rowCount, (int) pwdvAggValue, getCellFormat2() ) );
                             }
@@ -735,7 +734,7 @@ public class GenerateTabularAnalysisResultAction
                     }
                     else if( flag == 2 )
                     {
-                        if( selDataElement.getType().equalsIgnoreCase( DataElement.TYPE_INT ) )
+                        if( selDataElement.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_INT ) )
                         {
                             sheet0.addCell( new Number( colCount, headerRow+1+rowCount, (int)dvAggValue, getCellFormat2() ) );
                         }

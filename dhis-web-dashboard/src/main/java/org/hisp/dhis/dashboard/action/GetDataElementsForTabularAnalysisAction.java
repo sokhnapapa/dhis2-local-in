@@ -9,7 +9,7 @@ import java.util.List;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementGroup;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.options.displayproperty.DisplayPropertyHandler;
@@ -31,12 +31,11 @@ public class GetDataElementsForTabularAnalysisAction extends ActionSupport
         this.dataElementService = dataElementService;
     }
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     // -------------------------------------------------------------------------
@@ -132,7 +131,7 @@ public class GetDataElementsForTabularAnalysisAction extends ActionSupport
         while ( alldeIterator.hasNext() )
         {
             DataElement de1 = alldeIterator.next();
-            if ( de1.getType().equals( DataElement.TYPE_BOOL ) )
+            if ( de1.getType().equals( DataElement.VALUE_TYPE_BOOL ) )
             {
                 alldeIterator.remove();
             }
@@ -160,8 +159,7 @@ public class GetDataElementsForTabularAnalysisAction extends ActionSupport
                     {
                         DataElementCategoryOptionCombo decoc = optionComboIterator.next();
                         optionComboIds.add( de.getId() + ":" + decoc.getId() );
-                        optionComboNames.add( de.getName() + ":" + dataElementCategoryOptionComboService.getOptionNames( decoc ) );
-
+                        optionComboNames.add( de.getName() + ":" + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName() );
                     }
 
                 }

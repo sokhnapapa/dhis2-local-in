@@ -14,7 +14,7 @@ import org.hisp.dhis.aggregation.AggregationService;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOption;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataset.DataSet;
 import org.hisp.dhis.dataset.DataSetService;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
@@ -59,12 +59,11 @@ public class GenerateTopTenAnalysisDataAction
         this.aggregationService = aggregationService;
     }
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     // -------------------------------------------------------------------------
@@ -235,7 +234,7 @@ public class GenerateTopTenAnalysisDataAction
         while ( optionComboIterator.hasNext() )
         {
             int optionComboId = Integer.parseInt( (String) optionComboIterator.next() );
-            DataElementCategoryOptionCombo dcoc = dataElementCategoryOptionComboService
+            DataElementCategoryOptionCombo dcoc = dataElementCategoryService
                 .getDataElementCategoryOptionCombo( optionComboId );
 
             StringBuffer optionComboName = new StringBuffer();

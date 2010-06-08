@@ -55,7 +55,7 @@ import org.hisp.dhis.dashboard.util.SurveyData;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementGroup;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.datavalue.DataValue;
@@ -89,12 +89,11 @@ public class GenerateChartDataAction
     // Dependencies
     // -------------------------------------------------------------------------
     
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     private OrganisationUnitService organisationUnitService;
@@ -534,11 +533,11 @@ public class GenerateChartDataAction
                     // selectedServiceList.add( dataElement );
                     li2.add( dataElement );
                     int optionComboId = Integer.parseInt( partsOfServiceId[1] );
-                    DataElementCategoryOptionCombo decoc = dataElementCategoryOptionComboService
+                    DataElementCategoryOptionCombo decoc = dataElementCategoryService
                         .getDataElementCategoryOptionCombo( optionComboId );
                     selectedOptionComboList.add( decoc );
                     chartTitle += dataElement.getName() + " : "
-                        + dataElementCategoryOptionComboService.getOptionNames( decoc ) + ", ";
+                        + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName() + ", ";
                 }
             }
             else
@@ -780,20 +779,20 @@ public class GenerateChartDataAction
                      * if ( dElement.getAlternativeName() != null ) {
                      * series1[countForServiceList] =
                      * dElement.getAlternativeName() + " : " +
-                     * dataElementCategoryOptionComboService.getOptionNames(
+                     * dataElementCategoryService.getOptionNames(
                      * decoc ); series2[countForServiceList] =
                      * dElement.getAlternativeName() + " : " +
-                     * dataElementCategoryOptionComboService.getOptionNames(
+                     * dataElementCategoryService.getOptionNames(
                      * decoc ) + " (Target)"; } else
                      */
                     {
                         series1[countForServiceList] = dElement.getName() + " : "
-                            + dataElementCategoryOptionComboService.getOptionNames( decoc );
+                            + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName();
                         series2[countForServiceList] = dElement.getName() + " : "
-                            + dataElementCategoryOptionComboService.getOptionNames( decoc ) + " (Target)";
+                            + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName() + " (Target)";
                     }
                     yseriesList.add( dElement.getName() + " : "
-                        + dataElementCategoryOptionComboService.getOptionNames( decoc ) );
+                        + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName() );
                 }
                 else
                 {
@@ -1232,20 +1231,20 @@ public class GenerateChartDataAction
                      * if ( dElement.getAlternativeName() != null ) {
                      * series1[countForServiceList] =
                      * dElement.getAlternativeName() + " : " +
-                     * dataElementCategoryOptionComboService.getOptionNames(
+                     * dataElementCategoryService.getOptionNames(
                      * decoc ); series2[countForServiceList] =
                      * dElement.getAlternativeName() + " : " +
-                     * dataElementCategoryOptionComboService.getOptionNames(
+                     * dataElementCategoryService.getOptionNames(
                      * decoc ) + " (Target)"; } else
                      */
                     {
                         series1[countForServiceList] = dElement.getName() + " : "
-                            + dataElementCategoryOptionComboService.getOptionNames( decoc );
+                            + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName();
                         series2[countForServiceList] = dElement.getName() + " : "
-                            + dataElementCategoryOptionComboService.getOptionNames( decoc ) + " (Target)";
+                            + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName() + " (Target)";
                     }
                     yseriesList.add( dElement.getName() + " : "
-                        + dataElementCategoryOptionComboService.getOptionNames( decoc ) );
+                        + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName() );
                 }
                 else
                 {

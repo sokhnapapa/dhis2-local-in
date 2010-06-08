@@ -34,7 +34,7 @@ import java.util.List;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.dataset.DataSet;
@@ -49,7 +49,7 @@ import org.hisp.dhis.reporttable.RelativePeriods;
 import org.hisp.dhis.reporttable.ReportParams;
 import org.hisp.dhis.reporttable.ReportTable;
 import org.hisp.dhis.reporttable.ReportTableService;
-import org.hisp.dhis.system.util.CollectionConversionUtils;
+import org.hisp.dhis.system.util.ConversionUtils;
 
 import com.opensymphony.xwork2.Action;
 
@@ -78,13 +78,13 @@ public class SaveTableAction
         this.dataElementService = dataElementService;
     }
     
-    private DataElementCategoryComboService categoryComboService;
+    private DataElementCategoryService categoryService;
 
-    public void setCategoryComboService( DataElementCategoryComboService categoryComboService )
+    public void setCategoryService( DataElementCategoryService categoryService )
     {
-        this.categoryComboService = categoryComboService;
-    }    
-    
+        this.categoryService = categoryService;
+    }
+
     private IndicatorService indicatorService;
 
     public void setIndicatorService( IndicatorService indicatorService )
@@ -348,23 +348,23 @@ public class SaveTableAction
     private ReportTable getReportTable()
         throws Exception
     {
-        List<DataElement> dataElements = new CollectionConversionUtils<DataElement>().getList( 
+        List<DataElement> dataElements = new ConversionUtils().getList(
             dataElementService.getDataElements( getIntegerCollection( selectedDataElements ) ) );
         
-        List<Indicator> indicators = new CollectionConversionUtils<Indicator>().getList( 
+        List<Indicator> indicators = new ConversionUtils().getList(
             indicatorService.getIndicators( getIntegerCollection( selectedIndicators ) ) );
         
-        List<DataSet> dataSets = new CollectionConversionUtils<DataSet>().getList( 
+        List<DataSet> dataSets = new ConversionUtils().getList(
             dataSetService.getDataSets( getIntegerCollection( selectedDataSets ) ) );
         
-        List<Period> periods = new CollectionConversionUtils<Period>().getList( 
+        List<Period> periods = new ConversionUtils().getList( 
             periodService.getPeriods( getIntegerCollection( selectedPeriods ) ) );
         
-        List<OrganisationUnit> organisationUnits = new CollectionConversionUtils<OrganisationUnit>().getList( 
+        List<OrganisationUnit> organisationUnits = new ConversionUtils().getList(
             organisationUnitService.getOrganisationUnits( getIntegerCollection( selectedOrganisationUnits ) ) );
 
         DataElementCategoryCombo categoryCombo = ( categoryComboId != null ) ? 
-            categoryComboService.getDataElementCategoryCombo( categoryComboId ) : null;
+            categoryService.getDataElementCategoryCombo( categoryComboId ) : null;
         
         List<DataElementCategoryOptionCombo> categoryOptionCombos = ( categoryCombo != null ) ? 
             new ArrayList<DataElementCategoryOptionCombo>( categoryCombo.getOptionCombos() ) : new ArrayList<DataElementCategoryOptionCombo>();
@@ -395,10 +395,9 @@ public class SaveTableAction
         
         if ( tableId == null )
         {
-            reportTable = new ReportTable( tableName, mode, regression,
-                dataElements, indicators, dataSets, categoryOptionCombos, periods, null, organisationUnits, null,
-                doIndicators, doCategoryOptionCombos, doPeriods, doOrganisationUnits, relatives, reportParams, 
-                null, null );
+            reportTable = new ReportTable( tableName, mode, regression, dataElements, indicators,
+                dataSets, periods, null, organisationUnits, null, null, doIndicators,
+                doPeriods, doOrganisationUnits, relatives, reportParams, null, null );
         }
         else
         {
@@ -413,7 +412,7 @@ public class SaveTableAction
             reportTable.setPeriods( periods );
             reportTable.setUnits( organisationUnits );
             reportTable.setDoIndicators( doIndicators );
-            reportTable.setDoCategoryOptionCombos( doCategoryOptionCombos );
+            //reportTable.setDoCategoryOptionCombos( doCategoryOptionCombos );
             reportTable.setDoPeriods( doPeriods );
             reportTable.setDoUnits( doOrganisationUnits );
             reportTable.setRelatives( relatives );

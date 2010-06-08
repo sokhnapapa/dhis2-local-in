@@ -37,7 +37,7 @@ import java.util.TreeMap;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementGroup;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.dataelement.comparator.DataElementCategoryComboNameComparator;
@@ -99,12 +99,12 @@ public class GetTableOptionsAction
         this.dataElementService = dataElementService;
     }
     
-    private DataElementCategoryComboService categoryComboService;
+    private DataElementCategoryService categoryService;
 
-    public void setCategoryComboService( DataElementCategoryComboService categoryComboService )
+    public void setCategoryService( DataElementCategoryService categoryService )
     {
-        this.categoryComboService = categoryComboService;
-    }    
+        this.categoryService = categoryService;
+    }
     
     private IndicatorService indicatorService;
 
@@ -344,7 +344,7 @@ public class GetTableOptionsAction
         }
         else if ( mode != null && mode.equals( ReportTable.MODE_DATAELEMENTS ) && category )
         {
-            categoryCombos = new ArrayList<DataElementCategoryCombo>( categoryComboService.getAllDataElementCategoryCombos() );
+            categoryCombos = new ArrayList<DataElementCategoryCombo>( categoryService.getAllDataElementCategoryCombos() );
             
             Collections.sort( categoryCombos, new DataElementCategoryComboNameComparator() );
         }
