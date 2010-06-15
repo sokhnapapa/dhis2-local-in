@@ -39,10 +39,10 @@ import java.util.Set;
 import org.hisp.dhis.dataelement.CalculatedDataElement;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
-import org.hisp.dhis.dataset.DataEntryForm;
-import org.hisp.dhis.dataset.DataEntryFormService;
+import org.hisp.dhis.dataentryform.DataEntryForm;
+import org.hisp.dhis.dataentryform.DataEntryFormService;
 import org.hisp.dhis.dataset.DataSet;
 import org.hisp.dhis.datavalue.DataValue;
 import org.hisp.dhis.den.api.LLDataSets;
@@ -93,12 +93,12 @@ public class FormAction
     }
     
     @SuppressWarnings("unused")
-	private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;    
+	private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService( DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-    	this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
-    }  
+        this.dataElementCategoryService = dataElementCategoryService;
+    }
 
     private DataEntryFormService dataEntryFormService;
 
@@ -434,9 +434,9 @@ public class FormAction
         // ---------------------------------------------------------------------
 
         dataElementTypeMap = new HashMap<String, String>();
-        dataElementTypeMap.put( DataElement.TYPE_BOOL, i18n.getString( "yes_no" ) );
-        dataElementTypeMap.put( DataElement.TYPE_INT, i18n.getString( "number" ) );
-        dataElementTypeMap.put( DataElement.TYPE_STRING, i18n.getString( "text" ) );
+        dataElementTypeMap.put( DataElement.VALUE_TYPE_BOOL, i18n.getString( "yes_no" ) );
+        dataElementTypeMap.put( DataElement.VALUE_TYPE_INT, i18n.getString( "number" ) );
+        dataElementTypeMap.put( DataElement.VALUE_TYPE_STRING, i18n.getString( "text" ) );
 
         // ---------------------------------------------------------------------
         // Get the custom data entry form (if any)

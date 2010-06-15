@@ -33,6 +33,7 @@ import jxl.write.WritableCell;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import jxl.write.Number;
 
 import org.amplecode.quick.StatementManager;
 import org.apache.velocity.tools.generic.MathTool;
@@ -270,6 +271,13 @@ public class GenerateRoutineReportAnalyserResultAction
         return monthFormat;
     }
 
+    private SimpleDateFormat dailyFormat;
+
+    public SimpleDateFormat getDailyFormat()
+    {
+        return dailyFormat;
+    }
+    
     private SimpleDateFormat simpleMonthFormat;
 
     public SimpleDateFormat getSimpleMonthFormat()
@@ -439,6 +447,7 @@ public class GenerateRoutineReportAnalyserResultAction
         simpleMonthFormat = new SimpleDateFormat( "MMM" );
         yearFormat = new SimpleDateFormat( "yyyy" );
         simpleYearFormat = new SimpleDateFormat( "yy" );
+        dailyFormat = new SimpleDateFormat("yyyy-MM-dd");
         deCodesXMLFileName = reportList + "DECodes.xml";
 
         System.out.println("Report Generation Start Time is : \t" + new Date());
@@ -774,6 +783,7 @@ public class GenerateRoutineReportAnalyserResultAction
                 double sum = 0.0;
                 int flag1 = 0;
                 String tempStr = "";
+                double tempNum = 0;
 
                 Calendar tempStartDate = Calendar.getInstance();
                 Calendar tempEndDate = Calendar.getInstance();
@@ -858,6 +868,12 @@ public class GenerateRoutineReportAnalyserResultAction
                     tempStr = monthFormat.format( sDate );
 
                 }
+                else if ( deCodeString.equalsIgnoreCase( "DAILY-PERIOD" ) )
+                {
+                    tempStr = dailyFormat.format( sDate );
+
+                }
+
                 else if ( deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" ) )
                 {
                     tempStr = simpleMonthFormat.format( sDate );
@@ -1353,7 +1369,8 @@ public class GenerateRoutineReportAnalyserResultAction
                                 //value = value + temp;
                                 temp += value;
                             }
-                            
+
+                            tempNum = temp;
                             tempStr = String.valueOf( (int)temp );
                         }
                         
@@ -1483,7 +1500,16 @@ public class GenerateRoutineReportAnalyserResultAction
                         }
                         else
                         {
-                            sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                            try
+                            {
+                                    tempNum = Double.valueOf( tempStr );
+                                    sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
+
+                                }
+                                catch(Exception e)
+                                {
+                                    sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                                }
                         }
                     }
 
@@ -1543,7 +1569,16 @@ public class GenerateRoutineReportAnalyserResultAction
                         }
                         else
                         {
-                            sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                            try
+                            {
+                                    tempNum = Double.valueOf( tempStr );
+                                    sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
+
+                                }
+                                catch(Exception e)
+                                {
+                                    sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                                }
                         }
                     }
 
@@ -1614,7 +1649,16 @@ public class GenerateRoutineReportAnalyserResultAction
                         }
                         else
                         {
-                            sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                            try
+                            {
+                                    tempNum = Double.valueOf( tempStr );
+                                    sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
+
+                                }
+                                catch(Exception e)
+                                {
+                                    sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                                }
                         }
                     }
 
@@ -1684,7 +1728,16 @@ public class GenerateRoutineReportAnalyserResultAction
                         }
                         else
                         {
-                            sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                            try
+                            {
+                                    tempNum = Double.valueOf( tempStr );
+                                    sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
+
+                                }
+                                catch(Exception e)
+                                {
+                                    sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                                }
                         }
                     }
 
@@ -1758,7 +1811,16 @@ public class GenerateRoutineReportAnalyserResultAction
                         }
                         else
                         {
-                            sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                             try
+                            {
+                                    tempNum = Double.valueOf( tempStr );
+                                    sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
+
+                                }
+                                catch(Exception e)
+                                {
+                                    sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                                }
                         }
                     }
                     if ( reportModelTB.equalsIgnoreCase( "dynamicwithrootfacility" ) )
@@ -1830,7 +1892,17 @@ public class GenerateRoutineReportAnalyserResultAction
                         }
                         else
                         {
-                            sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                            try
+                            {
+                                    tempNum = Double.valueOf( tempStr );
+                                    sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
+
+                                }
+                                catch(Exception e)
+                                {
+                                    sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
+                                }
+                            
                         }
                     }
 

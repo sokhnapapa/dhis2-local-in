@@ -114,41 +114,33 @@ public class ValidateExpressionAction
             return INPUT;
         }
         
-        int result = expressionService.expressionIsValid( expression );
+        String result = expressionService.expressionIsValid( expression );
         
-        if ( result != ExpressionService.VALID )
+        if ( result.equals( ExpressionService.VALID ) )
         {
             message = i18n.getString( "could_not_save" ) + ": ";
             
-            if ( result == ExpressionService.DATAELEMENT_ID_NOT_NUMERIC )
+            if ( result.equals( ExpressionService.DATAELEMENT_ID_NOT_NUMERIC ) )
             {
                 message += i18n.getString( "dataelement_id_must_be_number" );
             }
-            else if ( result == ExpressionService.CATEGORYOPTIONCOMBO_ID_NOT_NUMERIC )
+            else if ( result.equals( ExpressionService.CATEGORYOPTIONCOMBO_ID_NOT_NUMERIC ) )
             {
                 message += i18n.getString( "category_option_combo_id_must_be_number" );
             }
-            else if ( result == ExpressionService.DATAELEMENT_DOES_NOT_EXIST )
+            else if ( result.equals( ExpressionService.DATAELEMENT_DOES_NOT_EXIST ) )
             {
                 message += i18n.getString( "id_does_not_reference_dataelement" );
             }
-            else if ( result == ExpressionService.CATEGORYOPTIONCOMBO_DOES_NOT_EXIST )
+            else if ( result.equals( ExpressionService.CATEGORYOPTIONCOMBO_DOES_NOT_EXIST ) )
             {
                 message += i18n.getString( "id_does_not_reference_category_option_combo" );
             }
-            else if ( result == ExpressionService.CATEGORYOPTIONCOMBO_ID_NOT_VALID )
-            {
-                message += i18n.getString( "category_option_combo_id_not_valid_for_de" );
-            }
-            else if ( result == ExpressionService.EXPRESSION_NOT_WELL_FORMED )
+            else if ( result.equals( ExpressionService.EXPRESSION_NOT_WELL_FORMED ) )
             {
                 message += i18n.getString( "expression_not_well_formed" );
             }
-            else if ( result == ExpressionService.DUPLICATE_DATAELEMENT )
-            {
-                message += i18n.getString( "duplicate_dataelement_not_allowed" );
-            }
-            
+                        
             return INPUT;
         }
         

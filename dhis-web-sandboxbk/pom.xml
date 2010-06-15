@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.hisp.dhis</groupId>
     <artifactId>dhis-web</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.0.5-SNAPSHOT</version>
   </parent>
   
   <artifactId>dhis-web-sandbox-bk</artifactId>
@@ -50,11 +50,8 @@
     <dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-jdbc</artifactId>
-    </dependency>
-  	<dependency>
-      <groupId>org.hisp.dhis</groupId>
-      <artifactId>dhis-service-organisationunit</artifactId>
-    </dependency>          
+      <version>${version}</version>
+    </dependency>        
     <dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-web-commons</artifactId>
@@ -92,13 +89,14 @@
     <dependency>
       <groupId>com.opensymphony</groupId>
       <artifactId>webwork</artifactId>
+      <version>${version}</version>
     </dependency>
     
     <!-- Other -->
     
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring</artifactId>
+      <artifactId>spring-orm</artifactId>
     </dependency>
     <dependency>
       <groupId>mysql</groupId>

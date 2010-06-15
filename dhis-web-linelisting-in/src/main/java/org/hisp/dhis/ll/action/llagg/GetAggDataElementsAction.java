@@ -70,7 +70,7 @@ public class GetAggDataElementsAction
         {
             DataElement de = deIterator.next();
 
-            if ( !de.getType().equalsIgnoreCase( DataElement.TYPE_INT ) )
+            if ( !de.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_INT ) )
             {
                 deIterator.remove();
             }

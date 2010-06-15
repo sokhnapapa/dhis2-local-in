@@ -39,7 +39,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementGroup;
 import org.hisp.dhis.dataelement.DataElementService;
 
@@ -63,12 +63,11 @@ public class GetLineListElementsAction
         this.dataElementService = dataElementService;
     }
     
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     // -------------------------------------------------------------------------
@@ -186,7 +185,7 @@ public class GetLineListElementsAction
                     {
                         DataElementCategoryOptionCombo decoc = optionComboIterator.next();
                         optionComboIds.add( de.getId()+":"+decoc.getId());
-                        optionComboNames.add( de.getName()+":"+dataElementCategoryOptionComboService.getOptionNames( decoc ));
+                        optionComboNames.add( de.getName()+":"+dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName());
                         
                     }   
                 }

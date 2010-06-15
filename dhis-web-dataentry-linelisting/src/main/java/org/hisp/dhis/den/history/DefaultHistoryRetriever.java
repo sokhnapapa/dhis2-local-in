@@ -75,9 +75,9 @@ public class DefaultHistoryRetriever
         Period lastPeriod, int historyLength )
         throws HistoryRetrieverException
     {
-        if ( !dataElement.getType().equals( DataElement.TYPE_INT ) )
+        if ( !dataElement.getType().equals( DataElement.VALUE_TYPE_INT ) )
         {
-            throw new HistoryRetrieverException( "DataElement is not of type " + DataElement.TYPE_INT + ": "
+            throw new HistoryRetrieverException( "DataElement is not of type " + DataElement.VALUE_TYPE_INT + ": "
                 + dataElement.getShortName() );
         }
 
@@ -153,9 +153,9 @@ public class DefaultHistoryRetriever
             Period lastPeriod, int historyLength )
         throws HistoryRetrieverException
         {
-            if ( !dataElement.getType().equals( DataElement.TYPE_INT ) )
+            if ( !dataElement.getType().equals( DataElement.VALUE_TYPE_INT ) )
             {
-                throw new HistoryRetrieverException( "DataElement is not of type " + DataElement.TYPE_INT + ": "
+                throw new HistoryRetrieverException( "DataElement is not of type " + DataElement.VALUE_TYPE_INT + ": "
                     + dataElement.getShortName() );
             }
 
@@ -189,6 +189,7 @@ public class DefaultHistoryRetriever
             {
                 DataElementHistoryPoint historyPoint = new DataElementHistoryPoint();
                 historyPoint.setPeriod( period );
+
 
                 Double value = getValue( dataElement, organisationUnit, period );
 
@@ -332,7 +333,7 @@ public class DefaultHistoryRetriever
     private Double getValue( DataElement dataElement, OrganisationUnit organisationUnit, Period period )
     throws HistoryRetrieverException
     {
-    	DataValue dataValue = dataValueService.getDataValue( organisationUnit, dataElement, period );
+    	/*DataValue dataValue = dataValueService.getDataValue( organisationUnit, dataElement, period );
 
     	if ( dataValue != null )
     	{
@@ -342,7 +343,7 @@ public class DefaultHistoryRetriever
 
     		}
     	}
-
+        */
     	return null;
     }
 

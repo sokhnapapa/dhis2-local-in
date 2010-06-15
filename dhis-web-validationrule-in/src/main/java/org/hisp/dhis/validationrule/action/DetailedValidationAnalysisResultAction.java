@@ -19,7 +19,7 @@ import org.apache.struts2.ServletActionContext;
 import org.hisp.dhis.aggregation.AggregationService;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.expression.Expression;
 import org.hisp.dhis.i18n.I18nFormat;
@@ -68,12 +68,12 @@ public class DetailedValidationAnalysisResultAction extends ActionSupport
         this.aggregationService = aggregationService;
     }
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;   
-    public void setDataElementCategoryOptionComboService( DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    private DataElementCategoryService dataElementCategoryService;
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
-
+   
     private ValidationRuleService validationRuleService;
     public void setValidationRuleService( ValidationRuleService validationRuleService )
     {
@@ -493,7 +493,7 @@ public class DetailedValidationAnalysisResultAction extends ActionSupport
 
                 
                 DataElement dataElement = dataElementService.getDataElement( dataElementId );                
-                DataElementCategoryOptionCombo optionCombo = dataElementCategoryOptionComboService.getDataElementCategoryOptionCombo( optionComboId );
+                DataElementCategoryOptionCombo optionCombo = dataElementCategoryService.getDataElementCategoryOptionCombo( optionComboId );
 
                 if(dataElement == null || optionCombo == null)
                 {

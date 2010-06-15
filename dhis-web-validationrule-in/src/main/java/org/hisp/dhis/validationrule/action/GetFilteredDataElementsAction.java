@@ -35,9 +35,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hisp.dhis.dataelement.DataElement;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
-import org.hisp.dhis.dataelement.Operand;
+import org.hisp.dhis.dataelement.DataElementOperand;
 import org.hisp.dhis.options.displayproperty.DisplayPropertyHandler;
 import org.hisp.dhis.validationrule.util.FilterUtil;
 
@@ -63,13 +63,13 @@ public class GetFilteredDataElementsAction
         this.dataElementService = dataElementService;
     }
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
+
 
     // -------------------------------------------------------------------------
     // Comparator
@@ -118,9 +118,9 @@ public class GetFilteredDataElementsAction
         return dataElements;
     }
 
-    private List<Operand> operands = new ArrayList<Operand>();
+    private List<DataElementOperand> operands = new ArrayList<DataElementOperand>();
 
-    public List<Operand> getOperands()
+    public List<DataElementOperand> getOperands()
     {
         return operands;
     }
@@ -138,7 +138,7 @@ public class GetFilteredDataElementsAction
 
         if ( dataElementGroupId == ALL )
         {
-            dataElements = new ArrayList<DataElement>( dataElementService.getDataElementsByType( DataElement.TYPE_INT ) );
+            dataElements = new ArrayList<DataElement>( dataElementService.getDataElementsByType( DataElement.VALUE_TYPE_INT ) );
         }
         else
         {
@@ -158,17 +158,17 @@ public class GetFilteredDataElementsAction
         // Create Operands
         // ---------------------------------------------------------------------
 
-        operands = new ArrayList<Operand>( dataElementCategoryOptionComboService.getOperands( dataElements ) );
+        operands = new ArrayList<DataElementOperand>( dataElementCategoryService.getOperands( dataElements ) );
         
         // ---------------------------------------------------------------------
         // String filter
         // ---------------------------------------------------------------------
 
-        Iterator<Operand> iterator = operands.iterator();
+        Iterator<DataElementOperand> iterator = operands.iterator();
         
         while ( iterator.hasNext() )
         {
-            Operand operand = iterator.next();
+            DataElementOperand operand = iterator.next();
             
             if ( !operand.getOperandName().toLowerCase().contains( filter.toLowerCase() ) )
             {

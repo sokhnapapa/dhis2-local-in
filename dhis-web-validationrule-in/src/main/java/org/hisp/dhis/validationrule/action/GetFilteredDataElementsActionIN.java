@@ -38,7 +38,7 @@ import java.util.Set;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.validationrule.util.Operand;
 import org.hisp.dhis.options.displayproperty.DisplayPropertyHandler;
@@ -66,11 +66,11 @@ public class GetFilteredDataElementsActionIN
         this.dataElementService = dataElementService;
     }
     
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService( DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     // -------------------------------------------------------------------------
@@ -140,7 +140,7 @@ public class GetFilteredDataElementsActionIN
 
         if ( dataElementGroupId == ALL )
         {
-            dataElements = new ArrayList<DataElement>( dataElementService.getDataElementsByType( DataElement.TYPE_INT ) );
+            dataElements = new ArrayList<DataElement>( dataElementService.getDataElementsByType( DataElement.VALUE_TYPE_INT ) );
         }
         else
         {
@@ -185,7 +185,7 @@ public class GetFilteredDataElementsActionIN
         		        		
         		for( DataElementCategoryOptionCombo optionCombo : optionCombos )
             	{             		           		
-            		Operand operand = new Operand( dataElement.getId(), optionCombo.getId(), dataElement.getName() + dataElementCategoryOptionComboService.getOptionNames( optionCombo ) );
+            		Operand operand = new Operand( dataElement.getId(), optionCombo.getId(), dataElement.getName() + dataElementCategoryService.getDataElementCategoryOptionCombo( optionCombo ).getName() );
             		operands.add( operand );
             	}       		
         		

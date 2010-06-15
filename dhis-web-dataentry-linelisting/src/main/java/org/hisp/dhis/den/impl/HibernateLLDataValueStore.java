@@ -44,7 +44,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.den.api.LLDataSets;
 import org.hisp.dhis.den.api.LLDataValue;
@@ -91,12 +91,11 @@ public class HibernateLLDataValueStore
         this.dataElementService = dataElementService;
     }
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     // -------------------------------------------------------------------------
@@ -2148,7 +2147,7 @@ public class HibernateLLDataValueStore
             for ( int i = 0; i < aggDeIds.length; i++ )
             {
                 DataElement de = dataElementService.getDataElement( aggDeIds[i] );
-                DataElementCategoryOptionCombo oc = dataElementCategoryOptionComboService
+                DataElementCategoryOptionCombo oc = dataElementCategoryService
                     .getDataElementCategoryOptionCombo( aggDeOptComIds[i] );
                 if ( de != null && oc != null )
                 {

@@ -33,7 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.den.api.LLDataValue;
 import org.hisp.dhis.den.api.LLDataValueService;
@@ -86,13 +86,13 @@ public class SaveValueAction
         this.selectedStateManager = selectedStateManager;
     }
     
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
-    
-    public void setDataElementCategoryOptionComboService( DataElementCategoryOptionComboService dataElementCategoryOptionComboService)
-    {
-    	this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;    	
-    }
+    private DataElementCategoryService dataElementCategoryService;
 
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
+    {
+        this.dataElementCategoryService = dataElementCategoryService;
+    }
+    
     // -------------------------------------------------------------------------
     // Input/output
     // -------------------------------------------------------------------------
@@ -175,7 +175,7 @@ public class SaveValueAction
                 
         DataElement dataElement = dataElementService.getDataElement( dataElementId );        
         storedBy = currentUserService.getCurrentUsername();               
-        DataElementCategoryOptionCombo optionCombo = dataElementCategoryOptionComboService.getDataElementCategoryOptionCombo( optionComboId );
+        DataElementCategoryOptionCombo optionCombo = dataElementCategoryService.getDataElementCategoryOptionCombo( optionComboId );
              
         if ( storedBy == null )
         {

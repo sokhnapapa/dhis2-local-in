@@ -2,7 +2,7 @@ package org.hisp.dhis.ll.action.llagg;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.linelisting.llaggregation.LinelistAggMapService;
 import org.hisp.dhis.linelisting.llaggregation.LinelistAggregationMapping;
@@ -28,9 +28,9 @@ public class SaveLLAggQueryAction implements Action
         this.linelistAggMapService = linelistAggMapService;
     }
 
-    private DataElementCategoryOptionComboService categoryService;
+    private DataElementCategoryService categoryService;
 
-    public void setCategoryService( DataElementCategoryOptionComboService categoryService )
+    public void setCategoryService( DataElementCategoryService categoryService )
     {
         this.categoryService = categoryService;
     }

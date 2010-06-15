@@ -44,7 +44,7 @@ public class FilterUtil
         
         while ( iterator.hasNext() )
         {
-            if ( !iterator.next().getType().equals( DataElement.TYPE_INT ) )
+            if ( !iterator.next().getType().equals( DataElement.VALUE_TYPE_INT ) )
             {
                 iterator.remove();
             }

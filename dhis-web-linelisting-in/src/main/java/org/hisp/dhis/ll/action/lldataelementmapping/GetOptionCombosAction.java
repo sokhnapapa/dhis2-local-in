@@ -34,7 +34,7 @@ import java.util.List;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 
 import com.opensymphony.xwork2.Action;
@@ -57,11 +57,11 @@ public class GetOptionCombosAction
         this.dataElementService = dataElementService;
     }
     
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService( DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     // -------------------------------------------------------------------------
@@ -112,7 +112,7 @@ public class GetOptionCombosAction
         {
             DataElementCategoryOptionCombo optionCombo = optionComboIterator.next();           
             
-            String optionComboName = dataElementCategoryOptionComboService.getOptionNames( optionCombo );
+            String optionComboName = dataElementCategoryService.getDataElementCategoryOptionCombo( optionCombo ).getName();
          
             String optionComboId = String.valueOf( optionCombo.getId() );
             

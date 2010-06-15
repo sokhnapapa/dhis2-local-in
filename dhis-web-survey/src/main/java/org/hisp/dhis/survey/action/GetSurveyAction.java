@@ -30,7 +30,7 @@ package org.hisp.dhis.survey.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hisp.dhis.dataset.DataEntryForm;
+import org.hisp.dhis.dataentryform.DataEntryForm;
 import org.hisp.dhis.indicator.Indicator;
 import org.hisp.dhis.survey.Survey;
 import org.hisp.dhis.survey.SurveyService;

@@ -1,6 +1,6 @@
 package org.hisp.dhis.ll.action.lldataelementmapping;
 
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.expression.Expression;
 import org.hisp.dhis.expression.ExpressionService;
@@ -45,12 +45,11 @@ public class AddLineListDataElementMapping
         this.dataElementService = dataElementService;
     }
 
-    private DataElementCategoryOptionComboService categoryOptionComboService;
+    private DataElementCategoryService categoryService;
 
-    public void setCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setCategoryService( DataElementCategoryService categoryService )
     {
-        this.categoryOptionComboService = dataElementCategoryOptionComboService;
+        this.categoryService = categoryService;
     }
 
     // -------------------------------------------------------------------------

@@ -154,7 +154,7 @@ public class AddValidationRuleAction
         validationRule.setLeftSide( leftSide );
         validationRule.setRightSide( rightSide );
         
-        validationRuleService.addValidationRule( validationRule );
+        validationRuleService.saveValidationRule( validationRule );
         
         return SUCCESS;
     }

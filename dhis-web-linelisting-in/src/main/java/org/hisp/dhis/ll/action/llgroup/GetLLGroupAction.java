@@ -28,19 +28,14 @@ package org.hisp.dhis.ll.action.llgroup;
  */
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryCombo;
-import org.hisp.dhis.dataset.DataEntryForm;
-import org.hisp.dhis.dataset.DataEntryFormService;
+import org.hisp.dhis.dataentryform.DataEntryForm;
+import org.hisp.dhis.dataentryform.DataEntryFormService;
 import org.hisp.dhis.linelisting.LineListElement;
 import org.hisp.dhis.linelisting.LineListGroup;
 import org.hisp.dhis.linelisting.LineListService;
-import org.hisp.dhis.linelisting.comparator.LineListElementNameComparator;
-import org.hisp.dhis.linelisting.comparator.LineListGroupNameComparator;
 import org.hisp.dhis.options.displayproperty.DisplayPropertyHandler;
 
 import com.opensymphony.xwork2.Action;

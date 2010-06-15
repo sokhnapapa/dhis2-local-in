@@ -38,7 +38,7 @@ import org.hisp.dhis.options.displayproperty.DisplayPropertyHandler;
 
 
 import com.opensymphony.xwork2.ActionSupport;
-import org.hisp.dhis.dataelement.Operand;
+import org.hisp.dhis.dataelement.DataElementOperand;
 import org.hisp.dhis.linelisting.LineListElement;
 import org.hisp.dhis.linelisting.LineListService;
 import org.hisp.dhis.linelisting.comparator.LineListElementNameComparator;
@@ -96,9 +96,9 @@ public class GetFilteredLineListElementsAction
         return llElements;
     }
     
-    private List<Operand> operands = new ArrayList<Operand>();
+    private List<DataElementOperand> operands = new ArrayList<DataElementOperand>();
 
-    public List<Operand> getOperands()
+    public List<DataElementOperand> getOperands()
     {
         return operands;
     }

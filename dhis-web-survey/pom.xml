@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.hisp.dhis</groupId>
     <artifactId>dhis-web</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.0.5-SNAPSHOT</version>
   </parent>
   
   <artifactId>dhis-web-survey</artifactId>
@@ -56,10 +56,6 @@
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-in-service-survey</artifactId>
 	  <version>${version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hisp.dhis</groupId>
-      <artifactId>dhis-service-organisationunit</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hisp.dhis</groupId>
@@ -114,7 +110,7 @@
     </dependency>     
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring</artifactId>
+      <artifactId>spring-orm</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

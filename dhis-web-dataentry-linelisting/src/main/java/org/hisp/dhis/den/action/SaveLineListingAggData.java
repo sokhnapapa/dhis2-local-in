@@ -39,7 +39,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionComboService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.dataset.DataSet;
 import org.hisp.dhis.datavalue.DataValue;
@@ -66,12 +66,11 @@ public class SaveLineListingAggData
     // Dependencies
     // -------------------------------------------------------------------------
 
-    private DataElementCategoryOptionComboService dataElementCategoryOptionComboService;
+    private DataElementCategoryService dataElementCategoryService;
 
-    public void setDataElementCategoryOptionComboService(
-        DataElementCategoryOptionComboService dataElementCategoryOptionComboService )
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     private DataValueService dataValueService;
@@ -214,7 +213,7 @@ public class SaveLineListingAggData
         int optionComboId = Integer.parseInt( partsOfdeString[1] );
 
         DataElement dataElement = dataElementService.getDataElement( dataElementId );
-        DataElementCategoryOptionCombo optionCombo = dataElementCategoryOptionComboService
+        DataElementCategoryOptionCombo optionCombo = dataElementCategoryService
             .getDataElementCategoryOptionCombo( optionComboId );
 
         if ( dataElement == null || optionCombo == null )

@@ -42,6 +42,8 @@ import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.period.Period;
 
 import com.opensymphony.xwork2.Action;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 
 /**
  * @author Margrethe Store
@@ -119,7 +121,7 @@ public class MinMaxGeneratingAction
         for ( DataElement dataelement : dataElements )
         {
             // check if dataelement is of type int
-            if ( dataelement.getType().equals( DataElement.TYPE_INT ) )
+            if ( dataelement.getType().equals( DataElement.VALUE_TYPE_INT ) )
             {
                 DataElementHistory dataElementHistory = historyRetriever.getHistory( dataelement, organisationUnit,
                     period, HISTORY_LENGTH );

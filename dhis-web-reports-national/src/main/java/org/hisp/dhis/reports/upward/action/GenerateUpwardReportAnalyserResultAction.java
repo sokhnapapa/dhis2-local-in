@@ -151,7 +151,7 @@ public class GenerateUpwardReportAnalyserResultAction
     {
         this.dataElementCategoryService = dataElementCategoryService;
     }
-    
+
     private I18nFormat format;
 
     public void setFormat( I18nFormat format )
@@ -1289,11 +1289,12 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                                                                                                                 if ( deFlag2 == 1 )
                                                                                                                                 {
-                                                                                                                                    try{
-                                                                                                                                    //tempNum = Integer.parseInt( tempStr );
+                                                                                                                                    try
+                                                                                                                                    {
+                                                                                                                                        //tempNum = Integer.parseInt( tempStr );
                                                                                                                                         tempNum = Double.parseDouble( tempStr );
-                                                                                                                                    }
-                                                                                                                                    catch(Exception ex){
+                                                                                                                                    } catch ( Exception ex )
+                                                                                                                                    {
                                                                                                                                         tempNum = 0;
                                                                                                                                     }
                                                                                                                                 }
@@ -1312,13 +1313,14 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                                                                                                                     if ( deFlag2 == 1 )
                                                                                                                                     {
-                                                                                                                                        try{
+                                                                                                                                        try
+                                                                                                                                        {
                                                                                                                                             //tempNum = Integer.parseInt( tempStr );
                                                                                                                                             tempNum = Double.parseDouble( tempStr );
-                                                                                                                                            }
-                                                                                                                                            catch(Exception ex){
-                                                                                                                                                tempNum = 0;
-                                                                                                                                            }
+                                                                                                                                        } catch ( Exception ex )
+                                                                                                                                        {
+                                                                                                                                            tempNum = 0;
+                                                                                                                                        }
 
                                                                                                                                     }
                                                                                                                                 } else
@@ -1346,13 +1348,14 @@ public class GenerateUpwardReportAnalyserResultAction
                                                                                                                                         }
                                                                                                                                         if ( deFlag2 == 1 )
                                                                                                                                         {
-                                                                                                                                            try{
+                                                                                                                                            try
+                                                                                                                                            {
                                                                                                                                                 //tempNum = Integer.parseInt( tempStr );
                                                                                                                                                 tempNum = Double.parseDouble( tempStr );
-                                                                                                                                                }
-                                                                                                                                                catch(Exception ex){
-                                                                                                                                                    tempNum = 0;
-                                                                                                                                                }
+                                                                                                                                            } catch ( Exception ex )
+                                                                                                                                            {
+                                                                                                                                                tempNum = 0;
+                                                                                                                                            }
 
                                                                                                                                         }
                                                                                                                                     }

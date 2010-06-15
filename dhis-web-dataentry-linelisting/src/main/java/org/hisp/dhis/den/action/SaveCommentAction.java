@@ -41,6 +41,7 @@ import org.hisp.dhis.period.Period;
 import org.hisp.dhis.user.CurrentUserService;
 
 import com.opensymphony.xwork2.Action;
+import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 
 /**
  * @author Torgeir Lorange Ostby
@@ -156,7 +157,7 @@ public class SaveCommentAction
         // Update DB
         // ---------------------------------------------------------------------
 
-        DataValue dataValue = dataValueService.getDataValue( organisationUnit, dataElement, period );
+        /*DataValue dataValue = dataValueService.getDataValue( organisationUnit, dataElement, period );
 
         if ( dataValue == null )
         {
@@ -185,7 +186,7 @@ public class SaveCommentAction
             this.timestamp = dataValue.getTimestamp();
             this.storedBy = dataValue.getStoredBy();
         }
-
+        */
         return SUCCESS;
     }
 }

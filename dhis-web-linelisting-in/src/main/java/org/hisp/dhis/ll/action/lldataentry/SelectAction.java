@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hisp.dhis.dataelement.DataElementService;
-import org.hisp.dhis.dataset.DataEntryFormService;
+import org.hisp.dhis.dataentryform.DataEntryFormService;
 import org.hisp.dhis.dataset.SectionService;
 import org.hisp.dhis.linelisting.LineListElement;
 import org.hisp.dhis.linelisting.LineListGroup;
