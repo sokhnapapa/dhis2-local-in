@@ -69,15 +69,17 @@
 	  
 	  	      
     <!-- Other -->
-	     
+<!--	     
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
     </dependency>
+ 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
+   -->
     <dependency>
       <groupId>jfree</groupId>
       <artifactId>jfreechart</artifactId>
@@ -104,5 +106,7 @@
       <artifactId>jxl</artifactId>
     </dependency>
   </dependencies>
-  
+  <properties>
+    <rootDir>../../</rootDir>
+  </properties>
 </project>

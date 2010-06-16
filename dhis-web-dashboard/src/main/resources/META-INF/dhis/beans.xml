@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	
 	<bean id="org.hisp.dhis.dashboard.action.DashBoardHomePageAction"
 		class="org.hisp.dhis.dashboard.action.DashBoardHomePageAction"
@@ -625,12 +625,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>
 	</bean>
 	
-	<bean id="org.hisp.dhis.dashboard.util.DBConnection"
-		class="org.hisp.dhis.dashboard.util.DBConnection" scope="prototype">
-		<property name="provider"
-			ref="org.hisp.dhis.system.database.DatabaseInfoProvider"/>
-	</bean>
-	
+
+  
 	<!-- TopTen Disease Analysis -->
 	<bean
 		id="org.hisp.dhis.dashboard.topten.action.GenerateTopTenAnalyserFormAction"
