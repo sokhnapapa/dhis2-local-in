@@ -51,6 +51,7 @@
     <url-pattern>*.action</url-pattern>
   </filter-mapping>
 
+  <!--
   <servlet>
         <servlet-name>jcaptcha</servlet-name>
         <servlet-class>org.hisp.dhis.security.action.CaptchaImageServlet</servlet-class>
@@ -67,7 +68,7 @@
         <servlet-name>captchaValidator</servlet-name>
         <url-pattern>/dhis-web-commons/security/captchaValidator</url-pattern>
   </servlet-mapping>
-
+-->
 
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

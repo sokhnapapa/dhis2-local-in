@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	
 	<!-- Import Form -->
 	
@@ -128,8 +128,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		<property name="dataValueService">
 			<ref bean="org.hisp.dhis.datavalue.DataValueService"/>
 		</property>
-		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+		<property name="dataElementCategoryService">
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>
 		<property name="configurationService">
 			<ref bean="org.hisp.dhis.config.ConfigurationService"/>
