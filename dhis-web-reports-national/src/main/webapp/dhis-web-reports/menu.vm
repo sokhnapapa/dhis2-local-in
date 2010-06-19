@@ -16,6 +16,10 @@
         -->
         <li><a href = "progressReportAnalyser.action">Periodwise Progress Reports</a></li>
         <li><a href = "ouWiseProgressReportAnalyser.action">Orgunitwise Progress Reports</a></li>
+        <li><a href = "activePlanReportsAnalyser.action">NBITS Reports</a></li>
+        <li><a href = "portalReportsAnalyser.action">NBITS Portal Reports</a></li>
+
+
         <!--
         <li><a href = "advancedReportAnalyser.action">Advanced Reports</a></li>
         <li><a href = "TwentyPointReportsAnalyser.action">Twenty Point Reports</a></li>       
