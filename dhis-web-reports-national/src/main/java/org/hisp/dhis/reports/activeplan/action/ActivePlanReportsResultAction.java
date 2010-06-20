@@ -162,12 +162,12 @@ public class ActivePlanReportsResultAction implements Action
 
     private ProgramService programService;
 
-    public void setProgramService( ProgramService programService )
+    public void setProgramService(ProgramService programService) 
     {
-        this.programService = programService;
-    }
+		this.programService = programService;
+	}
 
-    private ProgramInstanceService programInstanceService;
+	private ProgramInstanceService programInstanceService;
 
     public void setProgramInstanceService( ProgramInstanceService programInstanceService )
     {
