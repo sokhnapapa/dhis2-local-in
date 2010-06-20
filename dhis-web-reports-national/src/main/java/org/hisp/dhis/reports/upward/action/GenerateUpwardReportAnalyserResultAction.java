@@ -395,6 +395,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
     int deFlag2;
 
+    int isAggregated = 0;
     // -------------------------------------------------------------------------
     // Action implementation
     // -------------------------------------------------------------------------
@@ -2017,6 +2018,8 @@ public class GenerateUpwardReportAnalyserResultAction
      */
     private String getResultDataValue( String formula, Date startDate, Date endDate, OrganisationUnit organisationUnit )
     {
+    	isAggregated = 0;
+    	
         try
         {
             //6b1b7b5b7b5b7
@@ -2057,12 +2060,15 @@ public class GenerateUpwardReportAnalyserResultAction
                     if ( aggregatedValue == AggregationService.NO_VALUES_REGISTERED )
                     {
                         replaceString = NULL_REPLACEMENT;
-                        deFlag2 = 1;
-                    } else
+                        deFlag2 = 0;
+                    } 
+                    else
                     {
                         replaceString = String.valueOf( aggregatedValue );
 
                         deFlag2 = 1;
+                        
+                        isAggregated = 0;
                     }
 
                 } else
@@ -2158,6 +2164,11 @@ public class GenerateUpwardReportAnalyserResultAction
                 resultValue = buffer.toString();
             }
 
+            //if( isAggregated == 0 )
+            //{
+            //    resultValue = " ";
+            //}
+            
             if ( resultValue.equalsIgnoreCase( "" ) )
             {
                 resultValue = " ";

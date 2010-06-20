@@ -298,7 +298,7 @@ public class GenerateRoutineReportAnalyserResultAction
     {
         return simpleYearFormat;
     }
-
+    
     private List<String> deCodeType;
 
     private List<String> serviceType;
@@ -856,7 +856,10 @@ public class GenerateRoutineReportAnalyserResultAction
                     tempStr = orgUnitPPP.getParent().getName();
 
                 }
-
+                else if ( deCodeString.equalsIgnoreCase( "FACILITYCOMMENT" ) )
+                {
+                    tempStr = currentOrgUnit.getComment();
+                }
                 else if ( deCodeString.equalsIgnoreCase( "PERIOD" )
                     || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) )
                 {

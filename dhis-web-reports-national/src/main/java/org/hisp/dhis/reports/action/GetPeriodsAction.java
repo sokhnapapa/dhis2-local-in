@@ -161,9 +161,18 @@ public class GetPeriodsAction
                     periodNameList.add( simpleDateFormat1.format( p1.getStartDate() ) + "-" + year );
                 }
             }
+            else if ( periodType.getName().equalsIgnoreCase( "daily" ) )
+            {
+                simpleDateFormat1 = new SimpleDateFormat( "yyyy-MM-dd" );
+                
+                for ( Period p1 : periods )
+                {
+                    periodNameList.add( simpleDateFormat1.format( p1.getStartDate() ) );
+                }
+            }
             else
             {
-                simpleDateFormat1 = new SimpleDateFormat( "yyyy-mm-dd" );
+                simpleDateFormat1 = new SimpleDateFormat( "yyyy-MM-dd" );
                 for ( Period p1 : periods )
                 {
                     String tempPeriodName = simpleDateFormat1.format( p1.getStartDate() ) + " - "
