@@ -19,11 +19,13 @@ import javax.mail.internet.MimeMultipart;
 public class MailService
 {
 
+// To - Do
+// Need to get this info from properties file.
     public static final String MAIL_SERVER = "smtp.gmail.com";
 
-    public static final String USERNAME = "hisptransfer@gmail.com";
+    public static final String USERNAME = "abc@gmail.com";
 
-    public static final String PASSWORD = "hispindia@09";
+    public static final String PASSWORD = "xyz";
 
     public String sendEmail()
     {
@@ -32,8 +34,8 @@ public class MailService
 
         try
         {
-            String fromAddress = "hisptransfer@gmail.com";
-            String toAddress = "akashjindal.in@gmail.com";
+            String fromAddress = "abc@gmail.com";
+            String toAddress = "def@gmail.com";
             String subject = "This is a test Message";
             String message = "Hello Hows u?";
 
@@ -74,12 +76,12 @@ public class MailService
 
         try
         {
-            String fromAddress = "hisptransfer@gmail.com";
-            String toAddress = "suneelkumar.chevvu@gmail.com";
+            String fromAddress = "abc@gmail.com";
+            String toAddress = "def@gmail.com";
             String subject = "This is a test Mail with attachment";
             // String message = "Hello Hows u?";
 
-            String fileAttachment = "c:/HP_OrgUnits.xls";
+            String fileAttachment = "c:/samp.xls";
 
             // Get system properties
             Properties properties = System.getProperties();
@@ -100,7 +102,7 @@ public class MailService
             MimeBodyPart messageBodyPart = new MimeBodyPart();
 
             // fill message
-            messageBodyPart.setText( "Hi from Bharath with attachment" );
+            messageBodyPart.setText( "Hi with attachment" );
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart( messageBodyPart );
