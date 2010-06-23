@@ -1,6 +1,10 @@
 package org.hisp.dhis.reports.portal.action;
 
-//do date from and to
+//@23-06-2010 - Date from and to is solved.
+//@23-06-2010 - for doses checking if dose is given before enddate then show it
+//@23-06-2010 - formating done as per eclipse
+//@23-06-2010 - for tt dates checking if execution date is before end date
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,9 +71,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.opensymphony.xwork2.Action;
-import java.util.HashSet;
 import jxl.write.Label;
-import jxl.write.Number;
 import jxl.write.WritableCell;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
@@ -88,21 +90,18 @@ public class PortalReportsResultAction implements Action
     // -------------------------------------------------------------------------
 
     private StatementManager statementManager;
-
     public void setStatementManager( StatementManager statementManager )
     {
         this.statementManager = statementManager;
     }
 
     private ReportService reportService;
-
     public void setReportService( ReportService reportService )
     {
         this.reportService = reportService;
     }
 
     private OrganisationUnitService organisationUnitService;
-
     public OrganisationUnitService getOrganisationUnitService()
     {
         return organisationUnitService;
@@ -114,7 +113,6 @@ public class PortalReportsResultAction implements Action
     }
 
     private ProgramStageDataElementService programStageDataElementService;
-
     public void setProgramStageDataElementService(
         ProgramStageDataElementService programStageDataElementService )
     {
@@ -122,21 +120,18 @@ public class PortalReportsResultAction implements Action
     }
 
     private AggregationService aggregationService;
-
     public void setAggregationService( AggregationService aggregationService )
     {
         this.aggregationService = aggregationService;
     }
 
     private DataElementService dataElementService;
-
     public void setDataElementService( DataElementService dataElementService )
     {
         this.dataElementService = dataElementService;
     }
 
     private DataElementCategoryService dataElementCategoryOptionComboService;
-
     public void setDataElementCategoryOptionComboService(
         DataElementCategoryService dataElementCategoryOptionComboService )
     {
@@ -144,91 +139,78 @@ public class PortalReportsResultAction implements Action
     }
 
     private IndicatorService indicatorService;
-
     public void setIndicatorService( IndicatorService indicatorService )
     {
         this.indicatorService = indicatorService;
     }
 
     private PeriodService periodService;
-
     public void setPeriodService( PeriodService periodService )
     {
         this.periodService = periodService;
     }
 
     private PatientService patientService;
-
     public void setPatientService( PatientService patientService )
     {
         this.patientService = patientService;
     }
 
     private ProgramService programService;
-
     public void setProgramService( ProgramService programService )
     {
         this.programService = programService;
     }
 
     private ProgramInstanceService programInstanceService;
-
     public void setProgramInstanceService( ProgramInstanceService programInstanceService )
     {
         this.programInstanceService = programInstanceService;
     }
 
     private ProgramStageService programStageService;
-
     public void setProgramStageService( ProgramStageService programStageService )
     {
         this.programStageService = programStageService;
     }
 
     private ProgramStageInstanceService programStageInstanceService;
-
     public void setProgramStageInstanceService( ProgramStageInstanceService programStageInstanceService )
     {
         this.programStageInstanceService = programStageInstanceService;
     }
 
     private PatientIdentifierService patientIdentifierService;
-
     public void setPatientIdentifierService( PatientIdentifierService patientIdentifierService )
     {
         this.patientIdentifierService = patientIdentifierService;
     }
 
     private PatientAttributeValueService patientAttributeValueService;
-
     public void setPatientAttributeValueService( PatientAttributeValueService patientAttributeValueService )
     {
         this.patientAttributeValueService = patientAttributeValueService;
     }
 
     private PatientAttributeService patientAttributeService;
-
     public void setPatientAttributeService( PatientAttributeService patientAttributeService )
     {
         this.patientAttributeService = patientAttributeService;
     }
 
     private PatientDataValueService patientDataValueService;
-
     public void setPatientDataValueService( PatientDataValueService patientDataValueService )
     {
         this.patientDataValueService = patientDataValueService;
     }
 
     private PatientIdentifierTypeService patientIdentifierTypeService;
-
     public void setPatientIdentifierTypeService( PatientIdentifierTypeService patientIdentifierTypeService )
     {
         this.patientIdentifierTypeService = patientIdentifierTypeService;
     }
 
     private I18nFormat format;
-
     public void setFormat( I18nFormat format )
     {
         this.format = format;
@@ -238,119 +220,102 @@ public class PortalReportsResultAction implements Action
     // -------------------------------------------------------------------------
 
     private Map<Patient, Set<ProgramStageInstance>> visitsByPatients = new HashMap<Patient, Set<ProgramStageInstance>>();
-
     public Map<Patient, Set<ProgramStageInstance>> getVisitsByPatients()
     {
         return visitsByPatients;
     }
 
     private InputStream inputStream;
-
     public InputStream getInputStream()
     {
         return inputStream;
     }
 
     private String fileName;
-
     public String getFileName()
     {
         return fileName;
     }
 
     private MathTool mathTool;
-
     public MathTool getMathTool()
     {
         return mathTool;
     }
 
     private OrganisationUnit selectedOrgUnit;
-
     public OrganisationUnit getSelectedOrgUnit()
     {
         return selectedOrgUnit;
     }
 
     private List<OrganisationUnit> orgUnitList;
-
     public List<OrganisationUnit> getOrgUnitList()
     {
         return orgUnitList;
     }
 
     private List<String> dataValueList;
-
     public List<String> getDataValueList()
     {
         return dataValueList;
     }
 
     private List<String> services;
-
     public List<String> getServices()
     {
         return services;
     }
 
     private List<String> slNos;
-
     public List<String> getSlNos()
     {
         return slNos;
     }
 
     private SimpleDateFormat simpleDateFormat;
-
     public SimpleDateFormat getSimpleDateFormat()
     {
         return simpleDateFormat;
     }
 
     private String reportFileNameTB;
-
     public void setReportFileNameTB( String reportFileNameTB )
     {
         this.reportFileNameTB = reportFileNameTB;
     }
 
     private String reportModelTB;
-
     public void setReportModelTB( String reportModelTB )
     {
         this.reportModelTB = reportModelTB;
     }
 
     private String reportLevelTB;
-
     public void setReportLevelTB( String reportLevelTB )
     {
         this.reportLevelTB = reportLevelTB;
     }
 
     private String reportList;
-
     public void setReportList( String reportList )
     {
         this.reportList = reportList;
     }
 
     private Period selectedPeriod;
-
     public Period getSelectedPeriod()
     {
         return selectedPeriod;
     }
 
     private int ouIDTB;
-
     public void setOuIDTB( int ouIDTB )
     {
         this.ouIDTB = ouIDTB;
     }
 
     private int periodList;
-
     public int getPeriodList()
     {
         return periodList;
@@ -362,29 +327,15 @@ public class PortalReportsResultAction implements Action
     }
 
     private List<String> serviceType;
-
     private List<String> deCodeType;
-
     private List<Integer> sheetList;
-
     private List<Integer> rowList;
-
     private List<Integer> colList;
-
     private List<Integer> progList;
-
     private String raFolderName;
-    // private DeCodesXML deCodeTotalList;
-    // private int[] monthCount = { 0, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-
-    private Connection con = null;
-
     private String inputTemplatePath;
-
     private String outputReportPath;
-
     private String deCodesXMLFileName;
-
     private String startDate;
 
     public void setStartDate( String startDate )
@@ -393,32 +344,23 @@ public class PortalReportsResultAction implements Action
     }
 
     private String endDate;
-
     public void setEndDate( String endDate )
     {
         this.endDate = endDate;
     }
 
     private int rowCount;
-
     private Date sDate;
-
     private Date eDate;
 
-    // private String orgUnitInfo = "-1";
-    // private String aggDataTableName;
     // -------------------------------------------------------------------------
     // Action implementation
     // -------------------------------------------------------------------------
     public String execute()
         throws Exception
     {
-
         //con = (new DBConnection()).openConnection();
-
         statementManager.initialise();
-        //raFolderName = "ra_uttarakhand";
-
         raFolderName = reportService.getRAFolderName();
 
         // Initialization
@@ -427,30 +369,26 @@ public class PortalReportsResultAction implements Action
         slNos = new ArrayList<String>();
         simpleDateFormat = new SimpleDateFormat( "MMM-yyyy" );
         deCodesXMLFileName = reportList + "DECodes.xml";
-        //System.out.println("reportList = " + reportList);
         deCodeType = new ArrayList<String>();
         serviceType = new ArrayList<String>();
-
         sheetList = new ArrayList<Integer>();
         rowList = new ArrayList<Integer>();
         colList = new ArrayList<Integer>();
         progList = new ArrayList<Integer>();
-
         System.out.println( "startDate = " + startDate + " endDate = " + endDate );
+        Calendar c = Calendar.getInstance();
+        c.setTime(format.parseDate(startDate));
+        c.add(Calendar.DATE, -1);  // number of days to add
+        startDate = format.formatDate(c.getTime());  // dt is now the new date
+        c.setTime(format.parseDate(endDate));
+        c.add(Calendar.DATE, 1);  // number of days to add
+        endDate = format.formatDate(c.getTime());  // dt is now the new date
         sDate = format.parseDate( startDate );
-
         eDate = format.parseDate( endDate );
-
         simpleDateFormat = new SimpleDateFormat( "MMM-yyyy" );
-
-        // deCodeTotalList = new DeCodesXML();
-
         inputTemplatePath = System.getenv( "DHIS2_HOME" ) + File.separator + raFolderName + File.separator + "template" + File.separator + reportFileNameTB;
-
         outputReportPath = System.getenv( "DHIS2_HOME" ) + File.separator + raFolderName + File.separator + "output" + File.separator + UUID.randomUUID().toString() + ".xls";
-
-        System.out.println( " reportList " + reportList );
-
+        //System.out.println( " reportList " + reportList );
 
         generatPortalReport();
         statementManager.destroy();
@@ -461,7 +399,6 @@ public class PortalReportsResultAction implements Action
     public void generatPortalReport() throws Exception
     {
         Workbook templateWorkbook = Workbook.getWorkbook( new File( inputTemplatePath ) );
-
         WritableWorkbook outputReportWorkbook = Workbook.createWorkbook( new File( outputReportPath ), templateWorkbook );
         // System.out.println( "outputReportWorkbook = "+outputReportWorkbook);
         // Cell formatting
@@ -509,8 +446,6 @@ public class PortalReportsResultAction implements Action
                     int count1 = 0;
 
                     // System.out.println( "Program = " + curProgram + " Program stages = " + programStagesList.size() );
-
-
                     Map<String, String> childPhoneNo = new HashMap<String, String>();
                     childPhoneNo.put( "Others", "Immediate Relations" );
                     childPhoneNo.put( "Neighbor", "Neighbor" );
@@ -627,12 +562,9 @@ public class PortalReportsResultAction implements Action
                         System.out.println( "No prgram Instances" );
                     }
 
-                    int count2 = 0;
-
                     List<Patient> patientList = new ArrayList<Patient>();
                     Map<Patient, ProgramInstance> patientPIList = new HashMap<Patient, ProgramInstance>();
                     Map<ProgramInstance, Collection<ProgramStageInstance>> PIPSIList = new HashMap<ProgramInstance, Collection<ProgramStageInstance>>();
-                    Collection<Patient> sortedPatientList = new ArrayList<Patient>();
                     for ( ProgramInstance programInstance : programInstances )
                     {
                         Patient patient = programInstance.getPatient();
@@ -649,15 +581,19 @@ public class PortalReportsResultAction implements Action
                             ProgramStageInstance programStageInstance = programStageInstanceService.getProgramStageInstance( programInstance, PSName );
                             if ( programStageInstance != null )
                             {
+                                //taking programstageinstace wich are between startdate and enddate
                                 if ( programStageInstance.getDueDate().after( sDate ) && programStageInstance.getDueDate().before( eDate ) )
                                 {
                                     programStageInstances.add( programStageInstance );
+                                    System.out.println( "programInstance = "+programInstance.getId() + " programStageInstances = "+programStageInstance.getId());
                                     //System.out.println("programStageInstances size = "+programStageInstances.size());
                                 }
                             }
                         }
                         if ( programInstance != null && programStageInstances.size() != 0 )
                         {
+                            //putting pi and psi together
+                            System.out.println( "putting in pipsilist = "+programInstance.getId() +" "+ programStageInstances.size());
                             PIPSIList.put( programInstance, programStageInstances );
                             //putting patient and pi together
                             patientPIList.put( patient, programInstance );
@@ -666,9 +602,9 @@ public class PortalReportsResultAction implements Action
                         }
 
                     }
-                    count2 = 0;
                     int sheetNo = 0;
                     rowCount = 0;
+                    //running patient loop
                     for ( Patient patient : patientList )
                     {
                         ProgramInstance programInstance = patientPIList.get( patient );
@@ -715,323 +651,315 @@ public class PortalReportsResultAction implements Action
                                                 tempStr = " ";
                                             }
                                         }
-                                    } else
+                                    }
+                                    else if ( sType.equalsIgnoreCase( "caseAttribute" ) )
                                     {
-                                        if ( sType.equalsIgnoreCase( "caseAttribute" ) )
+                                        int deCodeInt = Integer.parseInt( deCodeString );
+
+                                        PatientAttribute patientAttribute = patientAttributeService.getPatientAttribute( deCodeInt );
+                                        PatientAttributeValue patientAttributeValue = patientAttributeValueService.getPatientAttributeValue( patient, patientAttribute );
+                                        if ( patientAttributeValue != null )
+                                        {
+                                            tempStr = patientAttributeValue.getValue();
+                                            if ( dhisPortalMap.containsKey( tempStr ) )
+                                            {
+                                                    tempStr = dhisPortalMap.get( tempStr );
+                                            }
+                                        } else
+                                        {
+                                            tempStr = " ";
+                                        }
+                                            //System.out.println( "patientAttribute = " + patientAttribute.getName() + " value = " + tempStr );
+                                    }
+                                    else if ( sType.equalsIgnoreCase( "dataelementstage" ) || sType.equalsIgnoreCase( "dataelementstagePODPublic" ) || sType.equalsIgnoreCase( "dataelementstagePODPrivate" ) || sType.equalsIgnoreCase( "dataelementstagePODHome" ) )
+                                    {
+                                        //_______________________dataelementstage_______________________
+                                        dataelementWithStage = deCodeString;
+                                        String[] deAndPs = dataelementWithStage.split( "\\." );
+                                        int psId = Integer.parseInt( deAndPs[0] );
+                                        int deId = Integer.parseInt( deAndPs[1] );
+
+                                        DataElement d1e = dataElementService.getDataElement( deId );
+                                        //System.out.println( "dataelement = " + d1e.getName() );
+                                        ProgramStageInstance pStageInstance = programStageInstanceService.getProgramStageInstance( programInstance, programStageService.getProgramStage( psId ) );
+
+                                        if ( PIPSIList.get( programInstance ).contains( pStageInstance ) || programInstance.isCompleted()==false )
+                                        {
+                                            if( pStageInstance.getExecutionDate()!=null && pStageInstance.getExecutionDate().before( eDate ) )
+                                            {
+                                                PatientDataValue patientDataValue1 = patientDataValueService.getPatientDataValue( pStageInstance, d1e, selectedOrgUnit );
+
+                                                if ( patientDataValue1 == null )
+                                                {
+                                                    tempStr = " ";
+                                                }
+                                                else if ( d1e.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_STRING ) && d1e.isMultiDimensional() )
+                                                {
+                                                    DataElementCategoryOptionCombo dataElementCategoryOptionCombo = dataElementCategoryOptionComboService.getDataElementCategoryOptionCombo( Integer.parseInt( patientDataValue1.getValue() ) );
+                                                    String decocName = dataElementCategoryOptionCombo.getName();
+                                                    if ( dhisPortalMap.containsKey( decocName ) )
+                                                    {
+                                                        decocName = dhisPortalMap.get( decocName );
+                                                        if ( sType.equalsIgnoreCase( "dataelementstagePODPublic" ) )
+                                                        {
+                                                            if ( podPublicList.contains( decocName ) )
+                                                            {
+                                                                tempStr = decocName;
+                                                            }
+                                                        }
+                                                        else if ( sType.equalsIgnoreCase( "dataelementstagePODPrivate" ) )
+                                                        {
+                                                            if ( podPrivateList.contains( decocName ) )
+                                                            {
+                                                                tempStr = decocName;
+                                                            }
+                                                        }
+                                                        else if ( sType.equalsIgnoreCase( "dataelementstagePODHome" ) )
+                                                        {
+                                                            if ( podHomeList.contains( decocName ) )
+                                                            {
+                                                                tempStr = decocName;
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            tempStr = decocName;
+                                                        }                                                                                                                                    
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    tempStr = patientDataValue1.getValue();
+                                                    //System.out.println( "PatientDataValue = " + tempStr);
+                                                    if ( dhisPortalMap.containsKey( tempStr ) )
+                                                    {
+                                                        tempStr = dhisPortalMap.get( tempStr );
+                                                        //System.out.println( "PatientDataValue = " + tempStr);
+                                                    }
+                                                }
+                                                    
+                                             }
+                                         } else
+                                         {
+                                            tempStr = " ";
+                                         }
+                                     }
+                                     else if ( sType.equalsIgnoreCase( "dataelement" ) )
+                                     {
+                                        if ( deCodeString.equalsIgnoreCase( "FACILITY" ) )
+                                        {
+                                            tempStr = selectedOrgUnit.getName();
+                                        }
+                                        else
+                                        {
+                                            int deCodeInt = Integer.parseInt( deCodeString );
+                                            //_______________________all programdes_______________________
+                                            DataElement d1e = dataElementService.getDataElement( deCodeInt );
+                                            //System.out.println( "dataelement = "+d1e.getName() );
+                                            Collection<ProgramStageInstance> programStageInstances = programStageInstanceService.getAllProgramStageInstances();//PIPSIList.get( programInstance );
+                                            Iterator<ProgramStageInstance> itrPSI = programStageInstances.iterator();
+
+                                            while ( itrPSI.hasNext() )
+                                            {
+                                                ProgramStageInstance programStageInstance = itrPSI.next();
+                                                 PatientDataValue patientDataValue1 = patientDataValueService.getPatientDataValue( programStageInstance, d1e, selectedOrgUnit );
+                                                 if ( patientDataValue1 != null )
+                                                 {
+                                                    //System.out.println( "psi = "+programStageInstance.getExecutionDate() + " ou = "+selectedOrgUnit.getName() + " dv = "+patientDataValue1.getValue() );
+                                                    if ( d1e.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_STRING ) && d1e.isMultiDimensional() )
+                                                    {
+                                                        
+                                                        DataElementCategoryOptionCombo dataElementCategoryOptionCombo = dataElementCategoryOptionComboService.getDataElementCategoryOptionCombo( Integer.parseInt( patientDataValue1.getValue() ) );
+                                                        tempStr = dataElementCategoryOptionCombo.getName();
+                                                        if ( dhisPortalMap.containsKey( tempStr ) )
+                                                        {
+                                                            tempStr = dhisPortalMap.get( tempStr );
+                                                            //System.out.println("tempStr = "+tempStr);
+                                                        }
+                                                    }
+                                                    else if(d1e.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_DATE ) )
+                                                    {
+                                                        String str = patientDataValue1.getValue();
+                                                        SimpleDateFormat simpleLmpDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
+                                                        Date doseDate = simpleLmpDateFormat.parse( str );
+                                                        if(doseDate.before( eDate ))
+                                                        {
+                                                            tempStr = simpleLmpDateFormat.format( doseDate );
+                                                        }
+                                                        else
+                                                        {
+                                                            tempStr = "";
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+
+                                                        tempStr = patientDataValue1.getValue();
+                                                        //System.out.println("tempStr = "+tempStr);
+                                                        if ( dhisPortalMap.containsKey( tempStr ) )
+                                                        {
+                                                            tempStr = dhisPortalMap.get( tempStr );
+                                                        }
+
+                                                    }
+                                                    //System.out.println("tempStr = "+tempStr);
+                                                 } else
+                                                 {
+                                                    continue;
+                                                 }
+     
+                                              }
+                                        }
+                                                    //
+                                     }
+                                     else if ( sType.equalsIgnoreCase( "caseProperty" ) )
+                                     {
+                                        //_______________________patient name_______________________
+                                        if ( deCodeString.equalsIgnoreCase( "Name" ) )
+                                        {
+                                            tempStr = patient.getFullName();
+                                        }
+                                        else if ( deCodeString.equalsIgnoreCase( "DOB" ) )
+                                        {
+                                            //_______________________DateOfBirth_______________________
+                                            Date patientDate = patient.getBirthDate();
+                                            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat( "yyyy-MM-dd" );
+                                            tempStr = simpleDateFormat1.format( patientDate );
+                                                                //System.out.println("DOB = "+tempStr);
+                                        }
+                                        else if ( deCodeString.equalsIgnoreCase( "LMP" ) )
+                                        {
+                                            //_______________________LMP_______________________
+                                            Date lmpDate = programInstance.getDateOfIncident();
+                                            SimpleDateFormat simpleLmpDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
+                                            tempStr = simpleLmpDateFormat.format( lmpDate );
+                                        }
+                                        else if ( deCodeString.equalsIgnoreCase( "PNCCheck" ) )
+                                        {
+                                            //_______________________pnc checkup_______________________
+                                            ProgramStage ps = programStageService.getProgramStage( 7 );
+                                            if ( curProgram.getProgramStages().contains( ps ) )
+                                            {
+                                                ProgramStageInstance psi = programStageInstanceService.getProgramStageInstance( programInstance, ps );
+                                                if ( psi.getExecutionDate() != null )
+                                                {
+                                                    tempStr = "Yes";
+                                                }
+                                                else
+                                                {
+                                                    tempStr = "No";
+                                                }
+                                            }
+                                        } 
+                                        else if ( deCodeString.equalsIgnoreCase( "BloodGroup" ) )
+                                        {
+                                            //_______________________Blood group_______________________
+                                            String bloodGroup = patient.getBloodGroup();
+                                            if ( !bloodGroup.trim().equalsIgnoreCase( "" ) )
+                                            {
+                                                if ( dhisPortalMap.containsKey( bloodGroup ) )
+                                                {
+                                                    tempStr = dhisPortalMap.get( bloodGroup );
+                                                    //System.out.println("tempStr = "+tempStr);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                tempStr = "N.A";
+                                            }
+                                        }
+                                        else if ( deCodeString.equalsIgnoreCase( "MotherId" ) )
+                                        {
+                                            Patient representative = patient.getRepresentative();
+                                            if ( representative != null )
+                                            {
+                                                String gender = representative.getGender();
+                                                if ( gender.equalsIgnoreCase( "F" ) )
+                                                {
+                                                    tempStr = patientIdentifierService.getPatientIdentifier( representative ).getIdentifier();
+                                                }
+                                                //System.out.println("Gender = "+gender + " temStr = "+tempStr);
+                                            }
+                                        }
+                                        else if ( sType.equalsIgnoreCase( "dataelementIFA" ) )
+                                        {
+                                            int deCodeInt = Integer.parseInt( deCodeString );
+                                            //_______________________all programdes_______________________
+                                            DataElement d1e = dataElementService.getDataElement( deCodeInt );
+                                            Collection<ProgramStageInstance> programStageInstances = PIPSIList.get( programInstance );
+                                            Iterator<ProgramStageInstance> itrPSI = programStageInstances.iterator();
+                                            int ifaCount = 0;
+
+                                            while ( itrPSI.hasNext() )
+                                            {
+                                                ProgramStageInstance programStageInstance = itrPSI.next();
+                                                PatientDataValue patientDataValue1 = patientDataValueService.getPatientDataValue( programStageInstance, d1e, selectedOrgUnit );
+                                                if ( patientDataValue1 != null )
+                                                {
+                                                    ifaCount = Integer.parseInt( patientDataValue1.getValue() ) + ifaCount;
+                                                    SimpleDateFormat simpleIfaDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
+                                                    if ( ifaCount >= 100 )
+                                                    {
+                                                        tempStr = simpleIfaDateFormat.format( programStageInstance.getExecutionDate() );
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }//end of if ifa
+                                        else if ( sType.equalsIgnoreCase( "caseAttributePN" ) || sType.equalsIgnoreCase( "caseAttributeHusband" ) || sType.equalsIgnoreCase( "caseAttributeMFName" ) )
                                         {
                                             int deCodeInt = Integer.parseInt( deCodeString );
 
                                             PatientAttribute patientAttribute = patientAttributeService.getPatientAttribute( deCodeInt );
                                             PatientAttributeValue patientAttributeValue = patientAttributeValueService.getPatientAttributeValue( patient, patientAttribute );
+                                            String name = "";
                                             if ( patientAttributeValue != null )
                                             {
-                                                tempStr = patientAttributeValue.getValue();
-                                                if ( dhisPortalMap.containsKey( tempStr ) )
+                                                if ( sType.equalsIgnoreCase( "caseAttributePN" ) )
                                                 {
-                                                    tempStr = dhisPortalMap.get( tempStr );
+                                                    name = patientAttributeValue.getValue();
+                                                    //System.out.println("name = "+name);
+                                                    if ( curProgram.getId() == 1 && dhisPortalMap.containsKey( name ) )
+                                                    {
+                                                        cAPhoneNumberName = name;
+                                                        tempStr = dhisPortalMap.get( name );
+                                                    }
+                                                    if ( curProgram.getId() == 2 && childPhoneNo.containsKey( name ) )
+                                                    {
+                                                        cAPhoneNumberName = name;
+                                                        tempStr = childPhoneNo.get( name );
+                                                    }
+                                                                        //System.out.println("name = "+name + " cAPhoneNumberName = "+cAPhoneNumberName);
                                                 }
-                                            } else
+                                                if ( sType.equalsIgnoreCase( "caseAttributeHusband" ) )
+                                                {
+                                                    name = patientAttributeValue.getValue();
+                                                    if ( cAPhoneNumberName.equals( "Husband" ) )
+                                                    {
+                                                        tempStr = name;
+                                                    }
+                                                }
+                                                if ( sType.equalsIgnoreCase( "caseAttributeMFName" ) )
+                                                {
+                                                    name = patientAttributeValue.getValue();
+                                                    if ( cAPhoneNumberName.equals( "Mother" ) || cAPhoneNumberName.equals( "Father" ) )
+                                                    {
+                                                        tempStr = mFNameMap.get( cAPhoneNumberName);
+                                                    }
+                                                }
+                                            }
+                                            else
                                             {
                                                 tempStr = " ";
                                             }
-                                            //System.out.println( "patientAttribute = " + patientAttribute.getName() + " value = " + tempStr );
-                                        } else
-                                        {
-                                            if ( sType.equalsIgnoreCase( "dataelementstage" ) || sType.equalsIgnoreCase( "dataelementstagePODPublic" ) || sType.equalsIgnoreCase( "dataelementstagePODPrivate" ) || sType.equalsIgnoreCase( "dataelementstagePODHome" ) )
-                                            {
-                                                //_______________________dataelementstage_______________________
-                                                dataelementWithStage = deCodeString;
-                                                String[] deAndPs = dataelementWithStage.split( "\\." );
-                                                int psId = Integer.parseInt( deAndPs[0] );
-                                                int deId = Integer.parseInt( deAndPs[1] );
-
-                                                DataElement d1e = dataElementService.getDataElement( deId );
-                                                System.out.println( "dataelement = " + d1e.getName() );
-                                                ProgramStageInstance pStageInstance = programStageInstanceService.getProgramStageInstance( programInstance, programStageService.getProgramStage( psId ) );
-                                                System.out.println( "programInstance = " + programInstance.getId() + " "+ programInstance.getPatient().getFullName() + " pStageInstance = "+pStageInstance.getExecutionDate() );
-                                                if ( PIPSIList.get( programInstance ).contains( pStageInstance ) )
-                                                {
-                                                    PatientDataValue patientDataValue1 = patientDataValueService.getPatientDataValue( pStageInstance, d1e, selectedOrgUnit );
-
-                                                    if ( patientDataValue1 == null )
-                                                    {
-                                                        tempStr = " ";
-                                                    } else
-                                                    {
-                                                        if ( d1e.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_STRING ) && d1e.isMultiDimensional() )
-                                                        {
-                                                            DataElementCategoryOptionCombo dataElementCategoryOptionCombo = dataElementCategoryOptionComboService.getDataElementCategoryOptionCombo( Integer.parseInt( patientDataValue1.getValue() ) );
-                                                            String decocName = dataElementCategoryOptionCombo.getName();
-                                                            if ( dhisPortalMap.containsKey( decocName ) )
-                                                            {
-                                                                decocName = dhisPortalMap.get( decocName );
-                                                                if ( sType.equalsIgnoreCase( "dataelementstagePODPublic" ) )
-                                                                {
-                                                                    if ( podPublicList.contains( decocName ) )
-                                                                    {
-                                                                        tempStr = decocName;
-                                                                    }
-                                                                } else
-                                                                {
-                                                                    if ( sType.equalsIgnoreCase( "dataelementstagePODPrivate" ) )
-                                                                    {
-                                                                        if ( podPrivateList.contains( decocName ) )
-                                                                        {
-                                                                            tempStr = decocName;
-                                                                        }
-                                                                    } else
-                                                                    {
-                                                                        if ( sType.equalsIgnoreCase( "dataelementstagePODHome" ) )
-                                                                        {
-                                                                            if ( podHomeList.contains( decocName ) )
-                                                                            {
-                                                                                tempStr = decocName;
-                                                                            }
-                                                                        } else
-                                                                        {
-                                                                            tempStr = decocName;
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        } else
-                                                        {
-                                                            tempStr = patientDataValue1.getValue();
-                                                            System.out.println( "PatientDataValue = " + tempStr);
-                                                            if ( dhisPortalMap.containsKey( tempStr ) )
-                                                            {
-                                                                tempStr = dhisPortalMap.get( tempStr );
-                                                                 System.out.println( "PatientDataValue = " + tempStr);
-                                                            }
-                                                        }
-                                                    }
-                                                } else
-                                                {
-                                                    tempStr = " ";
-                                                }
-                                            } else
-                                            {
-                                                if ( sType.equalsIgnoreCase( "dataelement" ) )
-                                                {
-                                                    if ( deCodeString.equalsIgnoreCase( "FACILITY" ) )
-                                                    {
-                                                        tempStr = selectedOrgUnit.getName();
-                                                    } else
-                                                    {
-                                                        int deCodeInt = Integer.parseInt( deCodeString );
-                                                        //_______________________all programdes_______________________
-                                                        DataElement d1e = dataElementService.getDataElement( deCodeInt );
-                                                        Collection<ProgramStageInstance> programStageInstances = PIPSIList.get( programInstance );
-                                                        Iterator<ProgramStageInstance> itrPSI = programStageInstances.iterator();
-
-                                                        while ( itrPSI.hasNext() )
-                                                        {
-
-                                                            ProgramStageInstance programStageInstance = itrPSI.next();
-                                                            PatientDataValue patientDataValue1 = patientDataValueService.getPatientDataValue( programStageInstance, d1e, selectedOrgUnit );
-                                                            if ( patientDataValue1 != null )
-                                                            {
-                                                                if ( d1e.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_STRING ) && d1e.isMultiDimensional() )
-                                                                {
-                                                                    DataElementCategoryOptionCombo dataElementCategoryOptionCombo = dataElementCategoryOptionComboService.getDataElementCategoryOptionCombo( Integer.parseInt( patientDataValue1.getValue() ) );
-                                                                    tempStr = dataElementCategoryOptionCombo.getName();
-                                                                    if ( dhisPortalMap.containsKey( tempStr ) )
-                                                                    {
-                                                                        tempStr = dhisPortalMap.get( tempStr );
-                                                                        //System.out.println("tempStr = "+tempStr);
-                                                                    }
-                                                                } else
-                                                                {
-
-                                                                    tempStr = patientDataValue1.getValue();
-                                                                    if ( dhisPortalMap.containsKey( tempStr ) )
-                                                                    {
-                                                                        tempStr = dhisPortalMap.get( tempStr );
-                                                                    }
-
-                                                                }
-                                                            } else
-                                                            {
-                                                                continue;
-                                                            }
-                                                            //System.out.println( "dataelement value  = " + tempStr );
-                                                        }
-                                                    }
-                                                    //
-                                                } else
-                                                {
-                                                    if ( sType.equalsIgnoreCase( "caseProperty" ) )
-                                                    {
-                                                        //_______________________patient name_______________________
-                                                        if ( deCodeString.equalsIgnoreCase( "Name" ) )
-                                                        {
-                                                            tempStr = patient.getFullName();
-                                                        } else
-                                                        {
-                                                            if ( deCodeString.equalsIgnoreCase( "DOB" ) )
-                                                            {
-                                                                //_______________________DateOfBirth_______________________
-                                                                Date patientDate = patient.getBirthDate();
-                                                                SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat( "yyyy-MM-dd" );
-                                                                tempStr = simpleDateFormat1.format( patientDate );
-                                                                //System.out.println("DOB = "+tempStr);
-                                                            } else
-                                                            {
-                                                                if ( deCodeString.equalsIgnoreCase( "LMP" ) )
-                                                                {
-                                                                    //_______________________LMP_______________________
-                                                                    Date lmpDate = programInstance.getDateOfIncident();
-                                                                    SimpleDateFormat simpleLmpDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
-                                                                    tempStr = simpleLmpDateFormat.format( lmpDate );
-                                                                } else
-                                                                {
-                                                                    if ( deCodeString.equalsIgnoreCase( "PNCCheck" ) )
-                                                                    {
-                                                                        //_______________________pnc checkup_______________________
-                                                                        ProgramStage ps = programStageService.getProgramStage( 7 );
-                                                                        if ( curProgram.getProgramStages().contains( ps ) )
-                                                                        {
-                                                                            ProgramStageInstance psi = programStageInstanceService.getProgramStageInstance( programInstance, ps );
-                                                                            if ( psi.getExecutionDate() != null )
-                                                                            {
-                                                                                tempStr = "Yes";
-                                                                            } else
-                                                                            {
-                                                                                tempStr = "No";
-                                                                            }
-                                                                        }
-                                                                    } else
-                                                                    {
-                                                                        if ( deCodeString.equalsIgnoreCase( "BloodGroup" ) )
-                                                                        {
-                                                                            //_______________________Blood group_______________________
-                                                                            String bloodGroup = patient.getBloodGroup();
-                                                                            if ( !bloodGroup.trim().equalsIgnoreCase( "" ) )
-                                                                            {
-                                                                                if ( dhisPortalMap.containsKey( bloodGroup ) )
-                                                                                {
-                                                                                    tempStr = dhisPortalMap.get( bloodGroup );
-                                                                                    //System.out.println("tempStr = "+tempStr);
-                                                                                }
-                                                                            } else
-                                                                            {
-                                                                                tempStr = "N.A";
-                                                                            }
-                                                                        } else
-                                                                        {
-                                                                            if ( deCodeString.equalsIgnoreCase( "MotherId" ) )
-                                                                            {
-                                                                                Patient representative = patient.getRepresentative();
-                                                                                if ( representative != null )
-                                                                                {
-                                                                                    String gender = representative.getGender();
-                                                                                    if ( gender.equalsIgnoreCase( "F" ) )
-                                                                                    {
-                                                                                        tempStr = patientIdentifierService.getPatientIdentifier( representative ).getIdentifier();
-                                                                                    }
-                                                                                    System.out.println("Gender = "+gender + " temStr = "+tempStr);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-
-                                                    } else
-                                                    {
-                                                        if ( sType.equalsIgnoreCase( "dataelementIFA" ) )
-                                                        {
-                                                            int deCodeInt = Integer.parseInt( deCodeString );
-                                                            //_______________________all programdes_______________________
-                                                            DataElement d1e = dataElementService.getDataElement( deCodeInt );
-                                                            Collection<ProgramStageInstance> programStageInstances = PIPSIList.get( programInstance );
-                                                            Iterator<ProgramStageInstance> itrPSI = programStageInstances.iterator();
-                                                            int ifaCount = 0;
-
-                                                            while ( itrPSI.hasNext() )
-                                                            {
-                                                                ProgramStageInstance programStageInstance = itrPSI.next();
-                                                                PatientDataValue patientDataValue1 = patientDataValueService.getPatientDataValue( programStageInstance, d1e, selectedOrgUnit );
-                                                                if ( patientDataValue1 != null )
-                                                                {
-                                                                    ifaCount = Integer.parseInt( patientDataValue1.getValue() ) + ifaCount;
-                                                                    SimpleDateFormat simpleIfaDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
-                                                                    if ( ifaCount >= 100 )
-                                                                    {
-                                                                        tempStr = simpleIfaDateFormat.format( programStageInstance.getExecutionDate() );
-                                                                        break;
-                                                                    }
-                                                                }
-                                                            }
-                                                        }//end of if ifa
-                                                        else
-                                                        {
-                                                            if ( sType.equalsIgnoreCase( "caseAttributePN" ) || sType.equalsIgnoreCase( "caseAttributeHusband" ) || sType.equalsIgnoreCase( "caseAttributeMFName" ) )
-                                                            {
-                                                                int deCodeInt = Integer.parseInt( deCodeString );
-
-                                                                PatientAttribute patientAttribute = patientAttributeService.getPatientAttribute( deCodeInt );
-                                                                PatientAttributeValue patientAttributeValue = patientAttributeValueService.getPatientAttributeValue( patient, patientAttribute );
-                                                                String name = "";
-                                                                if ( patientAttributeValue != null )
-                                                                {
-                                                                    if ( sType.equalsIgnoreCase( "caseAttributePN" ) )
-                                                                    {
-                                                                        name = patientAttributeValue.getValue();
-                                                                        //System.out.println("name = "+name);
-                                                                        if ( curProgram.getId() == 1 && dhisPortalMap.containsKey( name ) )
-                                                                        {
-                                                                            cAPhoneNumberName = name;
-                                                                            tempStr = dhisPortalMap.get( name );
-                                                                        }
-                                                                        if ( curProgram.getId() == 2 && childPhoneNo.containsKey( name ) )
-                                                                        {
-                                                                            cAPhoneNumberName = name;
-                                                                            tempStr = childPhoneNo.get( name );
-                                                                        }
-                                                                        //System.out.println("name = "+name + " cAPhoneNumberName = "+cAPhoneNumberName);
-                                                                    }
-                                                                    if ( sType.equalsIgnoreCase( "caseAttributeHusband" ) )
-                                                                    {
-                                                                        name = patientAttributeValue.getValue();
-                                                                        if ( cAPhoneNumberName.equals( "Husband" ) )
-                                                                        {
-                                                                            tempStr = name;
-                                                                        }
-                                                                    }
-                                                                    if ( sType.equalsIgnoreCase( "caseAttributeMFName" ) )
-                                                                    {
-                                                                        name = patientAttributeValue.getValue();
-                                                                        if ( cAPhoneNumberName.equals( "Mother" ) || cAPhoneNumberName.equals( "Father" ) )
-                                                                        {
-                                                                            tempStr = mFNameMap.get( cAPhoneNumberName);
-                                                                        }
-                                                                    }
-                                                                } else
-                                                                {
-                                                                    tempStr = " ";
-                                                                }
-
-                                                            }
-
-                                                        }
-
-                                                    }
-
-                                                }
-
-                                            }
                                         }
-                                    }
 
-
+                                     }
                                 }// end of if for excluding NA and program stages
                                 sheet = outputReportWorkbook.getSheet( sheetNo );
                                 WritableCell cell = sheet.getWritableCell( tempColNo, rowNo );
                                 
                                 sheet.addCell( new Label( tempColNo, rowNo, tempStr, wCellformat ) );
-
                                 //System.out.println( "tempColNo = " + tempColNo + " rowNo = " + rowNo + " value = " + tempStr );
 
                             }// end of checking program no is same or not
@@ -1040,7 +968,6 @@ public class PortalReportsResultAction implements Action
                         rowCount++;
                         rowNo++;
                     }//end of patient for loop
-                    //}
 
                 }//end of curprogram if loop
             }//end of for loop for programs
