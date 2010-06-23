@@ -30,6 +30,9 @@
         <li>
             <a href = "gapMinder.action" target="_blank">GapMinder</a>
         </li>
+        <li>
+            <a href = "sendMail.action">Send e-mail</a>
+        </li>
 
 										
     </ul>

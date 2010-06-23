@@ -180,7 +180,17 @@
 			class="org.hisp.dhis.reports.action.ReportsHomePageAction">						
 			<result name="success" type="velocity">/dhis-web-reports/gapMinderResult.vm</result>			
 		</action>
-	  	   	    			  
+
+<!-- Send E-mail -->
+    
+    <action name="sendMail"
+      class="org.hisp.dhis.reports.action.SendMailAction">
+      <result name="success" type="velocity">/main.vm</result>
+      <param name="page">/dhis-web-reports/sendMailResult.vm</param>
+      <param name="menu">/dhis-web-reports/menu.vm</param>                   
+    </action>
+    
+    	  	   	    			  
 	<!-- AJAX Requests -->
 	<action name="getDataElements"
       class="org.hisp.dhis.reports.action.GetDataElementsAction">

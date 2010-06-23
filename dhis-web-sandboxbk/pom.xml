@@ -47,11 +47,13 @@
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-core</artifactId>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-service-jdbc</artifactId>
       <version>${version}</version>
-    </dependency>        
+    </dependency>    
+      -->    
     <dependency>
       <groupId>org.hisp.dhis</groupId>
       <artifactId>dhis-web-commons</artifactId>
@@ -85,15 +87,15 @@
  	</dependency>
     
 	<!-- Web -->
-    
+<!--    
     <dependency>
       <groupId>com.opensymphony</groupId>
       <artifactId>webwork</artifactId>
       <version>${version}</version>
     </dependency>
-    
+    -->
     <!-- Other -->
-    
+    <!--
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
@@ -103,7 +105,7 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>5.0.4</version>
     </dependency>
-	
+	-->
 	
   
   </dependencies>	  

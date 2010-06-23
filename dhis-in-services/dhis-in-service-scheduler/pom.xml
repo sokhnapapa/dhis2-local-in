@@ -52,5 +52,13 @@
       <artifactId>commons-math</artifactId>
     </dependency>
     
+    <!-- Java Mail API -->
+    <dependency>
+     <groupId>javax.mail</groupId>
+     <artifactId>mail</artifactId>
+     <version>1.4.2</version>
+    </dependency>
+
+    
   </dependencies>
 </project>

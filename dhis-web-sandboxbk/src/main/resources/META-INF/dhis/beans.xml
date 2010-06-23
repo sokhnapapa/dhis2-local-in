@@ -31,7 +31,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>
 
 		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>		
 		<property name="periodService">
 			<ref bean="org.hisp.dhis.period.PeriodService"/>
@@ -70,7 +70,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 			<ref bean="org.hisp.dhis.dataset.DataSetService"/>
 		</property>
 		<property name="dataEntryFormService">
-			<ref bean="org.hisp.dhis.dataset.DataEntryFormService"/>
+			<ref bean="org.hisp.dhis.dataentryform.DataEntryFormService"/>
 		</property>
 		
 	</bean>
@@ -101,7 +101,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>
 
 		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>		
 		<property name="periodService">
 			<ref bean="org.hisp.dhis.period.PeriodService"/>
@@ -158,7 +158,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>
 
 		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>		
 		<property name="periodService">
 			<ref bean="org.hisp.dhis.period.PeriodService"/>
@@ -211,7 +211,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>
 
 		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>		
 		<property name="periodService">
 			<ref bean="org.hisp.dhis.period.PeriodService"/>
@@ -270,7 +270,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>
 
 		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>		
 		<property name="periodService">
 			<ref bean="org.hisp.dhis.period.PeriodService"/>
@@ -316,7 +316,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>
 
 		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>		
 		<property name="periodService">
 			<ref bean="org.hisp.dhis.period.PeriodService"/>
@@ -360,7 +360,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
        <property name="dataValueService"
           ref="org.hisp.dhis.datavalue.DataValueService"/>
        <property name="dataElementCategoryOptionComboService"
-          ref="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>				
+          ref="org.hisp.dhis.dataelement.DataElementCategoryService"/>				
 	</bean>
 
     <bean id="org.hisp.dhis.reports.util.DBConnection"
@@ -385,6 +385,17 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>						
 	</bean>
 
+<!-- Send E-mail -->
+  <bean id="org.hisp.dhis.reports.action.SendMailAction"
+    class="org.hisp.dhis.reports.action.SendMailAction"
+    scope="prototype">
+    
+    <property name="mailService">
+      <ref bean="org.hisp.dhis.mail.MailService"/>
+    </property>           
+  </bean>
+
+  
 	<!-- Importing From OLD DB -->
     <bean id="org.hisp.dhis.reports.importing.action.ImportingResultAction"
        class="org.hisp.dhis.reports.importing.action.ImportingResultAction" scope="prototype">
@@ -399,7 +410,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
        <property name="dataValueService"
           ref="org.hisp.dhis.datavalue.DataValueService"/>
        <property name="dataElementCategoryOptionComboService"
-          ref="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+          ref="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		<property name="dbConnection">
 			<ref bean="org.hisp.dhis.reports.util.DBConnection"/>
 		</property>
@@ -414,7 +425,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		  <ref bean="org.hisp.dhis.dataelement.DataElementService"/>
 		</property>
 		<property name="dataElementCategoryOptionComboService">
-		  <ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+		  <ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>
 	</bean>
 	
