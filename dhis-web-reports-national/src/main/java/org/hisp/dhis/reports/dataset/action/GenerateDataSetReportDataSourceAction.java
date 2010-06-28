@@ -96,10 +96,11 @@ public class GenerateDataSetReportDataSourceAction
         List<Integer> organisationUnits = new ArrayList<Integer>();
         organisationUnits.add( selectedStateManager.getSelectedOrganisationUnit().getId() );
         
-        process.setDataElementIds( getIdentifiers( DataElement.class, selectedStateManager.getSelectedDataSet().getDataElements() ) );
-        process.setIndicatorIds( new ArrayList<Integer>() );
-        process.setPeriodIds( periods  );
-        process.setOrganisationUnitIds( organisationUnits );
+        
+        //process.setDataElementIds( getIdentifiers( DataElement.class, selectedStateManager.getSelectedDataSet().getDataElements() ) );
+        //process.setIndicatorIds( new ArrayList<Integer>() );
+        //process.setPeriodIds( periods  );
+        //process.setOrganisationUnitIds( organisationUnits );
 
         processCoordinator.requestProcessExecution( executor );
 

@@ -105,10 +105,10 @@ public class CreateChartAction
         
         DataMartInternalProcess process = (DataMartInternalProcess) executor.getProcess();
         
-        process.setDataElementIds( new HashSet<Integer>() );
-        process.setIndicatorIds( getIdentifiers( Indicator.class, chart.getIndicators() ) );
-        process.setPeriodIds( getIdentifiers( Period.class, chart.getPeriods() ) );
-        process.setOrganisationUnitIds( getIdentifiers( OrganisationUnit.class, chart.getOrganisationUnits() ) );
+        //process.setDataElementIds( new HashSet<Integer>() );
+        //process.setIndicatorIds( getIdentifiers( Indicator.class, chart.getIndicators() ) );
+        //process.setPeriodIds( getIdentifiers( Period.class, chart.getPeriods() ) );
+        //process.setOrganisationUnitIds( getIdentifiers( OrganisationUnit.class, chart.getOrganisationUnits() ) );
 
         processCoordinator.requestProcessExecution( executor );
         

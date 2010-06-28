@@ -40,7 +40,7 @@ import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.organisationunit.OrganisationUnitService;
 import org.hisp.dhis.period.Period;
 import org.hisp.dhis.period.PeriodService;
-import org.hisp.dhis.reporttable.RelativePeriods;
+import org.hisp.dhis.period.RelativePeriods;
 import org.hisp.dhis.system.util.ConversionUtils;
 
 import com.opensymphony.xwork2.Action;
@@ -298,10 +298,10 @@ public class SaveChartAction
         relatives.setReportingMonth( reportingMonth );
         relatives.setLast3Months( last3Months );
         relatives.setLast6Months( last6Months );
-        relatives.setLast9Months( last9Months );
+        //relatives.setLast9Months( last9Months );
         relatives.setLast12Months( last12Months );
         relatives.setSoFarThisYear( soFarThisYear );
-        relatives.setSoFarThisFinancialYear( soFarThisFinancialYear );
+        //relatives.setSoFarThisFinancialYear( soFarThisFinancialYear );
         relatives.setLast3To6Months( last3To6Months );
         relatives.setLast6To9Months( last6To9Months );
         relatives.setLast9To12Months( last9To12Months );
