@@ -29,7 +29,6 @@ package org.hisp.dhis.dashboard.ta.action;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -53,7 +52,6 @@ import org.hisp.dhis.period.Period;
 import org.hisp.dhis.period.PeriodService;
 import org.hisp.dhis.period.PeriodType;
 import org.hisp.dhis.period.QuarterlyPeriodType;
-import org.hisp.dhis.period.RelativePeriodType;
 import org.hisp.dhis.period.SixMonthlyPeriodType;
 import org.hisp.dhis.period.TwoYearlyPeriodType;
 import org.hisp.dhis.period.WeeklyPeriodType;
@@ -224,7 +222,6 @@ public class GenerateTabularAnalysisFormAction
             String pTName = ptIterator.next().getName();
             if ( pTName.equalsIgnoreCase( DailyPeriodType.NAME ) || pTName.equalsIgnoreCase( TwoYearlyPeriodType.NAME )
                 || pTName.equalsIgnoreCase( OnChangePeriodType.NAME )
-                || pTName.equalsIgnoreCase( RelativePeriodType.NAME )
                 || pTName.equalsIgnoreCase( WeeklyPeriodType.NAME ) )
             {
                 ptIterator.remove();
