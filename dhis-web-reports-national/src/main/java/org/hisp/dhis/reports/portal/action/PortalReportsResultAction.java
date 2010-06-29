@@ -73,6 +73,7 @@ import org.xml.sax.SAXParseException;
 import com.opensymphony.xwork2.Action;
 import jxl.write.Label;
 import jxl.write.WritableCell;
+import org.dom4j.io.SAXReader;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.patient.PatientIdentifier;
@@ -445,7 +446,7 @@ public class PortalReportsResultAction implements Action
                     programStagesList = curProgram.getProgramStages();
                     int count1 = 0;
 
-                    // System.out.println( "Program = " + curProgram + " Program stages = " + programStagesList.size() );
+
                     Map<String, String> childPhoneNo = new HashMap<String, String>();
                     childPhoneNo.put( "Others", "Immediate Relations" );
                     childPhoneNo.put( "Neighbor", "Neighbor" );
@@ -461,6 +462,7 @@ public class PortalReportsResultAction implements Action
                     dhisPortalMap.put( "Mother", "Relative" );
                     dhisPortalMap.put( "Father", "Relative" );
                     dhisPortalMap.put( "Husband", "Relative" );
+                    dhisPortalMap.put( "Self", "Self" );
 
                     //putting jsy beneficiary / rti/sti / complication / pnc checkup / breast feeded in map
                     dhisPortalMap.put( "true", "Yes" );
@@ -486,7 +488,7 @@ public class PortalReportsResultAction implements Action
                     dhisPortalMap.put( "(Home non SBA)", "Non SBA" );
                     dhisPortalMap.put( "(Home SBA)", "SBA" );
                     //place of delivery public
-                    dhisPortalMap.put( "(Subcentre)", "Sub Centre" );
+                    dhisPortalMap.put( "(Sub Centre)", "Sub Centre" );
                     dhisPortalMap.put( "(PHC.)", "PHC" );
                     dhisPortalMap.put( "(CHC.)", "CH" );
                     dhisPortalMap.put( "(SDH.)", "SDH" );
@@ -518,7 +520,7 @@ public class PortalReportsResultAction implements Action
                     dhisPortalMap.put( "(None)", "None" );
                     //pnc visit
                     dhisPortalMap.put( "(with in 7 days)", "Within 7 days" );
-                    dhisPortalMap.put( "(With in 48 hrs)", "Within 7 days" );
+                    dhisPortalMap.put( "(With in 48 hrs)", "Within 48 hours" );
                     //pnc complications
                     dhisPortalMap.put( "(None.)", "None" );
                     dhisPortalMap.put( "(Sepsis)", "Sepsis" );
@@ -548,6 +550,37 @@ public class PortalReportsResultAction implements Action
                     mFNameMap.put( "Father", "Father's" );
                     mFNameMap.put( "Mother", "Mother's" );
 
+                    // <editor-fold defaultstate="collapsed" desc="Get all Maps">
+                  /*  File allMaps = new File( System.getProperty( "user.home" ) + File.separator + "dhis" + File.separator + raFolderName
+            + File.separator + "\\DhisPortalMap.xml");
+          if (allMaps.exists()) {
+                SAXReader reader = new SAXReader();
+                org.dom4j.Document document = reader.read(allMaps.toURI().toURL());
+                org.dom4j.Element root = document.getRootElement();
+                org.dom4j.XPath xpathSelector = new Dom4jXPath("//patientIDs/available");
+                List list = xpathSelector.selectNodes(document);
+                if (list.size() > 0) {
+                    if (list.size() < 50) {
+                        registerPatientModel.setMessage("Very Few IDs (" + list.size() + ") Left. Please Upload New IDs");
+                    }
+                    registerPatientModel.setIdentifierString(((Element) list.get(0)).getText());
+                    Element usedNode = (Element) list.get(0);
+                    String usedIdentifier = usedNode.getText();
+                    root.remove(usedNode);
+                    root.addElement("locked").addText(usedIdentifier);
+                    FileWriter fw = new FileWriter(availableIDs);
+                    OutputFormat format = OutputFormat.createPrettyPrint();
+                    XMLWriter writer = new XMLWriter(fw, format);
+                    writer.write(document);
+                    writer.close();
+                } else {
+                    registerPatientModel.setMessage("No Identifiers Left. Please Upload New IDs");
+                }
+            } else {
+                registerPatientModel.setMessage("AvailableIDs File Not Found. Please Upload Generated File from Options Page");
+            }*/
+            // </editor-fold>
+                    
                     //Checking whether there is stages or not.
                     if ( programStagesList == null || programStagesList.isEmpty() )
                     {
