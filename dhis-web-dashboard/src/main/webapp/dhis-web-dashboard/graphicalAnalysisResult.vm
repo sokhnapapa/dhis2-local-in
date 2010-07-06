@@ -16,6 +16,11 @@
   chartNamesToView[0] = new Array("Nothing");
   chartNamesToView[1] = new Array("Vertical3DBarChart","Horizontal3DBarChart","LineChart","LineAndBarChart","DualAxisChart","AreaChart","PieChart3D");	
   chartNamesToView[2] = new Array("Vertical3DBarChart","Horizontal3DBarChart","LineChart","LineAndBarChart","DualAxisChart","AreaChart");  							  						
+  
+  function drillDownResult(evt, selVal )
+  {
+    evt.target.href = "drillDownResult.action?selectedValues="+selVal;
+  }
   	
   function nextCharttoView()
    {         
@@ -407,19 +412,23 @@ function Request()
     <table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse; border-style: dotted" bordercolor="#111111" width="100%">                
         <tr>
             <td class="TableHeadingCellStyles" style="border-style: dotted; border-width: 1">Service Name</td>
-            	#foreach($xaxisvalue in $xseriesList)
-            	    <td class="TableHeadingCellStyles" align="center" style="border-style: dotted; border-width: 1">$xaxisvalue</td>				     
-            	#end
+            #foreach($xaxisvalue in $xseriesList)
+              <td class="TableHeadingCellStyles" align="center" style="border-style: dotted; border-width: 1">$xaxisvalue</td>				     
+            #end
         </tr>
-        	#set($count1 = 0)                         	
+        
+		#set($count1 = 0)
+		#set( $count3 = 0 )                         	
         #foreach($onedataList in $dataList)                    
-            <tr>
-                <td class="TableHeadingCellStyles" style="border-style: dotted; border-width: 1">$yseriesList.get($count1)</td>
-               		 #foreach($data in $onedataList)
-               		     <td class="TableDataCellStyles" align="center" style="border-style: dotted; border-width: 1">$data</td>               		             
-               		 #end
-               		 #set($count1 = $count1 + 1)
-            </tr>    
+          <tr>
+			<td class="TableHeadingCellStyles" style="border-style: dotted; border-width: 1">$yseriesList.get($count1)</td>
+                
+			#foreach($data in $onedataList)
+              <td class="TableDataCellStyles" align="center" style="border-style: dotted; border-width: 1"><a href="#" onclick="javascript:drillDownResult( event, '$selectedValues.get($count3)' )" target="_blank">$data</a></td>               		             
+              #set( $count3 = $count3 + 1 )
+			#end
+            #set( $count1 = $count1 + 1 )
+          </tr>    
         #end	
     </table>
     </div>

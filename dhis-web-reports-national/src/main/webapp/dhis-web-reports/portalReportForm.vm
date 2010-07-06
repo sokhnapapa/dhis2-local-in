@@ -48,7 +48,7 @@
 			    return true;
 			}			
 		</script>
-		<h1>CBIT Feedback Report Analyser</h1><hr /><br />
+		<h1>NBITS GOI Report Analyser</h1><hr /><br />
 	        
 		<form id="reportForm" name="reportForm" action="generatePortalReport.action" method="post" onsubmit="return formValidations()" target="_blank">
                     <table align="center" style=" border-collapse: collapse; margin-top: 0;" cellpadding="0" cellspacing="0" width="730" border=0>

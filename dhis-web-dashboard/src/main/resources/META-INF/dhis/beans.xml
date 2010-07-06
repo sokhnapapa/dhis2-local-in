@@ -55,9 +55,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		<property name="aggregationService">
 			<ref bean="org.hisp.dhis.aggregation.AggregationService"/>
 		</property>
-		<property name="dataElementCategoryOptionComboService">
+		<property name="dataElementCategoryService">
 			<ref
-				bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+				bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>
 		<property name="dashBoardService">
 			<ref bean="org.hisp.dhis.dashboard.util.DashBoardService"/>
@@ -89,6 +89,36 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		class="org.hisp.dhis.dashboard.ga.action.charts.GenerateChartAction"
 		scope="prototype">
 	</bean>
+	
+	 <bean id="org.hisp.dhis.dashboard.ga.action.charts.GenerateDrillDownResultAction"
+        class="org.hisp.dhis.dashboard.ga.action.charts.GenerateDrillDownResultAction"
+        scope="prototype">
+        <property name="statementManager" ref="statementManager"/>
+        <property name="organisationUnitService">
+            <ref bean="org.hisp.dhis.organisationunit.OrganisationUnitService"/>
+        </property>
+        <property name="dataElementService">
+            <ref bean="org.hisp.dhis.dataelement.DataElementService"/>
+        </property>
+        <property name="dataElementCategoryOptionComboService">
+            <ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
+        </property>
+        <property name="periodService">
+            <ref bean="org.hisp.dhis.period.PeriodService"/>
+        </property>
+        <property name="patientAttributeValueService">
+			<ref bean="org.hisp.dhis.patientattributevalue.PatientAttributeValueService"/>
+		</property>
+		<property name="patientAttributeService">
+			<ref bean="org.hisp.dhis.patient.PatientAttributeService"/>
+		</property>
+		<property name="caseAggregationMappingService">
+			<ref bean="org.hisp.dhis.caseaggregation.CaseAggregationMappingService"/>
+		</property>
+		<property name="configurationService">
+            <ref bean="org.hisp.dhis.config.ConfigurationService"/>
+        </property>
+    </bean>
 	
 	<!-- Annual Analyser -->
 	
@@ -516,8 +546,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		<property name="organisationUnitService">
 			<ref bean="org.hisp.dhis.organisationunit.OrganisationUnitService"/>
 		</property>
-		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+		<property name="dataElementCategoryService">
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>
 		<property name="indicatorService">
 			<ref bean="org.hisp.dhis.indicator.IndicatorService"/>
@@ -540,8 +570,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		<property name="dataElementService">
 			<ref bean="org.hisp.dhis.dataelement.DataElementService"/>
 		</property>
-		<property name="dataElementCategoryOptionComboService">
-			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+		<property name="dataElementCategoryService">
+			<ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>
 	</bean>
 
@@ -551,8 +581,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <property name="dataElementService">
             <ref bean="org.hisp.dhis.dataelement.DataElementService"/>
         </property>
-        <property name="dataElementCategoryOptionComboService">
-            <ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+        <property name="dataElementCategoryService">
+            <ref bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
         </property>
     </bean>
 	
@@ -659,9 +689,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		<property name="aggregationService">
 			<ref bean="org.hisp.dhis.aggregation.AggregationService"/>
 		</property>
-		<property name="dataElementCategoryOptionComboService">
+		<property name="dataElementCategoryService">
 			<ref
-				bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
+				bean="org.hisp.dhis.dataelement.DataElementCategoryService"/>
 		</property>
 	</bean>
 	

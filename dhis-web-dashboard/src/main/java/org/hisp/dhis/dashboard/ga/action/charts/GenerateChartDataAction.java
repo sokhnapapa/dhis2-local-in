@@ -348,6 +348,12 @@ public class GenerateChartDataAction
     {
         this.aggDataCB = aggDataCB;
     }
+    
+    private List<String> selectedValues;
+
+    public List<String> getSelectedValues() {
+        return selectedValues;
+    }
 
     private String deSelection;
 
@@ -461,6 +467,7 @@ public class GenerateChartDataAction
         numList = new ArrayList<List<String>>();
         denList = new ArrayList<List<String>>();
         targetList = new ArrayList<Double>();
+        selectedValues = new ArrayList<String>();
         selectedOptionComboList = new ArrayList<DataElementCategoryOptionCombo>();
 
         // OrgUnit Related Info
@@ -868,6 +875,14 @@ public class GenerateChartDataAction
                 }
                 else
                 {
+                    //Setting values for Drill down to Patient Info
+                    if( !dElement.isMultiDimensional() )
+                    {
+                        decoc = dataElementCategoryService.getDefaultDataElementCategoryOptionCombo();
+                    }
+                    String values = selectedOrgUnit.getId() + ":"+ dElement.getId() + ":"+ decoc.getId() + ":" + p.getId();
+                    selectedValues.add(values);
+                    
                     if ( deSelection.equalsIgnoreCase( "optioncombo" ) )
                     {
                         if ( ougSetCB == null )
