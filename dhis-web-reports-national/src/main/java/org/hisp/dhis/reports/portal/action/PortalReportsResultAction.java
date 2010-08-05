@@ -771,7 +771,7 @@ public class PortalReportsResultAction implements Action
 
                                         if ( PIPSIList.get( programInstance ).contains( pStageInstance ) || programInstance.isCompleted() == false )
                                         {
-                                            if ( pStageInstance.getExecutionDate() != null && pStageInstance.getExecutionDate().before( eDate ) )
+                                            if ( pStageInstance != null && pStageInstance.getExecutionDate() != null && pStageInstance.getExecutionDate().before( eDate ) )
                                             {
                                                 PatientDataValue patientDataValue1 = patientDataValueService.getPatientDataValue( pStageInstance, d1e, selectedOrgUnit );
 
