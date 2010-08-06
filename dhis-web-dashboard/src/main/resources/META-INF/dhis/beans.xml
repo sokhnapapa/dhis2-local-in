@@ -706,8 +706,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 	<bean id="org.hisp.dhis.dashboard.action.ExportToExcelAction"
 		class="org.hisp.dhis.dashboard.action.ExportToExcelAction"
 		scope="prototype">
-		<property name="locationManager"
-			ref="org.hisp.dhis.external.location.LocationManager"/>
+		<property name="locationManager" ref="locationManager" />
 	</bean>
 	
 	<bean id="org.hisp.dhis.dashboard.action.GetSortedDataAction"
