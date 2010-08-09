@@ -354,7 +354,7 @@ public class BenificiaryInfoReportsResultAction implements Action {
 
             WritableSheet sheet0 = outputReportWorkbook.getSheet( 0 );
             //System.out.println( "curProgram = " + curProgram.getName()  );
-            int count1 = 0;
+        int count1 = 0;
             int rowStart = 0;
 
             Map<String, List<Patient>> ouPatientList = new HashMap<String, List<Patient>>();
