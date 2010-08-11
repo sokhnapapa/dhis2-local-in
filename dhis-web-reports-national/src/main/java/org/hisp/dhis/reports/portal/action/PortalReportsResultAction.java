@@ -560,7 +560,7 @@ public class PortalReportsResultAction implements Action
                             // <editor-fold defaultstate="collapsed" desc="for loop for programInstances">
                             for ( ProgramInstance pi : programInstances )
                             {
-                                //System.out.println("_________________________________patient: "+patient.getFullName() + " id = "+patient.getId() + " ou = "+ou.getName());
+                                //System.out.println("_________________________________id = "+patient.getId() + " ou = "+ou.getName());
                                 Collection<ProgramStageInstance> programStageInstances = new ArrayList<ProgramStageInstance>();
                                 Collection<ProgramStageInstance> allProgramStageInstances = new ArrayList<ProgramStageInstance>();
                                 Iterator itr1 = programStagesList.iterator();
@@ -591,7 +591,7 @@ public class PortalReportsResultAction implements Action
                                         }
                                     }
                                 }
-                                if ( pi != null && !programStageInstances.isEmpty() )
+                                if ( pi != null )
                                 {
                                     //putting pi and psi together
                                     PIPSIList.put( pi, programStageInstances );
