@@ -48,12 +48,12 @@
     </dependency>
     
     <!-- Other -->
-    
+    <!--
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
     </dependency>
-	  
+	  -->
     <dependency>
       <groupId>jep</groupId>
       <artifactId>jep</artifactId>
