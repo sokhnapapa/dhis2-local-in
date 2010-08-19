@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,6 +29,8 @@ import org.hisp.dhis.period.PeriodStore;
 import org.hisp.dhis.period.PeriodType;
 import org.hisp.dhis.source.Source;
 import org.hisp.dhis.system.util.MathUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -80,25 +83,33 @@ public class DefaultReportService
         this.dataValueService = dataValueService;
     }
 
-    private DataElementCategoryService dataElementCategoryService;
+    private DataElementCategoryService dataElementCategoryOptionComboService;
 
-    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
+    public void setDataElementCategoryOptionComboService(
+        DataElementCategoryService dataElementCategoryOptionComboService )
     {
-        this.dataElementCategoryService = dataElementCategoryService;
+        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
     }
-
+    
     private DataMartStore dataMartStore;
     
     public void setDataMartStore( DataMartStore dataMartStore )
     {
         this.dataMartStore = dataMartStore;
     }
-
+    
+    private JdbcTemplate jdbcTemplate;
+    
+    public void setJdbcTemplate( JdbcTemplate jdbcTemplate )
+    {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     // -------------------------------------------------------------------------
     // Report_in
     // -------------------------------------------------------------------------
 
+   
     @Transactional
     public int addReport( Report_in report )
     {
@@ -164,6 +175,65 @@ public class DefaultReportService
     {
         return reportStore.getReportsByPeriodSourceAndReportType( periodType, source, reportType );
     }
+    
+    
+    public String getRAFolderName()
+    {
+        String raFolderName = "ra_national";
+
+        try
+        {
+            raFolderName = configurationService.getConfigurationByKey( Configuration_IN.KEY_REPORTFOLDER ).getValue();
+        }
+        catch ( Exception e )
+        {
+            System.out.println( "Exception : " + e.getMessage() );
+            return null;
+        }
+
+        return raFolderName;
+    }
+    
+    public List<Integer> getLinelistingRecordNos( OrganisationUnit organisationUnit, Period period, String lltype )
+    {
+        List<Integer> recordNosList = new ArrayList<Integer>();
+
+        String query = "";
+
+        int dataElementid = 1020;
+
+        if ( lltype.equalsIgnoreCase( "lldeath-l4DECodes.xml" ) || lltype.equalsIgnoreCase( "lllivebirth-l5DECodes.xml" )
+            || lltype.equalsIgnoreCase( "lllivebirth-l6DECodes.xml" ) )
+            dataElementid = 1020;
+        else if ( lltype.equalsIgnoreCase( "lldeath-l4DECodes.xml" ) || lltype.equalsIgnoreCase( "lldeath-l5DECodes.xml" )
+            || lltype.equalsIgnoreCase( "lldeath-l6DECodes.xml" ) )
+            dataElementid = 1027;
+        else if ( lltype.equalsIgnoreCase( "llmaternaldeath-l4DECodes.xml" ) || lltype.equalsIgnoreCase( "llmaternaldeath-l5DECodes.xml" )
+            || lltype.equalsIgnoreCase( "llmaternaldeath-l6DECodes.xml" ) )
+            dataElementid = 1032;
+
+        try
+        {
+            query = "SELECT recordno FROM lldatavalue WHERE dataelementid = " + dataElementid + " AND periodid = "
+                + period.getId() + " AND sourceid = " + organisationUnit.getId();
+
+            SqlRowSet rs1 = jdbcTemplate.queryForRowSet( query );
+
+            while ( rs1.next() )
+            {
+                recordNosList.add( rs1.getInt( 1 ) );
+            }
+
+            Collections.sort( recordNosList );
+        }
+        catch ( Exception e )
+        {
+            System.out.println( "SQL Exception : " + e.getMessage() );
+        }
+
+        return recordNosList;
+    }
+
     
     public List<Report_inDesign> getReportDesign( Report_in report )
     {
@@ -390,7 +460,7 @@ public class DefaultReportService
                 int optionComboId = Integer.parseInt( optionComboIdStr );
 
                 DataElement dataElement = dataElementService.getDataElement( dataElementId );
-                DataElementCategoryOptionCombo optionCombo = dataElementCategoryService.getDataElementCategoryOptionCombo( optionComboId );
+                DataElementCategoryOptionCombo optionCombo = dataElementCategoryOptionComboService.getDataElementCategoryOptionCombo( optionComboId );
 
                 if ( dataElement == null || optionCombo == null )
                 {
@@ -406,9 +476,9 @@ public class DefaultReportService
                     double aggregatedValue = 0.0;
                     for(Period p : periodList)
                     {
-                        double tempAggVal = dataMartStore.getAggregatedValue( dataElement, optionCombo, p, organisationUnit );                                    
+                        Double tempAggVal = dataMartStore.getAggregatedValue( dataElement, optionCombo, p, organisationUnit );                                    
 
-                        if( tempAggVal != -1 )
+                        if( tempAggVal == null )
                         {
                             aggregatedValue += tempAggVal;
                         }
@@ -505,3 +575,4 @@ public class DefaultReportService
         }
     }
 }
+

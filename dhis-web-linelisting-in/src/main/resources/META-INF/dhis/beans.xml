@@ -159,9 +159,9 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <property name="periodService">
             <ref bean="org.hisp.dhis.period.PeriodService"/>
         </property>
-        <property name="periodStore">
+      <!--  <property name="periodStore">
             <ref bean="org.hisp.dhis.period.PeriodStore"/>
-        </property>
+        </property>-->
         <property name="dataBaseManagerInterface">
             <ref bean="org.hisp.dhis.dbmanager.DataBaseManagerInterface"/>
         </property>
@@ -232,9 +232,9 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <property name="lineListService">
             <ref bean="org.hisp.dhis.linelisting.LineListService"/>
         </property>
-        <property name="dataBaseManagerInterface">
+      <!--  <property name="dataBaseManagerInterface">
             <ref bean="org.hisp.dhis.dbmanager.DataBaseManagerInterface"/>
-        </property>
+        </property>-->
     </bean>
 
     <bean id="org.hisp.dhis.ll.action.llgroup.LineListGroupElementListAction"
@@ -242,9 +242,9 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <property name="lineListService">
             <ref bean="org.hisp.dhis.linelisting.LineListService"/>
         </property>
-        <property name="periodService">
+    <!--    <property name="periodService">
             <ref bean="org.hisp.dhis.period.PeriodService"/>
-        </property>
+        </property>-->
         <property name="periodStore">
             <ref bean="org.hisp.dhis.period.PeriodStore"/>
         </property>
@@ -272,7 +272,7 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
 
     <bean id="org.hisp.dhis.ll.action.llgroup.SetupAssociationsTreeAction"
     class="org.hisp.dhis.ll.action.llgroup.SetupAssociationsTreeAction"
-    scope="prototype">
+    scope="prototype">		
         <property name="selectionTreeManager">
             <ref bean="org.hisp.dhis.oust.manager.SelectionTreeManager"/>
         </property>
@@ -477,9 +477,11 @@ http://www.springframework.org/schema/aop http://www.springframework.org/schema/
         <property name="dataElementService">
             <ref bean="org.hisp.dhis.dataelement.DataElementService"/>
         </property>
-        <property name="categoryService">
+        <!--<property name="categoryService">
             <ref bean="org.hisp.dhis.dataelement.DataElementCategoryOptionComboService"/>
-        </property>
+        </property>-->
+		<property name="categoryService" ref="org.hisp.dhis.dataelement.DataElementCategoryService">
+		</property>
     </bean>
 
 <!-- Linelisting Aggregation -->
