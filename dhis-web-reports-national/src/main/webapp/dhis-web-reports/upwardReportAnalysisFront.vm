@@ -1,5 +1,5 @@
 
-
+<script>
 		            //Global Variables
 		            
 					var reportModels = new HashTable();
