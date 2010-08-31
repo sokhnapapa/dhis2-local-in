@@ -293,7 +293,7 @@ public class SelectAction
             
             if(temp.getName().equalsIgnoreCase( LLDataSets.LL_IDSP_LAB ) || temp.getName().equalsIgnoreCase( LLDataSets.LL_DEATHS_IDSP ) || temp.getName().equalsIgnoreCase( LLDataSets.LL_UU_IDSP_EVENTSP ) || temp.getName().equalsIgnoreCase( LLDataSets.LL_BIRTHS ) || temp.getName().equalsIgnoreCase( LLDataSets.LL_DEATHS )  || temp.getName().equalsIgnoreCase( LLDataSets.LL_MATERNAL_DEATHS ) || temp.getName().equalsIgnoreCase( LLDataSets.LL_UU_IDSP_EVENTS ))
             {
-                if ( !( temp.getPeriodType() instanceof CalendarPeriodType ) || temp.getLocked() )
+                if ( !( temp.getPeriodType() instanceof CalendarPeriodType ) )
                 {
                     it.remove();
                 }

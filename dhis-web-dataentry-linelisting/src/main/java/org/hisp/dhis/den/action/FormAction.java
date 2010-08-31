@@ -43,6 +43,7 @@ import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.dataentryform.DataEntryForm;
 import org.hisp.dhis.dataentryform.DataEntryFormService;
+import org.hisp.dhis.datalock.DataSetLockService;
 import org.hisp.dhis.dataset.DataSet;
 import org.hisp.dhis.datavalue.DataValue;
 import org.hisp.dhis.den.api.LLDataSets;
@@ -126,6 +127,13 @@ public class FormAction
     public void setSelectedStateManager( SelectedStateManager selectedStateManager )
     {
         this.selectedStateManager = selectedStateManager;
+    }
+    
+    private DataSetLockService dataSetLockService;
+    
+    public void setDataSetLockService( DataSetLockService dataSetLockService)
+    {
+        this.dataSetLockService = dataSetLockService;
     }
 
     private I18n i18n;
@@ -329,8 +337,14 @@ public class FormAction
     {
         return maxRecordNo;
     }
-    
-    
+	
+	private boolean locked = false;
+
+    public boolean isLocked()
+    {
+        return locked;
+    }
+	    
     // -------------------------------------------------------------------------
     // Action implementation
     // -------------------------------------------------------------------------
@@ -482,6 +496,18 @@ public class FormAction
         else
         {
             
+        }
+        
+        if( dataSetLockService == null )
+        {
+            System.out.println(" DataSetLockService is null");
+        }
+        if( dataSetLockService.getDataSetLockByDataSetAndPeriod( dataSet, period ) != null)
+        {                               
+            if( dataSetLockService.getDataSetLockByDataSetAndPeriod( dataSet, period ).getSources().contains(organisationUnit) ) 
+            {
+                locked = true;
+            }
         }
         
         maxRecordNo = dataValueService.getMaxRecordNo();
