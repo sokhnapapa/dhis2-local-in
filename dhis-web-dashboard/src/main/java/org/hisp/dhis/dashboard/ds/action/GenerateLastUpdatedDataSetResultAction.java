@@ -1,5 +1,32 @@
 package org.hisp.dhis.dashboard.ds.action;
 
+/*
+ * Copyright (c) 2004-2007, University of Oslo
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ * * Neither the name of the HISP project nor the names of its contributors may
+ *   be used to endorse or promote products derived from this software without
+ *   specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -10,13 +37,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import org.hibernate.SessionFactory;
 import org.hisp.dhis.dashboard.util.DashBoardService;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataset.DataSet;
 import org.hisp.dhis.dataset.DataSetService;
+import org.hisp.dhis.datavalue.DataValueService;
 import org.hisp.dhis.options.displayproperty.DisplayPropertyHandler;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.organisationunit.OrganisationUnitLevel;
@@ -27,13 +54,21 @@ import org.hisp.dhis.period.Period;
 import org.hisp.dhis.period.PeriodService;
 import org.hisp.dhis.period.PeriodType;
 import org.hisp.dhis.source.Source;
+import org.hisp.dhis.user.User;
+import org.hisp.dhis.user.UserCredentials;
+import org.hisp.dhis.user.UserStore;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import com.opensymphony.xwork2.Action;
 
-public class GenerateDataStatusResultAction
-    implements Action
+/**
+ * @author brajesh murari
+ *
+ */
+
+public class GenerateLastUpdatedDataSetResultAction
+implements Action
 {
     // ---------------------------------------------------------------
     // Dependencies
@@ -59,6 +94,13 @@ public class GenerateDataStatusResultAction
     public void setOrganisationUnitService( OrganisationUnitService organisationUnitService )
     {
         this.organisationUnitService = organisationUnitService;
+    }
+    
+    private DataValueService dataValueService;
+
+    public void setDataValueService( DataValueService dataValueService )
+    {
+        this.dataValueService = dataValueService;
     }
 
     public OrganisationUnitService getOrganisationUnitService()
@@ -99,20 +141,28 @@ public class GenerateDataStatusResultAction
         this.displayPropertyHandler = displayPropertyHandler;
     }
     
+    private UserStore userStore;
+    
+    public void setUserStore( UserStore userStore )
+    {
+        this.userStore = userStore;
+    }
+      
     @SuppressWarnings("unused")
-	private Comparator<OrganisationUnit> orgUnitComparator;
+    private Comparator<OrganisationUnit> orgUnitComparator;
 
     public void setOrgUnitComparator( Comparator<OrganisationUnit> orgUnitComparator )
     {
         this.orgUnitComparator = orgUnitComparator;
     }
+    
     // ---------------------------------------------------------------
     // Output Parameters
     // ---------------------------------------------------------------
 
-    private Map<OrganisationUnit, List<Integer>> ouMapDataStatusResult;
+    private Map<OrganisationUnit, List<String>> ouMapDataStatusResult;
 
-    public Map<OrganisationUnit, List<Integer>> getOuMapDataStatusResult()
+    public Map<OrganisationUnit, List<String>> getOuMapDataStatusResult()
     {
         return ouMapDataStatusResult;
     }
@@ -330,11 +380,11 @@ public class GenerateDataStatusResultAction
 
         // Intialization
         periodNameList = new ArrayList<String>();
-        ouMapDataStatusResult = new HashMap<OrganisationUnit, List<Integer>>();
+        ouMapDataStatusResult = new HashMap<OrganisationUnit, List<String>>();
         results = new ArrayList<Integer>();
         maxOULevel = 1;
         minOULevel = organisationUnitService.getNumberOfOrganisationalLevels();
-
+      
         if ( immChildOption != null && immChildOption.equalsIgnoreCase( "yes" ) )
         {
             orgUnitListCB = new ArrayList<String>();
@@ -344,7 +394,6 @@ public class GenerateDataStatusResultAction
 
             selectedDataSets = new ArrayList<String>();
             selectedDataSets.add( dsId );
-
         }
 
         // DataSet Related Info
@@ -447,15 +496,10 @@ public class GenerateDataStatusResultAction
         periodInfo = "-1";
         for ( Period p : periodList )
             periodInfo += "," + p.getId();
-        
-        dataViewName = createDataView( orgUnitInfo, deInfo, periodInfo );
-      
-        String query = "";
-        query = "SELECT COUNT(*) FROM " + dataViewName + " WHERE dataelementid IN (?) AND sourceid IN (?) AND periodid IN (?)";
-        
+           
         Collection<DataElement> dataElements = new ArrayList<DataElement>();
         dataElements = selDataSet.getDataElements();
-
+        
         int dataSetMemberCount1 = 0;
         for ( DataElement de1 : dataElements )
         {
@@ -469,7 +513,7 @@ public class GenerateDataStatusResultAction
         Set<Source> dso = new HashSet<Source>();
         Iterator periodIterator;
         dso = selDataSet.getSources();
-
+        
         while ( orgUnitListIterator.hasNext() )
         {
             o = (OrganisationUnit) orgUnitListIterator.next();
@@ -485,8 +529,9 @@ public class GenerateDataStatusResultAction
 
             Period p;
 
-            double dataStatusPercentatge;
-            List<Integer> dsResults = new ArrayList<Integer>();
+            String storedby = null;           
+            String userDetailInfo = null;
+            List<String> dsResults = new ArrayList<String>();
             while ( periodIterator.hasNext() )
             {
                 p = (Period) periodIterator.next();
@@ -494,88 +539,97 @@ public class GenerateDataStatusResultAction
 
                 if ( dso == null )
                 {
-                    dsResults.add( -1 );
+                    dsResults.add( -1, dsId);
                     continue;
                 }
                 else if ( !dso.contains( o ) )
                 {
                     orgUnitInfo = "-1";
-                    orgUnitCount = 0;
-                    getOrgUnitInfo( o, dso );
-
-                    if ( includeZeros == null )
-                    {
-                        query = "SELECT COUNT(*) FROM " + dataViewName + " WHERE dataelementid IN (" + deInfo
-                            + ") AND sourceid IN (" + orgUnitInfo + ") AND periodid IN (" + periodInfo
-                            + ") and value <> 0";
-                    }
-                    else
-                    {
-                        query = "SELECT COUNT(*) FROM " + dataViewName + " WHERE dataelementid IN (" + deInfo
-                            + ") AND sourceid IN (" + orgUnitInfo + ") AND periodid IN (" + periodInfo + ")";
-                    }
-
-                    SqlRowSet sqlResultSet = jdbcTemplate.queryForRowSet( query );
-
-                    if ( sqlResultSet.next() )
-                    {
-                        try
-                        {
-                            //System.out.println( "Result is : \t" + sqlResultSet.getLong( 1 ) );
-                            dataStatusPercentatge = ((double) sqlResultSet.getInt( 1 ) / (double) (dataSetMemberCount1 * orgUnitCount)) * 100.0;
-                        }
-                        catch ( Exception e )
-                        {
-                            dataStatusPercentatge = 0.0;
-                        }
-                    }
-                    else
-                        dataStatusPercentatge = 0.0;
-
-                    if ( dataStatusPercentatge > 100.0 )
-                        dataStatusPercentatge = 100;
-
-                    dataStatusPercentatge = Math.round( dataStatusPercentatge * Math.pow( 10, 0 ) ) / Math.pow( 10, 0 );
-
-                    dsResults.add( (int) dataStatusPercentatge );
+       
+                    dsResults.add( " " );
                     continue;
                 }
 
                 orgUnitInfo = "" + o.getId();
 
-                if ( includeZeros == null )
-                {
-                    query = "SELECT COUNT(*) FROM " + dataViewName + " WHERE dataelementid IN (" + deInfo
-                        + ") AND sourceid IN (" + orgUnitInfo + ") AND periodid IN (" + periodInfo + ") and value <> 0";
-                }
-                else
-                {
-                    query = "SELECT COUNT(*) FROM " + dataViewName + " WHERE dataelementid IN (" + deInfo
-                        + ") AND sourceid IN (" + orgUnitInfo + ") AND periodid IN (" + periodInfo + ")";
-                }
+                SqlRowSet sqlResultSet = jdbcTemplate.queryForRowSet( "SELECT DISTINCT(storedby) FROM datavalue WHERE dataelementid IN (" + deInfo
+                    + ") AND sourceid IN (" + orgUnitInfo + ") AND periodid IN (" + periodInfo + ")" );
 
-                SqlRowSet sqlResultSet = jdbcTemplate.queryForRowSet( query );
-
-                if ( sqlResultSet.next() )
-                {
+                storedby = " ";
+                while ( sqlResultSet.next() )
+                {                   
+                    
                     try
                     {
-                        dataStatusPercentatge = ((double) sqlResultSet.getInt( 1 ) / (double) dataSetMemberCount1) * 100.0;
+                        String tempUserName = sqlResultSet.getString( 1 );
+                        
+                        if( tempUserName != null)
+                        {                      
+                            UserCredentials userCredentials = userStore.getUserCredentialsByUsername( tempUserName );
+                            
+                            if( userCredentials != null )
+                            {
+                                User user = userStore.getUser( userCredentials.getId() );
+                                
+                                if( user != null )
+                                {
+                                    storedby += user.getFirstName() + " "+ user.getSurname() + " , ";
+                                }
+                                else
+                                {
+                                    storedby +=  tempUserName + " , ";
+                                }
+                            }
+                            else
+                            {
+                                storedby +=  tempUserName + " , ";
+                            }
+                        }
+                        else
+                        {
+                            storedby = " ";
+                        }
+                                               
                     }
                     catch ( Exception e )
                     {
-                        dataStatusPercentatge = 0.0;
+                        storedby = "not known";
                     }
+                } 
+                
+                if( storedby.trim().equals( "" ) )
+                {                   
                 }
                 else
-                    dataStatusPercentatge = 0.0;
+                {
+                    storedby = storedby.substring( 0, storedby.length()-2 );
+                }
+                
+                SqlRowSet sqlResultSet1 = jdbcTemplate.queryForRowSet( "SELECT DISTINCT(lastupdated) FROM datavalue WHERE dataelementid IN (" + deInfo
+                    + ") AND sourceid IN (" + orgUnitInfo + ") AND periodid IN (" + periodInfo + ")" );
 
-                if ( dataStatusPercentatge > 100.0 )
-                    dataStatusPercentatge = 100;
-
-                dataStatusPercentatge = Math.round( dataStatusPercentatge * Math.pow( 10, 0 ) ) / Math.pow( 10, 0 );
-
-                dsResults.add( (int) dataStatusPercentatge );
+                String lastupdated = " ";
+                while ( sqlResultSet1.next() )
+                {                   
+                    try
+                    {
+                        if( lastupdated.compareTo( sqlResultSet1.getString( 1 ) ) < 0 )
+                            lastupdated = sqlResultSet1.getString( 1 );
+                    }
+                    catch ( Exception e )
+                    {
+                        lastupdated = "Not Known";
+                    }
+                }
+                
+                if( storedby.trim().equals( "" ) && lastupdated.trim().equals( "" ) )
+                {
+                    dsResults.add( " " );
+                }
+                else
+                {
+                    dsResults.add( storedby + " : " + lastupdated );
+                }
             }
 
             ouMapDataStatusResult.put( o, dsResults );
@@ -610,7 +664,7 @@ public class GenerateDataStatusResultAction
         {
             try
             {
-                deleteDataView( dataViewName );               
+                //deleteDataView( dataViewName );               
             }
             catch ( Exception e )
             {
@@ -620,8 +674,6 @@ public class GenerateDataStatusResultAction
 
         periodNameList = dashBoardService.getPeriodNamesByPeriodType( dataSetPeriodType, periodList );
         
-        //System.out.println("OrgUnit Size is :" + ouMapDataStatusResult.size() );
-
         return SUCCESS;
     }
 
@@ -642,48 +694,7 @@ public class GenerateDataStatusResultAction
         }
     }
 
-    public String createDataView( String orgUnitInfo, String deInfo, String periodInfo )
-    {      
-        String dataViewName = "_ds_" + UUID.randomUUID().toString();
-        dataViewName = dataViewName.replaceAll( "-", "" );
-
-        String query = "DROP VIEW IF EXISTS " + dataViewName;
-
-        try
-        {
-            @SuppressWarnings("unused")
-			int sqlResult = jdbcTemplate.update( query );
-
-            System.out.println( "View " + dataViewName + " dropped Successfully (if exists) " );
-            
-            query = "CREATE view " + dataViewName + " AS "
-            + " SELECT sourceid,dataelementid,periodid,value FROM datavalue " + " WHERE dataelementid in ("
-            + deInfo + ") AND " + " sourceid in (" + orgUnitInfo + ") AND " + " periodid in (" + periodInfo + ")";
-
-            sqlResult = jdbcTemplate.update( query );
-
-            System.out.println( "View " + dataViewName + " created Successfully" );
-        } // try block end
-        catch ( Exception e )
-        {
-            System.out.println( "SQL Exception : " + e.getMessage() );
-            return null;
-        }
-        finally
-        {
-            try
-            {              
-            }
-            catch ( Exception e )
-            {
-                System.out.println( "SQL Exception : " + e.getMessage() );
-                return null;
-            }
-        }// finally block end
-
-        return dataViewName;
-    }
-
+    
     public void deleteDataView( String dataViewName )
     {
         String query = "DROP VIEW IF EXISTS " + dataViewName;
@@ -691,7 +702,7 @@ public class GenerateDataStatusResultAction
         try
         {           
             @SuppressWarnings("unused")
-			int sqlResult = jdbcTemplate.update( query );
+                        int sqlResult = jdbcTemplate.update( query );
             System.out.println( "View " + dataViewName + " dropped Successfully" );
         } // try block end
         catch ( Exception e )
@@ -744,6 +755,7 @@ public class GenerateDataStatusResultAction
         }
     }
 
+    @SuppressWarnings( "unused" )
     private void getOrgUnitInfo( OrganisationUnit organisationUnit, Set<Source> dso )
     {
         Collection<OrganisationUnit> children = organisationUnit.getChildren();

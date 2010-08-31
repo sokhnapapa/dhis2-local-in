@@ -7,6 +7,7 @@ function ouSelCBChange()
 	
     if( ouSelCBId.checked )
     {
+        //alert("ouSelCBId.checked = "+ouSelCBId.checked);
         ouListCDId.disabled = false;
 		
         clearList( ouLevelId );
@@ -15,6 +16,7 @@ function ouSelCBChange()
     }
     else
     {
+        //alert("ouSelCBId.checked = "+ouSelCBId.checked);
         ouLevelId.disabled = false;
 		
         clearList( ouListCDId );
@@ -392,7 +394,7 @@ function getOUDetailsForTARecevied(xmlObject)
         {
             ouListCDId.disabled = false;
             
-            document.getElementById( "ViewReport" ).disabled = true;
+            document.getElementById( "ViewReport" ).disabled = false;
     		
             clearList( ouLevelId );
             ouLevelId.disabled = true;

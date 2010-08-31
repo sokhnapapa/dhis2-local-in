@@ -85,6 +85,16 @@ function textvalue(summary)
             document.ChartGenerationForm.submit();
   	 	
         }
+        else if(summary == "ValidationStatus")
+        {
+            document.ChartGenerationForm.action = "validationStatusResult.action";
+            document.ChartGenerationForm.submit();
+        }
+        else if(summary == "LastUpdatedStatus")
+        {
+            document.ChartGenerationForm.action = "lastUpdatedDataSetResult.action";
+            document.ChartGenerationForm.submit();
+        }
         else
         {
   	 	

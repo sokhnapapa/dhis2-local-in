@@ -573,18 +573,18 @@ public class GenerateTabularAnalysisResultAction
                     
                     String tempStr = "";
                     
-                    double tempAggVal;
+                    Double tempAggVal;
                     if( flag == 1 )
                     {
                         tempAggVal= aggregationService.getAggregatedNumeratorValue( selIndicator, sDate, eDate, ou );
-                        if(tempAggVal == -1 ) tempAggVal = 0.0;
+                        if(tempAggVal == null ) tempAggVal = 0.0;
                         pwnumAggValue = tempAggVal;
                         tempAggVal = aggregationService.getAggregatedDenominatorValue( selIndicator, sDate, eDate, ou );
-                        if(tempAggVal == -1 ) tempAggVal = 0.0;
+                        if(tempAggVal == null ) tempAggVal = 0.0;
                         pwdenAggValue = tempAggVal;
                         
                         tempAggVal = aggregationService.getAggregatedIndicatorValue( selIndicator, sDate, eDate, ou );
-                        if(tempAggVal == -1 ) tempAggVal = 0.0;
+                        if(tempAggVal == null ) tempAggVal = 0.0;
                         pwdAggIndValue = tempAggVal;
                         
                         pwdAggIndValue = Math.round( pwdAggIndValue * Math.pow( 10, 1 ) ) / Math.pow( 10, 1 );
@@ -598,7 +598,7 @@ public class GenerateTabularAnalysisResultAction
                             if( selDataElement.getType().equalsIgnoreCase( DataElement.VALUE_TYPE_INT ) )
                             {
                                 tempAggVal = aggregationService.getAggregatedDataValue( selDataElement, selDecoc, sDate, eDate, ou );
-                                if(tempAggVal == -1 ) tempAggVal = 0.0;
+                                if(tempAggVal == null ) tempAggVal = 0.0;
                                 pwdvAggValue = tempAggVal;
                                 
                                 tempStr = ""+(int) pwdvAggValue;
@@ -639,7 +639,7 @@ public class GenerateTabularAnalysisResultAction
                                     DataElementCategoryOptionCombo decoc1 = (DataElementCategoryOptionCombo) optionComboIterator.next();
     
                                     tempAggVal = aggregationService.getAggregatedDataValue( selDataElement, decoc1, sDate, eDate, ou );
-                                    if(tempAggVal == -1 ) tempAggVal = 0.0;
+                                    if(tempAggVal == null ) tempAggVal = 0.0;
                                     pwdvAggValue += tempAggVal;                                
                                 }
                                 
