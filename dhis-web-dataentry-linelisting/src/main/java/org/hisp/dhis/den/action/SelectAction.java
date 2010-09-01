@@ -429,7 +429,8 @@ public class SelectAction
         // ---------------------------------------------------------------------
 
         // Locate custom data entry form belonging to dataset, if any.
-        DataEntryForm dataEntryForm = dataEntryFormService.getDataEntryFormByDataSet( selectedDataSet );
+        DataEntryForm dataEntryForm = selectedDataSet.getDataEntryForm();
+        //dataEntryFormService.getDataEntryFormByDataSet( selectedDataSet );
         
         customDataEntryFormExists = ( dataEntryForm != null);
 

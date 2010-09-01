@@ -457,7 +457,10 @@ public class FormAction
         // ---------------------------------------------------------------------
 
         // Locate custom data entry form belonging to dataset, if any.
-        dataEntryForm = dataEntryFormService.getDataEntryFormByDataSet( dataSet );
+        
+        
+        dataEntryForm = dataSet.getDataEntryForm();
+        //dataEntryFormService.getDataEntryFormByDataSet( dataSet );
         cdeFormExists = (dataEntryForm != null);
 
         // Add JS and meta data to dynamically persist values of form.
