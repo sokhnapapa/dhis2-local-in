@@ -48,9 +48,10 @@ function removeSurveyCompleted( messageElement )
 
 function validateAddSurvey()
 {
-  var request = new Request();
-  request.setResponseTypeXML( 'message' );
-  request.setCallbackSuccess( addSurveyValidationCompleted ); 
+  
+	var request = new Request();
+	request.setResponseTypeXML( 'message' );
+	request.setCallbackSuccess( addSurveyValidationCompleted ); 
   
   var requestString = 'validateSurvey.action?name=' + document.getElementById( 'name' ).value +
                       '&shortName=' + document.getElementById( 'shortName' ).value;

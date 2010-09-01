@@ -300,7 +300,7 @@ function registerCompleteDataSet( messageElement )
 
 function registerReceived( messageElement )
 {
-	document.getElementById( "completeButton" ).disabled = true;
+completeButton" ).disabled = tr	document.getElementById( "ue;
 	document.getElementById( "undoButton" ).disabled = false;
     document.getElementById( "dateField" ).disabled = true;
     document.getElementById( "dateDiv" ).style.display = "none";
