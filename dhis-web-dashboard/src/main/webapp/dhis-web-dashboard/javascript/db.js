@@ -167,9 +167,7 @@ function getOrgUnitGroups()
     var orgUnitGroupSetId = orgUnitGroupSetList.options[ orgUnitGroupSetList.selectedIndex ].value;
 	
     if ( orgUnitGroupSetId != null )
-    {
-        //var url = "getOrgUnitGroups.action?orgUnitGroupSetId=" + orgUnitGroupSetId;
-		
+    {	
         var request = new Request();
         request.setResponseTypeXML( 'orgunitgroup' );
         request.setCallbackSuccess( getOrgUnitGroupsReceived );

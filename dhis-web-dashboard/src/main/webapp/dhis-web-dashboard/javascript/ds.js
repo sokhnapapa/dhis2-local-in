@@ -36,10 +36,11 @@ function exportDataStatusResultToWorkBook()
 // Category ListBox Change function
 function categoryChangeFunction(evt)
 {
-    selCategory = evt.target.value;
+    //selCategory = evt.target.value;
+    selCategory = $("select#categoryLB").val();
     if(selCategory == "period")
     {
-        document.ChartGenerationForm.facilityLB.disabled = true;
+        $("#facilityLB").attr("disabled", "disabled");
         var index = document.ChartGenerationForm.orgUnitListCB.options.length;
         for(i=0;i<index;i++)
         {
@@ -48,14 +49,14 @@ function categoryChangeFunction(evt)
     }
     else
     {
-        document.ChartGenerationForm.facilityLB.disabled = false;
+        $('#facilityLB').removeAttr('disabled');
     }
 }// categoryChangeFunction end
 			          
 //Facility ListBox Change Function
 function facilityChangeFunction(evt)
 {
-    selFacility = evt.target.value;
+    selFacility = $("select#facilityLB").val();
     if(selFacility == "children" || selFacility == "immChildren")
     {
         var index = document.ChartGenerationForm.orgUnitListCB.options.length;

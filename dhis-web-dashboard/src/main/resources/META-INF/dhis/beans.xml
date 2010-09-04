@@ -577,6 +577,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         <property name="organisationUnitService">
             <ref bean="org.hisp.dhis.organisationunit.OrganisationUnitService"/>
         </property>
+        <property name="organisationUnitGroupService">
+            <ref bean="org.hisp.dhis.organisationunit.OrganisationUnitGroupService"/>
+        </property>
 		
     </bean>
 	
@@ -609,6 +612,9 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
         </property>
         <property name="dataValueService">
             <ref bean="org.hisp.dhis.datavalue.DataValueService"/>
+        </property>
+        <property name="organisationUnitGroupService">
+            <ref bean="org.hisp.dhis.organisationunit.OrganisationUnitGroupService"/>
         </property>
     </bean>
 	

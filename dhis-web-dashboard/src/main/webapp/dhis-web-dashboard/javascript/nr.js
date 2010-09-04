@@ -6,17 +6,15 @@ function ouSelCBChange()
 
 	if( ouSelCBId.checked )
 	{
-		ouListCDId.disabled = false;
-
-		clearList( ouLevelId );
-                ouLevelId.disabled = true;
+                 $('#orgUnitListCB').removeAttr('disabled');
+                clearList( ouLevelId );
+                $("#orgUnitLevelCB").attr("disabled", "disabled");
 	}
 	else
 	{
-		ouLevelId.disabled = false;
-
-		clearList( ouListCDId );
-		ouListCDId.disabled = true;
+            $('#orgUnitLevelCB').removeAttr('disabled');
+            clearList( ouListCDId );
+            $("#orgUnitListCB").attr("disabled", "disabled");
 	}
 
     if( selOrgUnitId != null && selOrgUnitId != "NONE" && selOrgUnitId != "")

@@ -15,8 +15,11 @@
 <!-- The script that registeres selctions in the orgunit tree -->
 <script type="text/javascript">
 
+selection.setListenerFunction( orgUnitHasBeenSelected );
+
 function orgUnitHasBeenSelected( orgUnitIds )
-{    
+{
+alert("inside orgUnitHasBeenSelected orgUnitIds = "+orgUnitIds + " document.getElementById( 'ougSetCB' ).checked = "+document.getElementById( 'ougSetCB' ).checked);
 	if(document.getElementById( 'ougSetCB' ).checked)
 	{
 	 return;
@@ -30,8 +33,6 @@ function orgUnitHasBeenSelected( orgUnitIds )
 		getOUDeatilsForGA(orgUnitIds);
 	}		
 }
-
-selection.setListenerFunction( orgUnitHasBeenSelected );
 
 </script>
 
