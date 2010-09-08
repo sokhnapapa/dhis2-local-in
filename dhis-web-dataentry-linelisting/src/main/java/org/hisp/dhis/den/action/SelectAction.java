@@ -280,7 +280,8 @@ public class SelectAction
         // ---------------------------------------------------------------------
 
         dataSets = new ArrayList<DataSet>( dataSetService.getDataSetsBySource( organisationUnit ) );
-
+System.out.println("\n\n\n +++++++++++++ \n organisationUnit : " + organisationUnit);
+System.out.println("\n  dataSets : " + dataSets);
         // ---------------------------------------------------------------------
         // Remove DataSets which don't have a CalendarPeriodType or are locked
         // ---------------------------------------------------------------------

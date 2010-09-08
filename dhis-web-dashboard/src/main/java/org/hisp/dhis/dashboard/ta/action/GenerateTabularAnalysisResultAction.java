@@ -288,7 +288,7 @@ public class GenerateTabularAnalysisResultAction
         int startCol = 0;
         int headerRow = 1;
         int headerCol = 0;
-      
+        
         String raFolderName = configurationService.getConfigurationByKey( Configuration_IN.KEY_REPORTFOLDER ).getValue();
         String outputReportPath = System.getenv( "DHIS2_HOME" ) + File.separator + raFolderName + File.separator + "output" + File.separator + UUID.randomUUID().toString() + ".xls";        
         WritableWorkbook outputReportWorkbook = Workbook.createWorkbook( new File( outputReportPath ) );
