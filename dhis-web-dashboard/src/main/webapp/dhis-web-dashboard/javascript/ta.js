@@ -17,19 +17,17 @@ function getOrgUnitGroups()
 
 function ouradioSelection( evt )
 {
-	var selouRadioButton = evt.target.value;
-        
 	var ouSelCBId = document.getElementById( "ouSelCB" );
 	if( ouSelCBId.checked )
 	{
 		return;
 	}
 
-	if( selouRadioButton == "orgUnitGroupRadio" )
-	{
+	
+	var excelItems = byId('ouRadio');
+	if(excelItems.checked && excelItems.getAttribute('value') == "orgUnitGroupRadio"){
 		getOrgUnitGroups();
-	}
-	else
+	}else
 	{
 		ouSelCBChange();
 	}
@@ -215,7 +213,7 @@ function getDataElements()
     
     if ( dataElementGroupId != null )
     {
-        //var url = "getDataElementsForTA.action?id=" + dataElementGroupId + "&deOptionValue=" + deOptionValue;
+        /* //var url = "getDataElementsForTA.action?id=" + dataElementGroupId + "&deOptionValue=" + deOptionValue;
         var request = new Request();
         request.setResponseTypeXML('dataElement');
         request.setCallbackSuccess(getDataElementsReceived);
@@ -224,7 +222,17 @@ function getDataElements()
         var requestString = "getDataElementsForTA.action";
         var params = "id=" + dataElementGroupId + "&deOptionValue=" + deOptionValue;
         request.sendAsPost( params );
-        request.send( requestString );
+        request.send( requestString ); */
+		
+		$.post("getDataElementsForTA.action",
+		{
+			id:dataElementGroupId,
+			deOptionValue:deOptionValue
+		},
+		function (data)
+		{
+			getDataElementsReceived(data);
+		},'xml');
     }
 }// getDataElements end           
 
@@ -260,7 +268,7 @@ function getIndicators()
 	
     if ( indicatorGroupId != null )
     {
-        //var url = "getIndicators.action?id=" + indicatorGroupId;
+        /* //var url = "getIndicators.action?id=" + indicatorGroupId;
 		
         var request = new Request();
         request.setResponseTypeXML( 'indicator' );
@@ -270,7 +278,16 @@ function getIndicators()
         var requestString = "getIndicators.action";
         var params = "id=" + indicatorGroupId;
         request.sendAsPost( params );
-        request.send( requestString );
+        request.send( requestString ); */
+		
+		$.post("getIndicators.action",
+		{
+			id:indicatorGroupId
+		},
+		function (data)
+		{
+			getIndicatorsReceived(data);
+		},'xml');
     }
 }
 
@@ -396,7 +413,7 @@ function getPeriodsReceived( xmlObject )
 
 function getOUDeatilsForTA( orgUnitIds )
 {
-    //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds+"&type=ta";
+    /* //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds+"&type=ta";
 	
     var request = new Request();
     request.setResponseTypeXML( 'orgunit' );
@@ -406,7 +423,17 @@ function getOUDeatilsForTA( orgUnitIds )
     var requestString = "getOrgUnitDetails.action";
     var params = "orgUnitId=" + orgUnitIds+"&type=ta";
     request.sendAsPost( params );
-    request.send( requestString );
+    request.send( requestString ); */
+	
+	$.post("getOrgUnitDetails.action",
+		{
+			orgUnitId:orgUnitIds,
+			type:"ta"
+		},
+		function (data)
+		{
+			getOUDetailsForTARecevied(data);
+		},'xml');
 }
 
 function getOUDetailsForTARecevied(xmlObject)

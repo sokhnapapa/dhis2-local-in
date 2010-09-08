@@ -220,7 +220,7 @@ function getdSetPeriods()
     var dataSetId = dataSetList.options[ dataSetList.selectedIndex].value;
 
   
-    //var url = "getDataSetPeriods.action?id=" + dataSetId;
+    /* //var url = "getDataSetPeriods.action?id=" + dataSetId;
     
     var request = new Request();
     request.setResponseTypeXML( 'period' );
@@ -230,11 +230,18 @@ function getdSetPeriods()
     var requestString = "getDataSetPeriods.action";
     var params = "id=" + dataSetId;
     request.sendAsPost( params );
-    request.send( requestString );
+    request.send( requestString ); */
+	
+	$.post("getDataSetPeriods.action",
+	{
+		id:dataSetId
+	},
+	function (data)
+	{
+		getdSetPeriodsReceived(data);
+	},'xml');
  
-}	 
-
-
+}
 
 function getdSetPeriodsReceived( xmlObject )
 {	
@@ -280,7 +287,7 @@ function getdSetPeriodsReceived( xmlObject )
 
 function getOrgUDetails(orgUnitIds)
 {
-    //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds;
+    /* //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds;
 	
     var request = new Request();
     request.setResponseTypeXML( 'orgunit' );
@@ -290,9 +297,20 @@ function getOrgUDetails(orgUnitIds)
     var requestString = "getOrgUnitDetails.action";
     var params = "orgUnitId=" + orgUnitIds;
     request.sendAsPost( params );
-    request.send( requestString );
+    request.send( requestString ); */
 
-//getReports();
+	$.post("getOrgUnitDetails.action",
+	{
+		orgUnitId:orgUnitIds
+	},
+	function (data)
+	{
+		getOrgUDetailsRecevied(data);
+	},'xml');
+	
+//getReports(); 
+
+
 }
 
 function getOrgUDetailsRecevied(xmlObject)

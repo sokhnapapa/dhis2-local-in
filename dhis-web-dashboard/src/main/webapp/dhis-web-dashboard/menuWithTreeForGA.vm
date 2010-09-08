@@ -19,7 +19,6 @@ selection.setListenerFunction( orgUnitHasBeenSelected );
 
 function orgUnitHasBeenSelected( orgUnitIds )
 {
-alert("inside orgUnitHasBeenSelected orgUnitIds = "+orgUnitIds + " document.getElementById( 'ougSetCB' ).checked = "+document.getElementById( 'ougSetCB' ).checked);
 	if(document.getElementById( 'ougSetCB' ).checked)
 	{
 	 return;
