@@ -1,7 +1,7 @@
 
 function getOUDetails(orgUnitIds)
 {
-    //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds;
+    /* //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds;
 	
     var request = new Request();
     request.setResponseTypeXML( 'orgunit' );
@@ -11,14 +11,23 @@ function getOUDetails(orgUnitIds)
     var requestString = "getOrgUnitDetails.action";
     var params = "orgUnitId=" + orgUnitIds;
     request.sendAsPost( params );
-    request.send( requestString );
+    request.send( requestString ); */
+	
+	$.post("getOrgUnitDetails.action",
+			{
+				orgUnitId : orgUnitIds
+			},
+			function (data)
+			{
+				getOUDetailsRecevied(data);
+			},'xml');
 
     getReports();
 }
 
 function getOUDetailsForOuWiseProgressReport(orgUnitIds)
 {
-    //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds;
+    /* //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds;
 
     var request = new Request();
     request.setResponseTypeXML( 'orgunit' );
@@ -28,7 +37,16 @@ function getOUDetailsForOuWiseProgressReport(orgUnitIds)
     var requestString = "getOrgUnitDetails.action";
     var params = "orgUnitId=" + orgUnitIds;
     request.sendAsPost( params );
-    request.send( requestString );
+    request.send( requestString ); */
+	
+	$.post("getOrgUnitDetails.action",
+		{
+			orgUnitId : orgUnitIds
+		},
+		function (data)
+		{
+			getOUDetailsRecevied(data);
+		},'xml');
 
 }
 
@@ -45,7 +63,7 @@ function getOUDetailsRecevied(xmlObject)
 		
 		
         document.reportForm.ouNameTB.value = orgUnitName;
-        document.reportForm.ouLevelTB.value = level;
+        //document.reportForm.ouLevelTB.value = level;
     }    		
 }
 
@@ -59,7 +77,7 @@ function getDataElements()
         
     if ( dataElementGroupId != null )
     {
-        //var url = "getDataElements.action?id=" + dataElementGroupId;
+        /* //var url = "getDataElements.action?id=" + dataElementGroupId;
         var request = new Request();
         request.setResponseTypeXML('dataElement');
         request.setCallbackSuccess(getDataElementsReceived);
@@ -68,7 +86,17 @@ function getDataElements()
         var requestString = "getDataElements.action";
         var params = "id=" + dataElementGroupId;
         request.sendAsPost( params );
-        request.send( requestString );
+        request.send( requestString ); */
+		
+		$.post("getDataElements.action",
+		{
+			id : dataElementGroupId
+		},
+		function (data)
+		{
+			getDataElementsReceived(data);
+		},'xml');
+
     }
 }// getDataElements end           
 
@@ -110,7 +138,7 @@ function getPeriods()
   
     if ( periodTypeId != "NA" )
     {
-        //var url = "getPeriods.action?id=" + periodTypeId;
+        /* //var url = "getPeriods.action?id=" + periodTypeId;
     
         var request = new Request();
         request.setResponseTypeXML( 'period' );
@@ -120,7 +148,16 @@ function getPeriods()
         var requestString = "getPeriods.action";
         var params = "id=" + periodTypeId;
         request.sendAsPost( params );
-        request.send( requestString );
+        request.send( requestString ); */
+		
+		$.post("getPeriods.action",
+		{
+			id : periodTypeId
+		},
+		function (data)
+		{
+			getPeriodsReceived(data);
+		},'xml');
 
         document.reportForm.generate.disabled=false;
         var ouId = document.reportForm.ouIDTB.value;
@@ -194,20 +231,35 @@ function getReports( ouId, reportListFileName )
 
 function getReports( ouId, reportTypeName )
 { 
-	var periodTypeList = document.getElementById( "periodTypeId" );
+	var periodTypeList = byId( "periodTypeId" );
+	if( periodTypeList == null ){
+		return;
+	}
     var periodType = periodTypeList.options[ periodTypeList.selectedIndex ].value;
-    var autogenvalue = document.getElementById( "autogen" ).value;
+    var autogenvalue = byId( "autogen" ).value;
           
     if ( periodType != "NA" && ouId != null && ouId != "" )
     {
-        var request = new Request();
+       /*  var request = new Request();
         request.setResponseTypeXML( 'report' );
         request.setCallbackSuccess( getReportsReceived );
 
         var requestString = "getReports.action";
         var params = "periodType=" + periodType + "&ouId="+ouId + "&reportTypeName="+reportTypeName + "&autogenrep="+autogenvalue;
         request.sendAsPost( params );
-        request.send( requestString );
+        request.send( requestString ); */
+		
+		$.post("getReports.action",
+		{
+			periodType : periodType,
+			ouId : ouId,
+			reportTypeName : reportTypeName,
+			autogenrep : autogenvalue
+		},
+		function (data)
+		{
+			getReportsReceived(data);
+		},'xml');
     }
 }
 //23/08/2010 end
@@ -244,8 +296,6 @@ function getPeriodsReceived( xmlObject )
 {	
     var availablePeriods = document.getElementById( "availablePeriods" );
     var selectedPeriods = document.getElementById( "selectedPeriods" );
-	
-	
 	
     clearList( availablePeriods );
 	

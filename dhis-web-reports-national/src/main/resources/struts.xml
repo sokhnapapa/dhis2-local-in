@@ -410,7 +410,7 @@
 			<param name="menu">
 				/dhis-web-reports/menuWithTreeForDataSetLockReports.vm</param>
 			<param name="javascripts">
-				../dhis-web-commons/ouwt/ouwt.js,../dhis-web-commons/util/jquery.js,../dhis-web-commons/util/commons.js,../dhis-web-commons/lists/lists.js,javascript/datasetLockReport.js,javascript/hashtable.js</param>
+				../dhis-web-commons/ouwt/ouwt.js, javascript/datasetLockReport.js,javascript/hashtable.js</param>
 			<param name="stylesheets">css/StylesForTags.css</param>
 			<interceptor-ref name="organisationUnitTreeStack"/>
 		</action>
@@ -439,7 +439,7 @@
 		
 		<action name="getDataSetsForLockAction"
 			class="org.hisp.dhis.reports.datasetlock.action.GetDataSetsForLockAction">
-			<result name="success" type="velocity">
+			<result name="success" type="velocity-xml">
 				/dhis-web-reports/responseDataSetLock.vm</result>
 			<param name="onExceptionReturn">plainTextError</param>
 		</action>
@@ -758,7 +758,7 @@
 		<!-- AJAX Requests -->
 		<action name="getDataElements"
 			class="org.hisp.dhis.reports.action.GetDataElementsAction">
-			<result name="success" type="velocity">
+			<result name="success" type="velocity-xml">
 				/dhis-web-reports/responseDataElement.vm</result>
 			<!--<interceptor-ref name="transactionStack"/>-->
 			<param name="onExceptionReturn">plainTextError</param>
@@ -766,7 +766,7 @@
 		
 		<action name="getPeriods"
 			class="org.hisp.dhis.reports.action.GetPeriodsAction">
-			<result name="success" type="velocity">
+			<result name="success" type="velocity-xml">
 				/dhis-web-reports/responsePeriod.vm</result>
 			<!--<interceptor-ref name="transactionStack"/>-->
 			<param name="onExceptionReturn">plainTextError</param>
@@ -774,7 +774,7 @@
 		
 		<action name="getReports"
 			class="org.hisp.dhis.reports.action.GetReportsAction">
-			<result name="success" type="velocity">
+			<result name="success" type="velocity-xml">
 				/dhis-web-reports/responseReport.vm</result>
 			<param name="javascripts">
 				../dhis-web-commons/ouwt/ouwt.js,../dhis-web-commons/lists/lists.js,javascript/reports.js,javascript/hashtable.js</param>
@@ -784,7 +784,7 @@
 		
 		<action name="getProgressReports"
 			class="org.hisp.dhis.reports.action.GetProgressReportsAction">
-			<result name="success" type="velocity">
+			<result name="success" type="velocity-xml">
 				/dhis-web-reports/responseReport.vm</result>
 			<param name="javascripts">
 				../dhis-web-commons/ouwt/ouwt.js,../dhis-web-commons/lists/lists.js,javascript/reports.js,javascript/hashtable.js</param>
@@ -794,7 +794,7 @@
 		
 		<action name="getOrgUnitGroups"
 			class="org.hisp.dhis.reports.action.GetOrgUnitGroupsAction">
-			<result name="success" type="velocity">
+			<result name="success" type="velocity-xml">
 				/dhis-web-reports/responseOrgUnitGroup.vm</result>
 			<!--<interceptor-ref name="transactionStack"/>-->
 			<param name="onExceptionReturn">plainTextError</param>
@@ -802,7 +802,7 @@
 		
 		<action name="getOrgUnitDetails"
 			class="org.hisp.dhis.reports.action.GetOrgUnitsAction">
-			<result name="success" type="velocity">
+			<result name="success" type="velocity-xml">
 				/dhis-web-reports/responseOrgUnit.vm</result>
 			<!--<interceptor-ref name="transactionStack"/>-->
 			<param name="onExceptionReturn">plainTextError</param>
