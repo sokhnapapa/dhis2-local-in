@@ -2,13 +2,6 @@
 
 function getOUDetails(orgUnitIds)
 {
-	/* var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds;
-	
-	var request = new Request();
-	request.setResponseTypeXML( 'orgunit' );
-	request.setCallbackSuccess( getOUDetailsRecevied );
-	request.send( url ); */
-	
 	$.post("getOrgUnitDetails.action",
 		{
 			orgUnitId : orgUnitIds
@@ -46,12 +39,6 @@ function getDataElements()
         
     if ( dataElementGroupId != null )
     {
-        /* var url = "getDataElements.action?id=" + dataElementGroupId;
-        var request = new Request();
-        request.setResponseTypeXML('dataElement');
-        request.setCallbackSuccess(getDataElementsReceived);
-        request.send(url); */
-		
 		$.post("getDataElements.action",
 		{
 			id : dataElementGroupId
@@ -99,14 +86,7 @@ function getPeriods()
   var reportList = document.getElementById( "reportList" );
   
   if ( periodTypeId != "NA" )
-  {   
-    /* var url = "getPeriods.action?id=" + periodTypeId;
-    
-    var request = new Request();
-      request.setResponseTypeXML( 'period' );
-      request.setCallbackSuccess( getPeriodsReceived );
-      request.send( url ); */
-	  
+  { 
 	  $.post("getPeriods.action",
 		{
 			id : periodTypeId
@@ -134,14 +114,7 @@ function getReports( ouId, reportListFileName )
   var autogenvalue = document.getElementById( "autogen" ).value;
           
   if ( periodType != "NA" && ouId != null && ouId != "" )
-  {   
-    /* var url = "getReports.action?periodType=" + periodType + "&ouId="+ouId + "&reportListFileName="+reportListFileName+"&autogenrep="+autogenvalue;
-    
-    var request = new Request();
-      request.setResponseTypeXML( 'report' );
-      request.setCallbackSuccess( getReportsReceived );
-      request.send( url ); */
-	  
+  { 
 	   $.post("getReports.action",
 		{
 			periodType : periodType,
