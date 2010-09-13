@@ -1,4 +1,43 @@
 
+function checkStartDate( dtStr )
+{
+	
+	if( isDate( dtStr ) )
+	{
+		var splitDate = dtStr.split("-");
+		var temDay = splitDate[2];
+		if( parseInt( temDay,10 ) > 1 )
+		{
+			alert("Please select start day of the month");
+			return false;
+		}		
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function checkEndDate( dtStr )
+{
+	if( isDate( dtStr ) )
+	{
+		var splitDate = dtStr.split("-");
+		var temDay = splitDate[2];
+		if( parseInt( temDay,10 ) < 30 )
+		{
+			alert("Please select end day of the month");
+			return false;
+		}		
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 function getOUDetails(orgUnitIds)
 {
     /* //var url = "getOrgUnitDetails.action?orgUnitId=" + orgUnitIds;
