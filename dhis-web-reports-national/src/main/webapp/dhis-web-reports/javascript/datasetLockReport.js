@@ -33,7 +33,7 @@ function getAllPeriods() {
 			url :url,
 			cache :false,
 			success : function(response) {
-				dom = parseXML(response);
+				/* dom = parseXML(response);
 				$('#periodIds >option').remove();
 				$(dom).find('period').each(
 						function() {
@@ -43,12 +43,38 @@ function getAllPeriods() {
 											+ $(this).find('name').text()
 											+ "</option>");
 						});
-				enable("periodIds");
+				enable("periodIds"); */
+				
+				getAllPeriodsReceived( response );
+				
 				getDataSets();
 			}
 		});
 	}
 }
+
+
+function getAllPeriodsReceived(xmlObject) {
+
+	var periodList = byId("periodIds");
+
+	clearList(periodList);
+
+	var periods = xmlObject.getElementsByTagName("period");
+	for ( var i = 0; i < periods.length; i++) {
+		var id = periods[i].getElementsByTagName("id")[0].firstChild.nodeValue;
+		var name = periods[i].getElementsByTagName("name")[0].firstChild.nodeValue;;
+
+		/* var option = document.createElement("option");
+		option.value = id;
+		option.text = name;
+		reportsList.add(option, null); */
+		
+		$("#periodIds").append("<option value='"+ id +"'>" + name + "</option>");
+	}
+	$("#periodIds").attr('disabled', false);
+}
+
 
 function parseXML(xml) {
 	if (window.ActiveXObject && window.GetObject) {

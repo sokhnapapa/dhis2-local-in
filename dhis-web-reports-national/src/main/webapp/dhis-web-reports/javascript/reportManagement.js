@@ -213,10 +213,12 @@ function getPeriodsReceived(xmlObject) {
 		var id = periods[i].getElementsByTagName("id")[0].firstChild.nodeValue;
 		var periodName = periods[i].getElementsByTagName("periodname")[0].firstChild.nodeValue;
 
-		var option = document.createElement("option");
+		/* var option = document.createElement("option");
 		option.value = id;
 		option.text = periodName;
-		availablePeriods.add(option, null);
+		availablePeriods.add(option, null); */
+		
+		$("#availablePeriods").append("<option value='"+ id +"'>" + periodName + "</option>");
 	}
 }
 
@@ -266,9 +268,11 @@ function getReportsReceived(xmlObject) {
 
 		orgUnitName.value = ouName;
 
-		var option = document.createElement("option");
+		/* var option = document.createElement("option");
 		option.value = id;
 		option.text = name;
-		reportsList.add(option, null);
+		reportsList.add(option, null); */
+		
+		$("#reportList").append("<option value='"+ id +"'>" + name + "</option>");
 	}
 }
