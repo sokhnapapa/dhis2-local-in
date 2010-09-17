@@ -161,8 +161,9 @@ function editreportValidationCompleted(messageElement) {
 	if (type == 'success') {
 		document.forms['editReportForm'].submit();
 	} else if (type == 'input') {
-		document.getElementById('message').innerHTML = message;
-		document.getElementById('message').style.display = 'block';
+		//document.getElementById('message').innerHTML = message;
+		//document.getElementById('message').style.display = 'block';
+		setMessage( messageElement.firstChild.nodeValue );
 	}
 }
 
