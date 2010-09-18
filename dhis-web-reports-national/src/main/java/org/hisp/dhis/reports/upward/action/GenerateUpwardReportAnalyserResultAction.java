@@ -8,14 +8,11 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -37,18 +34,7 @@ import jxl.write.WritableWorkbook;
 
 import org.amplecode.quick.StatementManager;
 import org.apache.velocity.tools.generic.MathTool;
-import org.hisp.dhis.aggregation.AggregationService;
-import org.hisp.dhis.dataelement.DataElement;
-import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.dataelement.DataElementCategoryService;
-import org.hisp.dhis.dataelement.DataElementService;
-import org.hisp.dhis.dataset.DataSet;
-import org.hisp.dhis.dataset.DataSetService;
-import org.hisp.dhis.datavalue.DataValue;
-import org.hisp.dhis.datavalue.DataValueService;
 import org.hisp.dhis.i18n.I18nFormat;
-import org.hisp.dhis.indicator.Indicator;
-import org.hisp.dhis.indicator.IndicatorService;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.organisationunit.OrganisationUnitService;
 import org.hisp.dhis.organisationunit.comparator.OrganisationUnitNameComparator;
@@ -57,7 +43,6 @@ import org.hisp.dhis.period.PeriodService;
 import org.hisp.dhis.period.PeriodType;
 import org.hisp.dhis.reports.ReportService;
 import org.hisp.dhis.reports.Report_in;
-import org.hisp.dhis.system.util.MathUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -71,8 +56,6 @@ public class GenerateUpwardReportAnalyserResultAction
     implements Action
 {
 
-    private static final String NULL_REPLACEMENT = "0";
-
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
@@ -81,13 +64,6 @@ public class GenerateUpwardReportAnalyserResultAction
     public void setStatementManager( StatementManager statementManager )
     {
         this.statementManager = statementManager;
-    }
-
-    private DataSetService dataSetService;
-
-    public void setDataSetService( DataSetService dataSetService )
-    {
-        this.dataSetService = dataSetService;
     }
 
     private ReportService reportService;
@@ -104,13 +80,6 @@ public class GenerateUpwardReportAnalyserResultAction
         this.periodService = periodService;
     }
 
-    private DataElementService dataElementService;
-
-    public void setDataElementService( DataElementService dataElementService )
-    {
-        this.dataElementService = dataElementService;
-    }
-
     private OrganisationUnitService organisationUnitService;
 
     public void setOrganisationUnitService( OrganisationUnitService organisationUnitService )
@@ -121,34 +90,6 @@ public class GenerateUpwardReportAnalyserResultAction
     public OrganisationUnitService getOrganisationUnitService()
     {
         return organisationUnitService;
-    }
-
-    private AggregationService aggregationService;
-
-    public void setAggregationService( AggregationService aggregationService )
-    {
-        this.aggregationService = aggregationService;
-    }
-
-    private IndicatorService indicatorService;
-
-    public void setIndicatorService( IndicatorService indicatorService )
-    {
-        this.indicatorService = indicatorService;
-    }
-
-    private DataValueService dataValueService;
-
-    public void setDataValueService( DataValueService dataValueService )
-    {
-        this.dataValueService = dataValueService;
-    }
-
-    private DataElementCategoryService dataElementCategoryOptionComboService;
-    
-    public void setDataElementCategoryOptionComboService( DataElementCategoryService dataElementCategoryOptionComboService )
-    {
-        this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
     }
 
     private I18nFormat format;
