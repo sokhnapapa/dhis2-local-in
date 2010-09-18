@@ -23,16 +23,18 @@ function responseGetSelectedOrgUnitName( dataelement )
     document.reportForm.ouNameTB.value=element[0].getElementsByTagName("OugUnitName")[0].firstChild.nodeValue;
 }
 
-function getAllPeriods() {
-	var periodTypeList = document.getElementById("periodTypeId");
-	var periodTypeId = periodTypeList.options[periodTypeList.selectedIndex].value;
 
-	if (periodTypeId != null) {
-		var url = "getPeriodsForLock.action?name=" + periodTypeId;
-		$.ajax( {
-			url :url,
-			cache :false,
-			success : function(response) {
+
+//function getAllPeriods() {
+	//var periodTypeList = document.getElementById("periodTypeId");
+//	var periodTypeId = periodTypeList.options[periodTypeList.selectedIndex].value;
+
+//	if (periodTypeId != null) {
+	//	var url = "getPeriodsForLock.action?name=" + periodTypeId;
+	//	$.ajax( {
+		//	url :url,
+		//	cache :false,
+		//	success : function(response) {
 				/* dom = parseXML(response);
 				$('#periodIds >option').remove();
 				$(dom).find('period').each(
@@ -45,15 +47,17 @@ function getAllPeriods() {
 						});
 				enable("periodIds"); */
 				
-				getAllPeriodsReceived( response );
+			//	getAllPeriodsReceived( response );
 				
-				getDataSets();
-			}
-		});
-	}
-}
+	//			getDataSets();
+		//	}
+	//	});
+	//}
+//}
 
 
+
+/*
 function getAllPeriodsReceived(xmlObject) {
 
 	var periodList = byId("periodIds");
@@ -70,9 +74,32 @@ function getAllPeriodsReceived(xmlObject) {
 		option.text = name;
 		reportsList.add(option, null); */
 		
-		$("#periodIds").append("<option value='"+ id +"'>" + name + "</option>");
-	}
-	$("#periodIds").attr('disabled', false);
+	//	$("#periodIds").append("<option value='"+ id +"'>" + name + "</option>");
+	//}
+	//$("#periodIds").attr('disabled', false);
+//}
+
+// Functions for get availabe periods
+function getAllPeriods() {
+    var periodTypeList = document.getElementById( "periodTypeId" );
+    var periodTypeId = periodTypeList.options[ periodTypeList.selectedIndex ].value;
+
+    if ( periodTypeId != null ) {
+        var url = "getPeriodsForLock.action?name=" + periodTypeId;
+        $.ajax({
+            url: url,
+            cache: false,
+            success: function(response){
+                dom = parseXML(response);
+                $( '#periodIds >option' ).remove();
+                $(dom).find('period').each(function(){
+                    $('#periodIds').append("<option value="+$(this).find('id').text()+">" +$(this).find('name').text()+ "</option>");
+                });
+                enable( "periodIds" );
+                getDataSets();
+            }
+        });
+    }
 }
 
 
@@ -87,6 +114,7 @@ function parseXML(xml) {
 	throw new Error('No XML parser available');
 }
 
+// functions for get all corresponding dataSets
 function getDataSets() {
 	var periodTypeList = document.getElementById("periodTypeId");
 	var periodType = periodTypeList.options[periodTypeList.selectedIndex].value;

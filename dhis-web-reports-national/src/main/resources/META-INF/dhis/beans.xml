@@ -1697,11 +1697,21 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
             </property>
     </bean>
     
-    <bean id="org.hisp.dhis.reports.physical.action.GeneratePhysicalReportResultAction"
-        class="org.hisp.dhis.reports.physical.action.GeneratePhysicalReportResultAction" scope="prototype">
+		<bean id="org.hisp.dhis.reports.physical.action.GeneratePhysicalReportResultAction"
+			class="org.hisp.dhis.reports.physical.action.GeneratePhysicalReportResultAction" scope="prototype">
         
-		<property name="reportService">
-            <ref bean="statementManager"/></property>
+		
+		
+		
+		<!--<property name="reportService">
+            <ref bean="statementManager"/></property>-->
+			
+			<property name="statementManager" ref="statementManager">
+        </property>
+		
+			<property name="reportService">
+				<ref bean="org.hisp.dhis.reports.ReportService"/>
+			</property>	
 		
             <property name="dataSetService">
                  <ref bean="org.hisp.dhis.dataset.DataSetService"/>
@@ -1721,7 +1731,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
             <property name="dataValueService">
                  <ref bean="org.hisp.dhis.datavalue.DataValueService"/>
             </property>
-		<property name="currentUserService">
+			<property name="currentUserService">
                  <ref bean="org.hisp.dhis.user.CurrentUserService"/>
             </property>
         
