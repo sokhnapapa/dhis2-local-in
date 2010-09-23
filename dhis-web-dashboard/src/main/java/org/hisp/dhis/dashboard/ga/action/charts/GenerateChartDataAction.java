@@ -1528,33 +1528,7 @@ public class GenerateChartDataAction
                         }
                     }
                 }
-              //22/09/2010 add 
-                Double tempVal = aggregationService
-                .getAggregatedIndicatorValue( ind, startPeriod.getStartDate(), endPeriod.getEndDate(),
-                    childOrgUnit );
-                
-                if( tempVal != null)
-                {  
-                    serviceValues[countForServiceList][countForChildOrgUnitList] /= noOfChildren;
-                    serviceValues[countForServiceList][countForChildOrgUnitList] = Math
-                        .round( serviceValues[countForServiceList][countForChildOrgUnitList] * Math.pow( 10, 1 ) )
-                        / Math.pow( 10, 1 );
 
-                    numVal = Math.round( numVal * Math.pow( 10, 1 ) ) / Math.pow( 10, 1 );
-                    denVal = Math.round( denVal * Math.pow( 10, 1 ) ) / Math.pow( 10, 1 );
-                }
-                else
-                {  
-                    serviceValues[countForServiceList][countForChildOrgUnitList] = 0.0;
-                    serviceValues[countForServiceList][countForChildOrgUnitList] = 0.0;
-                    numVal = 0.0;
-                    denVal = 0.0;
-                }
-
-                // end 22/09/2010
-                    
-                    
-                    
                 serviceValues[countForServiceList][countForChildOrgUnitList] /= noOfChildren;
                 serviceValues[countForServiceList][countForChildOrgUnitList] = Math
                     .round( serviceValues[countForServiceList][countForChildOrgUnitList] * Math.pow( 10, 1 ) )
