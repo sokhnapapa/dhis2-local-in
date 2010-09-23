@@ -283,10 +283,10 @@ public class GenerateTabularAnalysisResultAction
         String monthOrder[] = { "04", "05", "06", "07", "08", "09","10", "11", "12", "01", "02", "03" };
         int monthDays[] = { 30, 31, 30, 31, 31, 30, 31, 30, 31, 31, 28, 31 };
         
-        int startRow = 1;
+        int startRow = 0;
         @SuppressWarnings("unused")
         int startCol = 0;
-        int headerRow = 1;
+        int headerRow = 0;
         int headerCol = 0;
         
         String raFolderName = configurationService.getConfigurationByKey( Configuration_IN.KEY_REPORTFOLDER ).getValue();
@@ -299,7 +299,7 @@ public class GenerateTabularAnalysisResultAction
         
         /* Orgunit Info */
 
-        if ( ouSelCB != null )
+        if ( ouRadio.equalsIgnoreCase("orgUnitSelectedRadio"))
         {
             for ( String ouStr : orgUnitListCB )
             {
@@ -343,7 +343,7 @@ public class GenerateTabularAnalysisResultAction
                 }
             }
         }
-        System.out.println("selectedoulebel = "+organisationUnitService.getLevelOfOrganisationUnit( selOrgUnit ));
+       // System.out.println("selectedoulebel = "+organisationUnitService.getLevelOfOrganisationUnit( selOrgUnit ));
         int minOULevel = 1;
         int maxOuLevel = 1;
         if( selOUList != null && selOUList.size() > 0 )
@@ -362,10 +362,10 @@ public class GenerateTabularAnalysisResultAction
         else if(orgUnitLevelCB != null && ouRadio.equalsIgnoreCase("orgUnitGroupRadio") ) minOULevel = organisationUnitService.getLevelOfOrganisationUnit( selOrgUnit );
         else maxOuLevel = minOULevel;
 
-        System.out.println("maxlevelou = "+maxOuLevel + " minoulevel = "+minOULevel);
+       // System.out.println("maxlevelou = "+maxOuLevel + " minoulevel = "+minOULevel);
         int c1 = headerCol+1;
         
-        if( ouSelCB != null )
+        if( ouRadio.equalsIgnoreCase("orgUnitSelectedRadio" ))
         {
             sheet0.mergeCells( c1, headerRow, c1, headerRow+1 );
             sheet0.addCell( new Label( c1, headerRow, "Facility", getCellFormat1() ) );
@@ -373,10 +373,10 @@ public class GenerateTabularAnalysisResultAction
         }
         else
         {
-            for(int i = minOULevel; i <= maxOuLevel; i++ )
+            for(int i = minOULevel; i <= maxOuLevel-1; i++ )
             {           
                 sheet0.mergeCells( c1, headerRow, c1, headerRow+1 );
-                sheet0.addCell( new Label( c1, headerRow, "Level"+i, getCellFormat1() ) );
+                sheet0.addCell( new Label( c1, headerRow, "Level"+(i+1), getCellFormat1() ) );
                 c1++;
             }
         }
@@ -507,9 +507,9 @@ public class GenerateTabularAnalysisResultAction
             
             //sheet0.mergeCells( colCount, headerRow+1+rowCount, colCount, headerRow+1+rowCount+ouChildCountMap.get( ou ));
             
-            if( ouSelCB != null )
+            if( ouRadio.equalsIgnoreCase("orgUnitSelectedRadio"))
             {
-                sheet0.addCell( new Label( headerCol+1, headerRow+1+rowCount, ou.getName(), getCellFormat2() ) );
+                sheet0.addCell( new Label( 1, 2, ou.getName(), getCellFormat2() ) );
             }
             else
             {
@@ -518,12 +518,12 @@ public class GenerateTabularAnalysisResultAction
                 {
                     if( i == colCount )
                     {
-                        sheet0.addCell( new Label( colCount, headerRow+1+rowCount, ou.getName(), getCellFormat2() ) );
+                        sheet0.addCell( new Label( colCount-1, headerRow+1+rowCount, ou.getName(), getCellFormat2() ) );
                     }
                     else
                     {
                         parentOu = parentOu.getParent();
-                        sheet0.addCell( new Label( i, headerRow+1+rowCount, parentOu.getName(), getCellFormat2() ) );
+                        sheet0.addCell( new Label( i, headerRow+rowCount, parentOu.getName(), getCellFormat2() ) );
                     } 
                 }
             }

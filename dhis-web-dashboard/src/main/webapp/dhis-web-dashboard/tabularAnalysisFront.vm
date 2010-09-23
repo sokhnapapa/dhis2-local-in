@@ -141,7 +141,7 @@
 				<table>
 					<tr>
 						<td class="NormalB">
-							<input type="checkbox" id="ouSelCB" name="ouSelCB" onchange="ouSelCBChange()" value="ON" > Selected<br />
+							<input type="radio" id="ouRadio" name="ouRadio" value="orgUnitSelectedRadio" onclick="ouradioSelection(event)" > Selected<br />
 							$i18n.getString( "ga_orgunit" )<br>    			                    	
 							<select name="orgUnitListCB" id="orgUnitListCB" multiple size="7" style="width: 175px;" ondblclick="remOUFunction()" disabled >
 							</select>						
@@ -149,7 +149,7 @@
 						<td class="NormalB">&nbsp;</td>
 						<td class="NormalB">
 
-                            <input type="radio" id="ouRadio" name="ouRadio" value="orgUnitGroupRadio"    onclick="ouradioSelection(event)"> OrgUnitGroups
+                            <input type="radio" id="ouRadio" name="ouRadio" value="orgUnitGroupRadio"  onclick="ouradioSelection(event)"> OrgUnitGroups
                             <br>
                             <input type="radio" id="ouRadio" name="ouRadio" value="orgUnitLevelRadio" onclick="ouradioSelection(event)" checked> OrgUnit Levels
 							<br>
