@@ -47,6 +47,8 @@ import javax.servlet.http.HttpSession;
 import org.amplecode.quick.StatementManager;
 import org.apache.struts2.ServletActionContext;
 import org.hisp.dhis.aggregation.AggregationService;
+import org.hisp.dhis.caseaggregation.CaseAggregationMapping;
+import org.hisp.dhis.caseaggregation.CaseAggregationMappingService;
 import org.hisp.dhis.dashboard.util.DashBoardService;
 import org.hisp.dhis.dashboard.util.SurveyData;
 import org.hisp.dhis.dataelement.DataElement;
@@ -151,6 +153,13 @@ public class GenerateChartDataAction
         this.dataValueService = dataValueService;
     }
 
+    private CaseAggregationMappingService caseAggregationMappingService;
+    
+    public void setCaseAggregationMappingService( CaseAggregationMappingService caseAggregationMappingService )
+    {
+        this.caseAggregationMappingService = caseAggregationMappingService;
+    }
+    
     // -------------------------------------------------------------------------
     // Comparator
     // -------------------------------------------------------------------------
@@ -348,8 +357,16 @@ public class GenerateChartDataAction
     
     private List<String> selectedValues;
 
-    public List<String> getSelectedValues() {
+    public List<String> getSelectedValues() 
+    {
         return selectedValues;
+    }
+
+    private List<String> selectedStatus;
+    
+    public List<String> getSelectedStatus()
+    {
+        return selectedStatus;
     }
 
     private String deSelection;
@@ -465,6 +482,7 @@ public class GenerateChartDataAction
         denList = new ArrayList<List<String>>();
         targetList = new ArrayList<Double>();
         selectedValues = new ArrayList<String>();
+        selectedStatus = new ArrayList<String>();
         selectedOptionComboList = new ArrayList<DataElementCategoryOptionCombo>();
 
         // OrgUnit Related Info
@@ -882,6 +900,17 @@ public class GenerateChartDataAction
                         {
                             String values = selectedOrgUnit.getId() + ":"+ dElement.getId() + ":"+ decoc.getId() + ":" + p.getId();
                             selectedValues.add(values);
+                            
+                            CaseAggregationMapping caseAggMapping = caseAggregationMappingService.getCaseAggregationMappingByOptionCombo( dElement, decoc );
+                            
+                            if( caseAggMapping == null )
+                            {
+                                selectedStatus.add( "no" );
+                            }
+                            else
+                            {
+                                selectedStatus.add( "yes" );
+                            }
 
                             if( aggDataCB == null )
                             {
@@ -956,6 +985,17 @@ public class GenerateChartDataAction
                             {
                                 String values = selectedOrgUnit.getId() + ":"+ dElement.getId() + ":"+ decoc1.getId() + ":" + p.getId();
                                 selectedValues.add(values);
+
+                                CaseAggregationMapping caseAggMapping = caseAggregationMappingService.getCaseAggregationMappingByOptionCombo( dElement, decoc1 );
+                                
+                                if( caseAggMapping == null )
+                                {
+                                    selectedStatus.add( "no" );
+                                }
+                                else
+                                {
+                                    selectedStatus.add( "yes" );
+                                }
 
                                 if ( aggDataCB == null )
                                 {
