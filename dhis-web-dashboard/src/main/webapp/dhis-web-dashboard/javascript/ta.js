@@ -572,6 +572,8 @@ function formValidations()
 {
     var selectedServices = document.getElementById("selectedServices");
     var orgUnitListCB = document.getElementById("orgUnitListCB");
+    var selOUListLength = document.tabularAnalysisForm.orgUnitListCB.options.length;
+   // alert(selOUListLength);
     var orgUnitLevelCB = document.getElementById("orgUnitLevelCB");
     var yearLB = document.getElementById("yearLB");
     var periodLB = document.getElementById("periodLB");
@@ -581,7 +583,7 @@ function formValidations()
     var periodTypeId = periodTypeList.options[ periodTypeList.selectedIndex ].value;
     var ouRadioVal = $( "input[name='ouRadio']:checked" ).val();
   
-    
+    var k=0;
     if( selectedServices.options.length <= 0 ) 
     {
         alert("Please select DataElement/Indicator(s)");
@@ -612,11 +614,21 @@ function formValidations()
 	
     if( ouRadioVal == "orgUnitSelectedRadio" )
     {
-        if( orgUnitListCB.selectedIndex < 0 ) 
+        //if( orgUnitListCB.selectedIndex < 0 ) 
+    	if( selOUListLength <= 0 )
         {
             alert( "Please select OrgUnit(s)" );
             return false;
         }
+    	/*
+        else
+        {
+        	for(k=0;k<selOUListLength;k++)
+        	{
+        		document.tabularAnalysisForm.orgUnitListCB.options[k].selected = true;
+        	}
+    	}
+    	*/
     }
     else if( ouRadioVal == "orgUnitGroupRadio" ) 
     { 
