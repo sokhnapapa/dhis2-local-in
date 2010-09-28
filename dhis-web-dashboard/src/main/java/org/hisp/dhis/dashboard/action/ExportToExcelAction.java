@@ -160,9 +160,13 @@ public class ExportToExcelAction implements Action
         //File outputReportFile = locationManager.getFileForWriting( UUID.randomUUID().toString() + ".xls", "db", "output" );
         
         
-        String outputReportFile = System.getProperty( "user.home" ) + File.separator + "dhis" + File.separator + configurationService.getConfigurationByKey( Configuration_IN.KEY_REPORTFOLDER ).getValue()
-        + File.separator + "output" + File.separator + UUID.randomUUID().toString() + ".xls";
+     //   String outputReportFile = System.getProperty( "user.home" ) + File.separator + "dhis" + File.separator + configurationService.getConfigurationByKey( Configuration_IN.KEY_REPORTFOLDER ).getValue()
+     //   + File.separator + "output" + File.separator + UUID.randomUUID().toString() + ".xls";
+        String outputReportFile = System.getenv( "DHIS2_HOME" ) + File.separator + configurationService.getConfigurationByKey( Configuration_IN.KEY_REPORTFOLDER ).getValue()
+          + File.separator + "output" + File.separator + UUID.randomUUID().toString() + ".xls";
        
+        System.out.println("Env Variable is  :" + System.getenv( "DHIS2_HOME" ) );
+        System.out.println("Complete path is :" + outputReportFile );
         
         WritableWorkbook outputReportWorkbook = Workbook.createWorkbook( new File(outputReportFile) );
         WritableSheet sheet0 = outputReportWorkbook.createSheet( "ChartOutput", 0 );
