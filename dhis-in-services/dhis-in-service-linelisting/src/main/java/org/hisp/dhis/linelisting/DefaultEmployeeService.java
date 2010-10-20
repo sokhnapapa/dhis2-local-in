@@ -1,10 +1,5 @@
-package org.hisp.dhis.linelisting;
-
-import java.io.Serializable;
-import org.hisp.dhis.common.IdentifiableObject;
-
 /*
- * Copyright (c) 2004-2009, University of Oslo
+ * Copyright (c) 2004-2010, University of Oslo
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,60 +24,58 @@ import org.hisp.dhis.common.IdentifiableObject;
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-@SuppressWarnings( "serial" )
-public class LineListElementOptions
-    extends IdentifiableObject
-    implements Serializable
+package org.hisp.dhis.linelisting;
+
+import java.util.Collection;
+
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * @author Mithilesh Kumar Thakur
+ *
+ * @version DefaultEmployeeService.java Oct 15, 2010 1:53:20 PM
+ */
+@Transactional
+public class DefaultEmployeeService implements EmployeeService
 {
+    // -------------------------------------------------------------------------
+    // Dependencies
+    // -------------------------------------------------------------------------
 
-    public int getId()
+    private EmployeeStore employeeStore;
+    
+    public void setEmployeeStore( EmployeeStore employeeStore )
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        this.employeeStore = employeeStore;
+    }
+    
+    // -------------------------------------------------------------------------
+    // Employee
+    // -------------------------------------------------------------------------
+    
+    public void addEmployee( Employee employee )
+    {
+        employeeStore.addEmployee( employee );
     }
 
-    public void setId( int id )
+    public void deleteEmployee( Employee employee )
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        employeeStore.deleteEmployee( employee );
     }
 
-    public String getName()
+    public void updateEmployee( Employee employee )
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        employeeStore.updateEmployee( employee );
     }
 
-    public void setName( String name )
+    public Employee getEmployeeByPDSCode( String pdsCode )
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        return employeeStore.getEmployeeByPDSCode( pdsCode );
     }
 
-    public String getShortName()
+    public Collection<Employee> getAllEmployee()
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        return employeeStore.getAllEmployee();
     }
-
-    public void setShortName( String shortName )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    public String getCode()
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    public void setCode( String code )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    public String getAlternativeName()
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    public void setAlternativeName( String alternativeName )
-    {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
 }
+
