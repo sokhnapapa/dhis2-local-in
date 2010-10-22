@@ -1,4 +1,4 @@
-package org.hisp.dhis.reports.upward.action;
+package org.hisp.dhis.reports.aggregation.action;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -38,8 +38,13 @@ import org.amplecode.quick.StatementManager;
 import org.apache.velocity.tools.generic.MathTool;
 import org.hisp.dhis.aggregation.AggregationService;
 import org.hisp.dhis.dataelement.DataElement;
+import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
+import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.dataset.DataSet;
 import org.hisp.dhis.dataset.DataSetService;
+import org.hisp.dhis.datavalue.DataValue;
+import org.hisp.dhis.datavalue.DataValueService;
 import org.hisp.dhis.i18n.I18nFormat;
 import org.hisp.dhis.indicator.Indicator;
 import org.hisp.dhis.indicator.IndicatorService;
@@ -61,34 +66,35 @@ import org.xml.sax.SAXParseException;
 
 import com.opensymphony.xwork2.Action;
 
-public class GenerateUpwardReportAnalyserResultAction
+public class GenerateAggregationReportAnalyserResultAction
     implements Action
 {
-
     private static final String NULL_REPLACEMENT = "0";
-
+    
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
+    
     private StatementManager statementManager;
 
     public void setStatementManager( StatementManager statementManager )
     {
         this.statementManager = statementManager;
     }
-
+    
+    private ReportService reportService;
+    
+    public void setReportService( ReportService reportService )
+    {
+        this.reportService = reportService;
+    }
+    
+    // 
     private DataSetService dataSetService;
 
     public void setDataSetService( DataSetService dataSetService )
     {
         this.dataSetService = dataSetService;
-    }
-
-    private ReportService reportService;
-
-    public void setReportService( ReportService reportService )
-    {
-        this.reportService = reportService;
     }
 
     private PeriodService periodService;
@@ -97,21 +103,21 @@ public class GenerateUpwardReportAnalyserResultAction
     {
         this.periodService = periodService;
     }
-/*
+
     private DataElementService dataElementService;
 
     public void setDataElementService( DataElementService dataElementService )
     {
         this.dataElementService = dataElementService;
     }
-*/
+
     private OrganisationUnitService organisationUnitService;
 
     public void setOrganisationUnitService( OrganisationUnitService organisationUnitService )
     {
         this.organisationUnitService = organisationUnitService;
     }
-
+    
     public OrganisationUnitService getOrganisationUnitService()
     {
         return organisationUnitService;
@@ -130,56 +136,49 @@ public class GenerateUpwardReportAnalyserResultAction
     {
         this.indicatorService = indicatorService;
     }
-/*
+
     private DataValueService dataValueService;
 
     public void setDataValueService( DataValueService dataValueService )
     {
         this.dataValueService = dataValueService;
     }
-
-    private DataElementCategoryService dataElementCategoryOptionComboService;
     
+    private DataElementCategoryService dataElementCategoryOptionComboService;
+
     public void setDataElementCategoryOptionComboService( DataElementCategoryService dataElementCategoryOptionComboService )
     {
         this.dataElementCategoryOptionComboService = dataElementCategoryOptionComboService;
     }
-*/
-    /*
-    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
-    {
-        this.dataElementCategoryService = dataElementCategoryService;
-    }
-*/
+    
     private I18nFormat format;
 
     public void setFormat( I18nFormat format )
     {
         this.format = format;
     }
-
     // -------------------------------------------------------------------------
-    // Properties
+    // Constants
     // -------------------------------------------------------------------------
-/*    private PeriodStore periodStore;
+    
+    private final int ALL = 0;
 
-    public void setPeriodStore( PeriodStore periodStore )
+    public int getALL()
     {
-        this.periodStore = periodStore;
+        return ALL;
     }
-*/
+    
+    // -------------------------------------------------------------------------
+    // Input/Output getter/setter
+    // -------------------------------------------------------------------------
+    
     private InputStream inputStream;
 
     public InputStream getInputStream()
     {
         return inputStream;
     }
-
-    /*
-     * private String contentType;
-     * 
-     * public String getContentType() { return contentType; }
-     */
+    
     private String fileName;
 
     public String getFileName()
@@ -187,35 +186,18 @@ public class GenerateUpwardReportAnalyserResultAction
         return fileName;
     }
 
-    /*
-     * private int bufferSize;
-     * 
-     * public int getBufferSize() { return bufferSize; }
-     */
     private MathTool mathTool;
 
     public MathTool getMathTool()
     {
         return mathTool;
     }
-
-    // private OrganisationUnit selectedOrgUnit;
-    // public OrganisationUnit getSelectedOrgUnit()
-    // {
-    // return selectedOrgUnit;
-    // }
+    
     private List<OrganisationUnit> orgUnitList;
 
     public List<OrganisationUnit> getOrgUnitList()
     {
         return orgUnitList;
-    }
-
-    private Period selectedPeriod;
-
-    public Period getSelectedPeriod()
-    {
-        return selectedPeriod;
     }
 
     private List<String> dataValueList;
@@ -279,26 +261,16 @@ public class GenerateUpwardReportAnalyserResultAction
     private List<String> serviceType;
 
     private String reportFileNameTB;
-/*
-    public void setReportFileNameTB( String reportFileNameTB )
-    {
-        this.reportFileNameTB = reportFileNameTB;
-    }
-*/
+
     private String reportModelTB;
-/*
-    public void setReportModelTB( String reportModelTB )
-    {
-        this.reportModelTB = reportModelTB;
-    }
-*/
+
     private String reportList;
 
     public void setReportList( String reportList )
     {
         this.reportList = reportList;
     }
-/*
+
     private String startDate;
 
     public void setStartDate( String startDate )
@@ -313,25 +285,18 @@ public class GenerateUpwardReportAnalyserResultAction
         this.endDate = endDate;
     }
 
-    private List<String> orgUnitListCB;
+    private Period selectedPeriod;
 
-    public void setOrgUnitListCB( List<String> orgUnitListCB )
+    public Period getSelectedPeriod()
     {
-        this.orgUnitListCB = orgUnitListCB;
+        return selectedPeriod;
     }
-*/
+
     private int ouIDTB;
 
     public void setOuIDTB( int ouIDTB )
     {
         this.ouIDTB = ouIDTB;
-    }
-
-    private int availablePeriods;
-
-    public void setAvailablePeriods( int availablePeriods )
-    {
-        this.availablePeriods = availablePeriods;
     }
 
     private String aggCB;
@@ -364,14 +329,26 @@ public class GenerateUpwardReportAnalyserResultAction
         return periodType;
     }
 
+    private String periodTypeId;
+
+    public void setPeriodTypeId( String periodTypeId )
+    {
+        this.periodTypeId = periodTypeId;
+    }
+
+    private String periodTypeIdTB;
+
+    public String setPeriodTypeIdTB()
+    {
+        return periodTypeIdTB;
+    }
+
     private List<Period> periods;
 
     public List<Period> getPeriods()
     {
         return periods;
     }
-
-    private double tempNum = 0;
 
 //    private List<Integer> totalOrgUnitsCountList;
 
@@ -384,43 +361,43 @@ public class GenerateUpwardReportAnalyserResultAction
         return childOrgUnits;
     }
 
-    int deFlag1;
+    private int deFlag1;
 
-    int deFlag2;
-
-    int isAggregated = 0;
-
+    private int deFlag2;
     // -------------------------------------------------------------------------
     // Action implementation
     // -------------------------------------------------------------------------
+
     public String execute()
         throws Exception
-    {
 
+    {
+     // Initialization
         statementManager.initialise();
-        deFlag2 = 0;
+        raFolderName = reportService.getRAFolderName();
+        
         deFlag1 = 0;
+        deFlag2 = 0;
+        statementManager.initialise();
         // Initialization
         raFolderName = reportService.getRAFolderName();
+        int tempNum = 0;
 
         mathTool = new MathTool();
         services = new ArrayList<String>();
         slNos = new ArrayList<String>();
         deCodeType = new ArrayList<String>();
         serviceType = new ArrayList<String>();
-//      totalOrgUnitsCountList = new ArrayList<Integer>();
-//      String deCodesXMLFileName = "";
+//        totalOrgUnitsCountList = new ArrayList<Integer>();
+      
         simpleDateFormat = new SimpleDateFormat( "MMM-yyyy" );
         monthFormat = new SimpleDateFormat( "MMMM" );
         simpleMonthFormat = new SimpleDateFormat( "MMM" );
         yearFormat = new SimpleDateFormat( "yyyy" );
         simpleYearFormat = new SimpleDateFormat( "yy" );
-//      deCodesXMLFileName = reportList + "DECodes.xml";
-
-        // Getting Report Details       
-        String deCodesXMLFileName = "";
        
-
+     // Getting Report Details   
+        String deCodesXMLFileName = "";
         Report_in selReportObj = reportService.getReport( Integer.parseInt( reportList ) );
 
         deCodesXMLFileName = selReportObj.getXmlTemplateName();
@@ -428,12 +405,8 @@ public class GenerateUpwardReportAnalyserResultAction
         reportFileNameTB = selReportObj.getExcelTemplateName();
         
         System.out.println( reportModelTB + " : " + reportFileNameTB + " : " + deCodesXMLFileName + " : " + ouIDTB );
-        
+
         System.out.println( "Report Generation Start Time is : \t" + new Date() );
-        
-        
-        
-        
 
         String parentUnit = "";
 
@@ -441,14 +414,11 @@ public class GenerateUpwardReportAnalyserResultAction
         rowList = new ArrayList<Integer>();
         colList = new ArrayList<Integer>();
 
-        String inputTemplatePath = System.getenv( "DHIS2_HOME" ) + File.separator + raFolderName + File.separator
-            + "template" + File.separator + reportFileNameTB;
-        String outputReportPath = System.getenv( "DHIS2_HOME" ) + File.separator + raFolderName + File.separator
-            + "output" + File.separator + UUID.randomUUID().toString() + ".xls";
+        String inputTemplatePath = System.getenv( "DHIS2_HOME" ) + File.separator + raFolderName + File.separator + "template" + File.separator + reportFileNameTB;
+        String outputReportPath = System.getenv( "DHIS2_HOME" ) + File.separator + raFolderName + File.separator + "output" + File.separator + UUID.randomUUID().toString() + ".xls";
         Workbook templateWorkbook = Workbook.getWorkbook( new File( inputTemplatePath ) );
 
-        WritableWorkbook outputReportWorkbook = Workbook
-            .createWorkbook( new File( outputReportPath ), templateWorkbook );
+        WritableWorkbook outputReportWorkbook = Workbook.createWorkbook( new File( outputReportPath ), templateWorkbook );
 
         if ( reportModelTB.equalsIgnoreCase( "DYNAMIC-ORGUNIT" ) )
         {
@@ -529,13 +499,14 @@ public class GenerateUpwardReportAnalyserResultAction
             orgUnitList.add( 0, orgUnit );
         }
 
-        selectedPeriod = periodService.getPeriod( availablePeriods );
+        // selectedPeriod = periodService.getPeriod( availablePeriods );
 
-        sDate = format.parseDate( String.valueOf( selectedPeriod.getStartDate() ) );
+        sDate = format.parseDate( startDate );
 
-        eDate = format.parseDate( String.valueOf( selectedPeriod.getEndDate() ) );
+        eDate = format.parseDate( endDate );
 
         simpleDateFormat = new SimpleDateFormat( "MMM-yyyy" );
+
 
         // Getting DataValues
         dataValueList = new ArrayList<String>();
@@ -547,13 +518,11 @@ public class GenerateUpwardReportAnalyserResultAction
 
         int rowCounter = 0;
 
-        //----------------------------------------------------------------------
-        // -----------------------------
+        // ---------------------------------------------------------------------------------------------------
         // Feedback without orgunit START
         // This part is for generating feedback reports for orgunits without any
         // children
-        //----------------------------------------------------------------------
-        // -----------------------------
+        // ---------------------------------------------------------------------------------------------------
 
         OrganisationUnit checkChildOrgunit = new OrganisationUnit();
 
@@ -565,15 +534,14 @@ public class GenerateUpwardReportAnalyserResultAction
 
         int children = 1;
 
-        if ( reportModelTB.equalsIgnoreCase( "INDICATOR-FOR-FEEDBACK" )
-            && (childOrgUnits == null || childOrgUnits.size() == 0) )
+        if ( reportModelTB.equalsIgnoreCase( "INDICATOR-FOR-FEEDBACK" ) && ( childOrgUnits == null || childOrgUnits.size() == 0 ) )
         {
             children = 0;
         }
 
         if ( children == 0 )
         {
-           // int quarterPeriod = 0;
+            //int quarterPeriod = 0;
 
             OrganisationUnit currentOrgUnit = (OrganisationUnit) it.next();
 
@@ -586,21 +554,20 @@ public class GenerateUpwardReportAnalyserResultAction
 
                 String deType = (String) deCodeType.get( count1 );
                // String sType = (String) serviceType.get( count1 );
-                //int count = 0;
-                //double sum = 0.0;
-                //int flag1 = 0;
+               // int count = 0;
+               // double sum = 0.0;
+               // int flag1 = 0;
                 String tempStr = "";
-
+                
                 Calendar tempStartDate = Calendar.getInstance();
                 Calendar tempEndDate = Calendar.getInstance();
                 List<Calendar> calendarList = new ArrayList<Calendar>( getStartingEndingPeriods( deType ) );
                 if ( calendarList == null || calendarList.isEmpty() )
                 {
-                    tempStartDate.setTime( selectedPeriod.getStartDate() );
-                    tempEndDate.setTime( selectedPeriod.getEndDate() );
+                    tempStartDate.setTime( sDate );
+                    tempEndDate.setTime( eDate );
                     return SUCCESS;
-                }
-                else
+                } else
                 {
                     tempStartDate = calendarList.get( 0 );
                     tempEndDate = calendarList.get( 1 );
@@ -610,15 +577,13 @@ public class GenerateUpwardReportAnalyserResultAction
                 {
                     tempStr = "";
 
-                }
-                else
+                } else
                 {
                     if ( deCodeString.equalsIgnoreCase( "FACILITYP" ) )
                     {
                         tempStr = currentOrgUnit.getName();
 
-                    }
-                    else
+                    } else
                     {
                         if ( deCodeString.equalsIgnoreCase( "FACILITYPP" ) )
                         {
@@ -628,8 +593,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                             tempStr = orgUnitP.getName();
 
-                        }
-                        else
+                        } else
                         {
                             if ( deCodeString.equalsIgnoreCase( "FACILITYPPP" ) )
                             {
@@ -643,8 +607,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                 tempStr = orgUnitPP.getName();
 
-                            }
-                            else
+                            } else
                             {
                                 if ( deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
                                 {
@@ -662,15 +625,13 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                     tempStr = orgUnitPPP.getName();
 
-                                }
-                                else
+                                } else
                                 {
                                     if ( deCodeString.equalsIgnoreCase( "PERIOD-MONTH" ) )
                                     {
                                         tempStr = monthFormat.format( sDate );
 
-                                    }
-                                    else
+                                    } else
                                     {
                                         if ( deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
                                         {
@@ -689,13 +650,14 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                             startMonth = monthFormat.format( sDateTemp );
 
-                                            periodType = selectedPeriod.getPeriodType();
+                                            //periodService.getPeriod( periodTypeIdTB );
+
+                                            periodType = periodService.getPeriodTypeByName( periodTypeId );
+                                            //periodType = selectedPeriod.getPeriodType();
 
                                             tempQuarterYear.setTime( sDateTemp );
 
-                                            if ( (startMonth.equalsIgnoreCase( "January" )
-                                                || startMonth.equalsIgnoreCase( "February" ) || startMonth
-                                                .equalsIgnoreCase( "March" )) )
+                                            if ( ( startMonth.equalsIgnoreCase( "January" ) || startMonth.equalsIgnoreCase( "February" ) || startMonth.equalsIgnoreCase( "March" ) ) )
                                             {
                                                 tempQuarterYear.roll( Calendar.YEAR, -1 );
 
@@ -707,9 +669,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                             tempQuarterYear.setTime( eDateTemp );
 
-                                            if ( !(startMonth.equalsIgnoreCase( "January" )
-                                                || startMonth.equalsIgnoreCase( "February" ) || startMonth
-                                                .equalsIgnoreCase( "March" )) )
+                                            if ( !( startMonth.equalsIgnoreCase( "January" ) || startMonth.equalsIgnoreCase( "February" ) || startMonth.equalsIgnoreCase( "March" ) ) )
                                             {
                                                 tempQuarterYear.roll( Calendar.YEAR, 1 );
 
@@ -720,8 +680,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                             tempStr = startYear + " - " + endYear;
 
-                                        }
-                                        else
+                                        } else
                                         {
                                             tempStr = "";
                                         }
@@ -746,6 +705,7 @@ public class GenerateUpwardReportAnalyserResultAction
                 {
                     sheet0.addCell( new Blank( tempColNo, tempRowNo, wCellformat ) );
                 }
+
                 sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
 
                 count1++;
@@ -753,17 +713,13 @@ public class GenerateUpwardReportAnalyserResultAction
 
         }
 
-        //----------------------------------------------------------------------
-        // -----------------------------
+        // ---------------------------------------------------------------------------------------------------
         // Feedback without orgunit END
-        //----------------------------------------------------------------------
-        // -----------------------------
+        // ---------------------------------------------------------------------------------------------------
 
-        //----------------------------------------------------------------------
-        // -----------------------------
+        // ---------------------------------------------------------------------------------------------------
         // All other reports START
-        //----------------------------------------------------------------------
-        // -----------------------------
+        // ---------------------------------------------------------------------------------------------------
 
         while ( it.hasNext() && children != 0 )
         {
@@ -780,9 +736,9 @@ public class GenerateUpwardReportAnalyserResultAction
 
                 String deType = (String) deCodeType.get( count1 );
                 String sType = (String) serviceType.get( count1 );
-               // int count = 0;
-                //double sum = 0.0;
-               // int flag1 = 0;
+                //int count = 0;
+               // double sum = 0.0;
+                //int flag1 = 0;
                 String tempStr = "";
 
                 Calendar tempStartDate = Calendar.getInstance();
@@ -790,11 +746,10 @@ public class GenerateUpwardReportAnalyserResultAction
                 List<Calendar> calendarList = new ArrayList<Calendar>( getStartingEndingPeriods( deType ) );
                 if ( calendarList == null || calendarList.isEmpty() )
                 {
-                    tempStartDate.setTime( selectedPeriod.getStartDate() );
-                    tempEndDate.setTime( selectedPeriod.getEndDate() );
+                    tempStartDate.setTime( sDate );
+                    tempEndDate.setTime( eDate );
                     return SUCCESS;
-                }
-                else
+                } else
                 {
                     tempStartDate = calendarList.get( 0 );
                     tempEndDate = calendarList.get( 1 );
@@ -804,21 +759,18 @@ public class GenerateUpwardReportAnalyserResultAction
                 {
                     tempStr = currentOrgUnit.getName();
 
-                }
-                else
+                } else
                 {
                     if ( deCodeString.equalsIgnoreCase( "FACILITY-NOREPEAT" ) )
                     {
                         tempStr = parentUnit;
-                    }
-                    else
+                    } else
                     {
                         if ( deCodeString.equalsIgnoreCase( "FACILITYP" ) )
                         {
                             tempStr = currentOrgUnit.getParent().getName();
 
-                        }
-                        else
+                        } else
                         {
                             if ( deCodeString.equalsIgnoreCase( "FACILITYPP" ) )
                             {
@@ -828,8 +780,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                 tempStr = orgUnitP.getParent().getName();
 
-                            }
-                            else
+                            } else
                             {
                                 if ( deCodeString.equalsIgnoreCase( "FACILITYPPP" ) )
                                 {
@@ -843,8 +794,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                     tempStr = orgUnitPP.getParent().getName();
 
-                                }
-                                else
+                                } else
                                 {
                                     if ( deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
                                     {
@@ -862,62 +812,51 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                         tempStr = orgUnitPPP.getParent().getName();
 
-                                    }
-                                    else
+                                    } else
                                     {
-                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) )
+                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" ) || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) )
                                         {
                                             tempStr = simpleDateFormat.format( sDate );
 
-                                        }
-                                        else
+                                        } else
                                         {
                                             if ( deCodeString.equalsIgnoreCase( "PERIOD-MONTH" ) )
                                             {
                                                 tempStr = monthFormat.format( sDate );
 
-                                            }
-                                            else
+                                            } else
                                             {
                                                 if ( deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" ) )
                                                 {
                                                     tempStr = simpleMonthFormat.format( sDate );
 
-                                                }
-                                                else
+                                                } else
                                                 {
                                                     if ( deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" ) )
                                                     {
                                                         tempStr = simpleMonthFormat.format( eDate );
 
-                                                    }
-                                                    else
+                                                    } else
                                                     {
                                                         if ( deCodeString.equalsIgnoreCase( "MONTH-START" ) )
                                                         {
                                                             tempStr = monthFormat.format( sDate );
 
-                                                        }
-                                                        else
+                                                        } else
                                                         {
                                                             if ( deCodeString.equalsIgnoreCase( "MONTH-END" ) )
                                                             {
                                                                 tempStr = monthFormat.format( eDate );
 
-                                                            }
-                                                            else
+                                                            } else
                                                             {
                                                                 if ( deCodeString.equalsIgnoreCase( "PERIOD-WEEK" ) )
                                                                 {
-                                                                    tempStr = String.valueOf( tempStartDate
-                                                                        .get( Calendar.WEEK_OF_MONTH ) );
+                                                                    tempStr = String.valueOf( tempStartDate.get( Calendar.WEEK_OF_MONTH ) );
 
-                                                                }
-                                                                else
+                                                                } else
                                                                 {
-                                                                    if ( deCodeString
-                                                                        .equalsIgnoreCase( "PERIOD-QUARTER" ) )
+                                                                    if ( deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" ) )
                                                                     {
                                                                         String startMonth = "";
 
@@ -926,34 +865,28 @@ public class GenerateUpwardReportAnalyserResultAction
                                                                         if ( startMonth.equalsIgnoreCase( "April" ) )
                                                                         {
                                                                             tempStr = "Quarter I";
-                                                                        }
-                                                                        else
+                                                                        } else
                                                                         {
                                                                             if ( startMonth.equalsIgnoreCase( "July" ) )
                                                                             {
                                                                                 tempStr = "Quarter II";
-                                                                            }
-                                                                            else
+                                                                            } else
                                                                             {
-                                                                                if ( startMonth
-                                                                                    .equalsIgnoreCase( "October" ) )
+                                                                                if ( startMonth.equalsIgnoreCase( "October" ) )
                                                                                 {
                                                                                     tempStr = "Quarter III";
-                                                                                }
-                                                                                else
+                                                                                } else
                                                                                 {
                                                                                     tempStr = "Quarter IV";
 
-                                                                                    //quarterPeriod = 1;
+                                                                                   // quarterPeriod = 1;
 
                                                                                 }
                                                                             }
                                                                         }
-                                                                    }
-                                                                    else
+                                                                    } else
                                                                     {
-                                                                        if ( deCodeString
-                                                                            .equalsIgnoreCase( "SIMPLE-QUARTER" ) )
+                                                                        if ( deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" ) )
                                                                         {
                                                                             String startMonth = "";
 
@@ -962,99 +895,77 @@ public class GenerateUpwardReportAnalyserResultAction
                                                                             if ( startMonth.equalsIgnoreCase( "April" ) )
                                                                             {
                                                                                 tempStr = "Q1";
-                                                                            }
-                                                                            else
+                                                                            } else
                                                                             {
-                                                                                if ( startMonth
-                                                                                    .equalsIgnoreCase( "July" ) )
+                                                                                if ( startMonth.equalsIgnoreCase( "July" ) )
                                                                                 {
                                                                                     tempStr = "Q2";
-                                                                                }
-                                                                                else
+                                                                                } else
                                                                                 {
-                                                                                    if ( startMonth
-                                                                                        .equalsIgnoreCase( "October" ) )
+                                                                                    if ( startMonth.equalsIgnoreCase( "October" ) )
                                                                                     {
                                                                                         tempStr = "Q3";
-                                                                                    }
-                                                                                    else
+                                                                                    } else
                                                                                     {
                                                                                         tempStr = "Q4";
 
-                                                                                        //quarterPeriod = 1;
+                                                                                       // quarterPeriod = 1;
 
                                                                                     }
                                                                                 }
                                                                             }
-                                                                        }
-                                                                        else
+                                                                        } else
                                                                         {
-                                                                            if ( deCodeString
-                                                                                .equalsIgnoreCase( "QUARTER-MONTHS-SHORT" ) )
+                                                                            if ( deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" ) )
                                                                             {
                                                                                 String startMonth = "";
 
                                                                                 startMonth = monthFormat.format( sDate );
 
-                                                                                if ( startMonth
-                                                                                    .equalsIgnoreCase( "April" ) )
+                                                                                if ( startMonth.equalsIgnoreCase( "April" ) )
                                                                                 {
                                                                                     tempStr = "Apr - Jun";
-                                                                                }
-                                                                                else
+                                                                                } else
                                                                                 {
-                                                                                    if ( startMonth
-                                                                                        .equalsIgnoreCase( "July" ) )
+                                                                                    if ( startMonth.equalsIgnoreCase( "July" ) )
                                                                                     {
                                                                                         tempStr = "Jul - Sep";
-                                                                                    }
-                                                                                    else
+                                                                                    } else
                                                                                     {
-                                                                                        if ( startMonth
-                                                                                            .equalsIgnoreCase( "October" ) )
+                                                                                        if ( startMonth.equalsIgnoreCase( "October" ) )
                                                                                         {
                                                                                             tempStr = "Oct - Dec";
-                                                                                        }
-                                                                                        else
+                                                                                        } else
                                                                                         {
                                                                                             tempStr = "Jan - Mar";
 
-                                                                                            //quarterPeriod = 1;
+                                                                                           // quarterPeriod = 1;
 
                                                                                         }
                                                                                     }
                                                                                 }
-                                                                            }
-                                                                            else
+                                                                            } else
                                                                             {
-                                                                                if ( deCodeString
-                                                                                    .equalsIgnoreCase( "QUARTER-MONTHS" ) )
+                                                                                if ( deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" ) )
                                                                                 {
                                                                                     String startMonth = "";
 
-                                                                                    startMonth = monthFormat
-                                                                                        .format( sDate );
+                                                                                    startMonth = monthFormat.format( sDate );
 
-                                                                                    if ( startMonth
-                                                                                        .equalsIgnoreCase( "April" ) )
+                                                                                    if ( startMonth.equalsIgnoreCase( "April" ) )
                                                                                     {
                                                                                         tempStr = "April - June";
-                                                                                    }
-                                                                                    else
+                                                                                    } else
                                                                                     {
-                                                                                        if ( startMonth
-                                                                                            .equalsIgnoreCase( "July" ) )
+                                                                                        if ( startMonth.equalsIgnoreCase( "July" ) )
                                                                                         {
                                                                                             tempStr = "July - September";
-                                                                                        }
-                                                                                        else
+                                                                                        } else
                                                                                         {
-                                                                                            if ( startMonth
-                                                                                                .equalsIgnoreCase( "October" ) )
+                                                                                            if ( startMonth.equalsIgnoreCase( "October" ) )
                                                                                             {
                                                                                                 tempStr = "October - December";
-                                                                                            }
-                                                                                            else
+                                                                                            } else
                                                                                             {
                                                                                                 tempStr = "January - March";
 
@@ -1063,76 +974,58 @@ public class GenerateUpwardReportAnalyserResultAction
                                                                                             }
                                                                                         }
                                                                                     }
-                                                                                }
-                                                                                else
+                                                                                } else
                                                                                 {
-                                                                                    if ( deCodeString
-                                                                                        .equalsIgnoreCase( "QUARTER-START-SHORT" ) )
+                                                                                    if ( deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" ) )
                                                                                     {
                                                                                         String startMonth = "";
 
-                                                                                        startMonth = monthFormat
-                                                                                            .format( sDate );
+                                                                                        startMonth = monthFormat.format( sDate );
 
-                                                                                        if ( startMonth
-                                                                                            .equalsIgnoreCase( "April" ) )
+                                                                                        if ( startMonth.equalsIgnoreCase( "April" ) )
                                                                                         {
                                                                                             tempStr = "Apr";
-                                                                                        }
-                                                                                        else
+                                                                                        } else
                                                                                         {
-                                                                                            if ( startMonth
-                                                                                                .equalsIgnoreCase( "July" ) )
+                                                                                            if ( startMonth.equalsIgnoreCase( "July" ) )
                                                                                             {
                                                                                                 tempStr = "Jul";
-                                                                                            }
-                                                                                            else
+                                                                                            } else
                                                                                             {
-                                                                                                if ( startMonth
-                                                                                                    .equalsIgnoreCase( "October" ) )
+                                                                                                if ( startMonth.equalsIgnoreCase( "October" ) )
                                                                                                 {
                                                                                                     tempStr = "Oct";
-                                                                                                }
-                                                                                                else
+                                                                                                } else
                                                                                                 {
                                                                                                     tempStr = "Jan";
 
-                                                                                                    //quarterPeriod = 1;
+                                                                                                   // quarterPeriod = 1;
 
                                                                                                 }
                                                                                             }
                                                                                         }
-                                                                                    }
-                                                                                    else
+                                                                                    } else
                                                                                     {
-                                                                                        if ( deCodeString
-                                                                                            .equalsIgnoreCase( "QUARTER-START" ) )
+                                                                                        if ( deCodeString.equalsIgnoreCase( "QUARTER-START" ) )
                                                                                         {
                                                                                             String startMonth = "";
 
-                                                                                            startMonth = monthFormat
-                                                                                                .format( sDate );
+                                                                                            startMonth = monthFormat.format( sDate );
 
-                                                                                            if ( startMonth
-                                                                                                .equalsIgnoreCase( "April" ) )
+                                                                                            if ( startMonth.equalsIgnoreCase( "April" ) )
                                                                                             {
                                                                                                 tempStr = "April";
-                                                                                            }
-                                                                                            else
+                                                                                            } else
                                                                                             {
-                                                                                                if ( startMonth
-                                                                                                    .equalsIgnoreCase( "July" ) )
+                                                                                                if ( startMonth.equalsIgnoreCase( "July" ) )
                                                                                                 {
                                                                                                     tempStr = "July";
-                                                                                                }
-                                                                                                else
+                                                                                                } else
                                                                                                 {
-                                                                                                    if ( startMonth
-                                                                                                        .equalsIgnoreCase( "October" ) )
+                                                                                                    if ( startMonth.equalsIgnoreCase( "October" ) )
                                                                                                     {
                                                                                                         tempStr = "October";
-                                                                                                    }
-                                                                                                    else
+                                                                                                    } else
                                                                                                     {
                                                                                                         tempStr = "January";
 
@@ -1141,76 +1034,58 @@ public class GenerateUpwardReportAnalyserResultAction
                                                                                                     }
                                                                                                 }
                                                                                             }
-                                                                                        }
-                                                                                        else
+                                                                                        } else
                                                                                         {
-                                                                                            if ( deCodeString
-                                                                                                .equalsIgnoreCase( "QUARTER-END-SHORT" ) )
+                                                                                            if ( deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" ) )
                                                                                             {
                                                                                                 String endMonth = "";
 
-                                                                                                endMonth = monthFormat
-                                                                                                    .format( eDate );
+                                                                                                endMonth = monthFormat.format( eDate );
 
-                                                                                                if ( endMonth
-                                                                                                    .equalsIgnoreCase( "June" ) )
+                                                                                                if ( endMonth.equalsIgnoreCase( "June" ) )
                                                                                                 {
                                                                                                     tempStr = "Jun";
-                                                                                                }
-                                                                                                else
+                                                                                                } else
                                                                                                 {
-                                                                                                    if ( endMonth
-                                                                                                        .equalsIgnoreCase( "September" ) )
+                                                                                                    if ( endMonth.equalsIgnoreCase( "September" ) )
                                                                                                     {
                                                                                                         tempStr = "Sep";
-                                                                                                    }
-                                                                                                    else
+                                                                                                    } else
                                                                                                     {
-                                                                                                        if ( endMonth
-                                                                                                            .equalsIgnoreCase( "December" ) )
+                                                                                                        if ( endMonth.equalsIgnoreCase( "December" ) )
                                                                                                         {
                                                                                                             tempStr = "Dec";
-                                                                                                        }
-                                                                                                        else
+                                                                                                        } else
                                                                                                         {
                                                                                                             tempStr = "Mar";
 
-                                                                                                            //quarterPeriod = 1;
+                                                                                                           // quarterPeriod = 1;
 
                                                                                                         }
                                                                                                     }
                                                                                                 }
-                                                                                            }
-                                                                                            else
+                                                                                            } else
                                                                                             {
-                                                                                                if ( deCodeString
-                                                                                                    .equalsIgnoreCase( "QUARTER-END" ) )
+                                                                                                if ( deCodeString.equalsIgnoreCase( "QUARTER-END" ) )
                                                                                                 {
                                                                                                     String endMonth = "";
 
-                                                                                                    endMonth = monthFormat
-                                                                                                        .format( eDate );
+                                                                                                    endMonth = monthFormat.format( eDate );
 
-                                                                                                    if ( endMonth
-                                                                                                        .equalsIgnoreCase( "June" ) )
+                                                                                                    if ( endMonth.equalsIgnoreCase( "June" ) )
                                                                                                     {
                                                                                                         tempStr = "June";
-                                                                                                    }
-                                                                                                    else
+                                                                                                    } else
                                                                                                     {
-                                                                                                        if ( endMonth
-                                                                                                            .equalsIgnoreCase( "September" ) )
+                                                                                                        if ( endMonth.equalsIgnoreCase( "September" ) )
                                                                                                         {
                                                                                                             tempStr = "September";
-                                                                                                        }
-                                                                                                        else
+                                                                                                        } else
                                                                                                         {
-                                                                                                            if ( endMonth
-                                                                                                                .equalsIgnoreCase( "December" ) )
+                                                                                                            if ( endMonth.equalsIgnoreCase( "December" ) )
                                                                                                             {
                                                                                                                 tempStr = "December";
-                                                                                                            }
-                                                                                                            else
+                                                                                                            } else
                                                                                                             {
                                                                                                                 tempStr = "March";
 
@@ -1219,186 +1094,114 @@ public class GenerateUpwardReportAnalyserResultAction
                                                                                                             }
                                                                                                         }
                                                                                                     }
-                                                                                                }
-                                                                                                else
+                                                                                                } else
                                                                                                 {
-                                                                                                    if ( deCodeString
-                                                                                                        .equalsIgnoreCase( "PERIOD-YEAR" ) )
+                                                                                                    if ( deCodeString.equalsIgnoreCase( "PERIOD-YEAR" ) )
                                                                                                     {
                                                                                                         sDateTemp = sDate;
 
-                                                                                                        Calendar tempQuarterYear = Calendar
-                                                                                                            .getInstance();
+                                                                                                        Calendar tempQuarterYear = Calendar.getInstance();
 
-                                                                                                        tempQuarterYear
-                                                                                                            .setTime( sDateTemp );
+                                                                                                        tempQuarterYear.setTime( sDateTemp );
 
                                                                                                         String startMonth = "";
 
-                                                                                                        startMonth = monthFormat
-                                                                                                            .format( sDateTemp );
+                                                                                                        startMonth = monthFormat.format( sDateTemp );
 
-                                                                                                        periodType = selectedPeriod
-                                                                                                            .getPeriodType();
+                                                                                                        periodType = periodService.getPeriodTypeByName( periodTypeId );
 
-                                                                                                        if ( periodType
-                                                                                                            .getName()
-                                                                                                            .equalsIgnoreCase(
-                                                                                                                "Yearly" ) )
+                                                                                                        if ( periodType.getName().equalsIgnoreCase( "Yearly" ) )
                                                                                                         {
                                                                                                             sDateTemp = sDate;
-                                                                                                        }
-                                                                                                        else
+                                                                                                        } else
                                                                                                         {
-                                                                                                            if ( (startMonth
-                                                                                                                .equalsIgnoreCase( "January" )
-                                                                                                                || startMonth
-                                                                                                                    .equalsIgnoreCase( "February" ) || startMonth
-                                                                                                                .equalsIgnoreCase( "March" ))
-                                                                                                                && periodType
-                                                                                                                    .getName()
-                                                                                                                    .equalsIgnoreCase(
-                                                                                                                        "Quarterly" ) )
+                                                                                                            if ( ( startMonth.equalsIgnoreCase( "January" ) || startMonth.equalsIgnoreCase( "February" ) || startMonth.equalsIgnoreCase( "March" ) ) && periodType.getName().equalsIgnoreCase( "Quarterly" ) )
                                                                                                             {
-                                                                                                                tempQuarterYear
-                                                                                                                    .roll(
-                                                                                                                        Calendar.YEAR,
-                                                                                                                        -1 );
+                                                                                                                tempQuarterYear.roll( Calendar.YEAR, -1 );
 
-                                                                                                                sDateTemp = tempQuarterYear
-                                                                                                                    .getTime();
+                                                                                                                sDateTemp = tempQuarterYear.getTime();
 
                                                                                                             }
                                                                                                         }
 
-                                                                                                        tempStr = yearFormat
-                                                                                                            .format( sDateTemp );
-                                                                                                    }
-                                                                                                    else
+                                                                                                        tempStr = yearFormat.format( sDateTemp );
+                                                                                                    } else
                                                                                                     {
-                                                                                                        if ( deCodeString
-                                                                                                            .equalsIgnoreCase( "SIMPLE-YEAR" ) )
+                                                                                                        if ( deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" ) )
                                                                                                         {
                                                                                                             sDateTemp = sDate;
 
-                                                                                                            Calendar tempQuarterYear = Calendar
-                                                                                                                .getInstance();
+                                                                                                            Calendar tempQuarterYear = Calendar.getInstance();
 
-                                                                                                            tempQuarterYear
-                                                                                                                .setTime( sDateTemp );
+                                                                                                            tempQuarterYear.setTime( sDateTemp );
 
                                                                                                             String startMonth = "";
 
-                                                                                                            startMonth = monthFormat
-                                                                                                                .format( sDateTemp );
+                                                                                                            startMonth = monthFormat.format( sDateTemp );
 
-                                                                                                            periodType = selectedPeriod
-                                                                                                                .getPeriodType();
+                                                                                                            periodType = periodService.getPeriodTypeByName( periodTypeId );
 
-                                                                                                            if ( periodType
-                                                                                                                .getName()
-                                                                                                                .equalsIgnoreCase(
-                                                                                                                    "Yearly" ) )
+                                                                                                            if ( periodType.getName().equalsIgnoreCase( "Yearly" ) )
                                                                                                             {
                                                                                                                 sDateTemp = sDate;
-                                                                                                            }
-                                                                                                            else
+                                                                                                            } else
                                                                                                             {
-                                                                                                                if ( (startMonth
-                                                                                                                    .equalsIgnoreCase( "January" )
-                                                                                                                    || startMonth
-                                                                                                                        .equalsIgnoreCase( "February" ) || startMonth
-                                                                                                                    .equalsIgnoreCase( "March" ))
-                                                                                                                    && periodType
-                                                                                                                        .getName()
-                                                                                                                        .equalsIgnoreCase(
-                                                                                                                            "Quarterly" ) )
+                                                                                                                if ( ( startMonth.equalsIgnoreCase( "January" ) || startMonth.equalsIgnoreCase( "February" ) || startMonth.equalsIgnoreCase( "March" ) ) && periodType.getName().equalsIgnoreCase( "Quarterly" ) )
                                                                                                                 {
-                                                                                                                    tempQuarterYear
-                                                                                                                        .roll(
-                                                                                                                            Calendar.YEAR,
-                                                                                                                            -1 );
+                                                                                                                    tempQuarterYear.roll( Calendar.YEAR, -1 );
 
-                                                                                                                    sDateTemp = tempQuarterYear
-                                                                                                                        .getTime();
+                                                                                                                    sDateTemp = tempQuarterYear.getTime();
 
                                                                                                                 }
                                                                                                             }
 
-                                                                                                            tempStr = simpleYearFormat
-                                                                                                                .format( sDateTemp );
-                                                                                                        }
-                                                                                                        else
+                                                                                                            tempStr = simpleYearFormat.format( sDateTemp );
+                                                                                                        } else
                                                                                                         {
-                                                                                                            if ( deCodeString
-                                                                                                                .equalsIgnoreCase( "YEAR-END" ) )
+                                                                                                            if ( deCodeString.equalsIgnoreCase( "YEAR-END" ) )
                                                                                                             {
 
                                                                                                                 sDateTemp = sDate;
 
-                                                                                                                Calendar tempQuarterYear = Calendar
-                                                                                                                    .getInstance();
+                                                                                                                Calendar tempQuarterYear = Calendar.getInstance();
 
-                                                                                                                tempQuarterYear
-                                                                                                                    .setTime( sDate );
+                                                                                                                tempQuarterYear.setTime( sDate );
 
-                                                                                                                sDate = tempQuarterYear
-                                                                                                                    .getTime();
+                                                                                                                sDate = tempQuarterYear.getTime();
 
                                                                                                                 String startMonth = "";
 
-                                                                                                                startMonth = monthFormat
-                                                                                                                    .format( sDateTemp );
+                                                                                                                startMonth = monthFormat.format( sDateTemp );
 
-                                                                                                                periodType = selectedPeriod
-                                                                                                                    .getPeriodType();
+                                                                                                                periodType = periodService.getPeriodTypeByName( periodTypeId );
 
-                                                                                                                if ( periodType
-                                                                                                                    .getName()
-                                                                                                                    .equalsIgnoreCase(
-                                                                                                                        "Yearly" ) )
+                                                                                                                if ( periodType.getName().equalsIgnoreCase( "Yearly" ) )
                                                                                                                 {
-                                                                                                                    tempQuarterYear
-                                                                                                                        .roll(
-                                                                                                                            Calendar.YEAR,
-                                                                                                                            1 );
+                                                                                                                    tempQuarterYear.roll( Calendar.YEAR, 1 );
 
-                                                                                                                    sDateTemp = tempQuarterYear
-                                                                                                                        .getTime();
+                                                                                                                    sDateTemp = tempQuarterYear.getTime();
 
                                                                                                                 }
 
-                                                                                                                if ( !(startMonth
-                                                                                                                    .equalsIgnoreCase( "January" )
-                                                                                                                    || startMonth
-                                                                                                                        .equalsIgnoreCase( "February" ) || startMonth
-                                                                                                                    .equalsIgnoreCase( "March" )) )
+                                                                                                                if ( !( startMonth.equalsIgnoreCase( "January" ) || startMonth.equalsIgnoreCase( "February" ) || startMonth.equalsIgnoreCase( "March" ) ) )
                                                                                                                 {
-                                                                                                                    tempQuarterYear
-                                                                                                                        .roll(
-                                                                                                                            Calendar.YEAR,
-                                                                                                                            1 );
+                                                                                                                    tempQuarterYear.roll( Calendar.YEAR, 1 );
 
-                                                                                                                    sDateTemp = tempQuarterYear
-                                                                                                                        .getTime();
+                                                                                                                    sDateTemp = tempQuarterYear.getTime();
 
                                                                                                                 }
 
-                                                                                                                tempStr = yearFormat
-                                                                                                                    .format( sDateTemp );
-                                                                                                            }
-                                                                                                            else
+                                                                                                                tempStr = yearFormat.format( sDateTemp );
+                                                                                                            } else
                                                                                                             {
-                                                                                                                if ( deCodeString
-                                                                                                                    .equalsIgnoreCase( "YEAR-FROMTO" ) )
+                                                                                                                if ( deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
                                                                                                                 {
 
                                                                                                                     sDateTemp = sDate;
 
                                                                                                                     eDateTemp = eDate;
 
-                                                                                                                    Calendar tempQuarterYear = Calendar
-                                                                                                                        .getInstance();
+                                                                                                                    Calendar tempQuarterYear = Calendar.getInstance();
 
                                                                                                                     String startYear = "";
 
@@ -1406,269 +1209,137 @@ public class GenerateUpwardReportAnalyserResultAction
 
                                                                                                                     String startMonth = "";
 
-                                                                                                                    startMonth = monthFormat
-                                                                                                                        .format( sDateTemp );
+                                                                                                                    startMonth = monthFormat.format( sDateTemp );
 
-                                                                                                                    periodType = selectedPeriod
-                                                                                                                        .getPeriodType();
+                                                                                                                    System.out.println( "The value for periodType is " + periodTypeId );
 
-                                                                                                                    tempQuarterYear
-                                                                                                                        .setTime( sDateTemp );
+                                                                                                                    periodType = periodService.getPeriodTypeByName( periodTypeId );
 
-                                                                                                                    if ( periodType
-                                                                                                                        .getName()
-                                                                                                                        .equalsIgnoreCase(
-                                                                                                                            "Yearly" ) )
+                                                                                                                    tempQuarterYear.setTime( sDateTemp );
+
+                                                                                                                    if ( periodType.getName().equalsIgnoreCase( "Yearly" ) )
                                                                                                                     {
                                                                                                                         sDateTemp = sDate;
-                                                                                                                    }
-                                                                                                                    else
+                                                                                                                    } else
                                                                                                                     {
-                                                                                                                        if ( (startMonth
-                                                                                                                            .equalsIgnoreCase( "January" )
-                                                                                                                            || startMonth
-                                                                                                                                .equalsIgnoreCase( "February" ) || startMonth
-                                                                                                                            .equalsIgnoreCase( "March" )) )
+                                                                                                                        if ( ( startMonth.equalsIgnoreCase( "January" ) || startMonth.equalsIgnoreCase( "February" ) || startMonth.equalsIgnoreCase( "March" ) ) )
                                                                                                                         {
-                                                                                                                            tempQuarterYear
-                                                                                                                                .roll(
-                                                                                                                                    Calendar.YEAR,
-                                                                                                                                    -1 );
+                                                                                                                            tempQuarterYear.roll( Calendar.YEAR, -1 );
 
-                                                                                                                            sDateTemp = tempQuarterYear
-                                                                                                                                .getTime();
+                                                                                                                            sDateTemp = tempQuarterYear.getTime();
 
                                                                                                                         }
                                                                                                                     }
 
-                                                                                                                    startYear = yearFormat
-                                                                                                                        .format( sDateTemp );
+                                                                                                                    startYear = yearFormat.format( sDateTemp );
 
-                                                                                                                    tempQuarterYear
-                                                                                                                        .setTime( eDateTemp );
+                                                                                                                    tempQuarterYear.setTime( eDateTemp );
 
-                                                                                                                    if ( periodType
-                                                                                                                        .getName()
-                                                                                                                        .equalsIgnoreCase(
-                                                                                                                            "Yearly" ) )
+                                                                                                                    if ( periodType.getName().equalsIgnoreCase( "Yearly" ) )
                                                                                                                     {
-                                                                                                                        tempQuarterYear
-                                                                                                                            .roll(
-                                                                                                                                Calendar.YEAR,
-                                                                                                                                1 );
+                                                                                                                        tempQuarterYear.roll( Calendar.YEAR, 1 );
 
-                                                                                                                        eDateTemp = tempQuarterYear
-                                                                                                                            .getTime();
+                                                                                                                        eDateTemp = tempQuarterYear.getTime();
                                                                                                                     }
 
-                                                                                                                    if ( !(startMonth
-                                                                                                                        .equalsIgnoreCase( "January" )
-                                                                                                                        || startMonth
-                                                                                                                            .equalsIgnoreCase( "February" ) || startMonth
-                                                                                                                        .equalsIgnoreCase( "March" )) )
+                                                                                                                    if ( !( startMonth.equalsIgnoreCase( "January" ) || startMonth.equalsIgnoreCase( "February" ) || startMonth.equalsIgnoreCase( "March" ) ) )
                                                                                                                     {
-                                                                                                                        tempQuarterYear
-                                                                                                                            .roll(
-                                                                                                                                Calendar.YEAR,
-                                                                                                                                1 );
+                                                                                                                        tempQuarterYear.roll( Calendar.YEAR, 1 );
 
-                                                                                                                        eDateTemp = tempQuarterYear
-                                                                                                                            .getTime();
+                                                                                                                        eDateTemp = tempQuarterYear.getTime();
 
                                                                                                                     }
-                                                                                                                    endYear = yearFormat
-                                                                                                                        .format( eDateTemp );
+                                                                                                                    endYear = yearFormat.format( eDateTemp );
 
-                                                                                                                    tempStr = startYear
-                                                                                                                        + " - "
-                                                                                                                        + endYear;
+                                                                                                                    tempStr = startYear + " - " + endYear;
 
-                                                                                                                }
-                                                                                                                else
+                                                                                                                } else
                                                                                                                 {
-                                                                                                                    if ( deCodeString
-                                                                                                                        .equalsIgnoreCase( "SLNO" ) )
+                                                                                                                    if ( deCodeString.equalsIgnoreCase( "SLNO" ) )
                                                                                                                     {
-                                                                                                                        tempStr = ""
-                                                                                                                            + (orgUnitCount + 1);
-                                                                                                                    }
-                                                                                                                    else
+                                                                                                                        tempStr = "" + ( orgUnitCount + 1 );
+                                                                                                                    } else
                                                                                                                     {
-                                                                                                                        if ( deCodeString
-                                                                                                                            .equalsIgnoreCase( "NA" ) )
+                                                                                                                        if ( deCodeString.equalsIgnoreCase( "NA" ) )
                                                                                                                         {
                                                                                                                             tempStr = " ";
-                                                                                                                        }
-                                                                                                                        else
+                                                                                                                        } else
                                                                                                                         {
                                                                                                                             rowCounter += 1;
 
-                                                                                                                            if ( sType
-                                                                                                                                .equalsIgnoreCase( "dataelement" ) )
+                                                                                                                            if ( sType.equalsIgnoreCase( "dataelement" ) )
                                                                                                                             {
                                                                                                                                 if ( aggCB == null )
                                                                                                                                 {
-                                                                                                                                    tempStr = reportService.getIndividualResultDataValue(
-                                                                                                                                        deCodeString,
-                                                                                                                                        tempStartDate
-                                                                                                                                            .getTime(),
-                                                                                                                                        tempEndDate
-                                                                                                                                            .getTime(),
-                                                                                                                                        currentOrgUnit , reportModelTB);
-                                                                                                                                   
-                                                                                                                                }
-                                                                                                                                else
+                                                                                                                                    tempStr = getIndividualResultDataValue( deCodeString, tempStartDate.getTime(), tempEndDate.getTime(), currentOrgUnit );
+                                                                                                                                } else
                                                                                                                                 {
-                                                                                                                                    tempStr = reportService.getResultDataValue(
-                                                                                                                                        deCodeString,
-                                                                                                                                        tempStartDate
-                                                                                                                                            .getTime(),
-                                                                                                                                        tempEndDate
-                                                                                                                                            .getTime(),
-                                                                                                                                        currentOrgUnit ,reportModelTB);
+                                                                                                                                    tempStr = getResultDataValue( deCodeString, tempStartDate.getTime(), tempEndDate.getTime(),
+                                                                                                                                        currentOrgUnit );
                                                                                                                                 }
-
                                                                                                                                 if ( deFlag2 == 1 )
                                                                                                                                 {
-                                                                                                                                    try
-                                                                                                                                    {
-                                                                                                                                        // tempNum
-                                                                                                                                        // =
-                                                                                                                                        // Integer
-                                                                                                                                        // .
-                                                                                                                                        // parseInt
-                                                                                                                                        // (
-                                                                                                                                        // tempStr
-                                                                                                                                        // )
-                                                                                                                                        // ;
-                                                                                                                                        tempNum = Double
-                                                                                                                                            .parseDouble( tempStr );
-                                                                                                                                    }
-                                                                                                                                    catch ( Exception ex )
-                                                                                                                                    {
-                                                                                                                                        tempNum = 0;
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                            else
-                                                                                                                            {
-                                                                                                                                if ( sType
-                                                                                                                                    .equalsIgnoreCase( "indicator-parent" ) )
-                                                                                                                                {
-                                                                                                                                    if ( aggCB == null )
-                                                                                                                                    {
-                                                                                                                                        tempStr = getIndividualResultIndicatorValue(
-                                                                                                                                            deCodeString,
-                                                                                                                                            tempStartDate
-                                                                                                                                                .getTime(),
-                                                                                                                                            tempEndDate
-                                                                                                                                                .getTime(),
-                                                                                                                                            currentOrgUnit
-                                                                                                                                                .getParent() );
-                                                                                                                                    }
-                                                                                                                                    else
-                                                                                                                                    {
-                                                                                                                                        tempStr = getResultIndicatorValue(
-                                                                                                                                            deCodeString,
-                                                                                                                                            tempStartDate
-                                                                                                                                                .getTime(),
-                                                                                                                                            tempEndDate
-                                                                                                                                                .getTime(),
-                                                                                                                                            currentOrgUnit
-                                                                                                                                                .getParent() );
-                                                                                                                                    }
-
-                                                                                                                                    if ( deFlag2 == 1 )
-                                                                                                                                    {
-                                                                                                                                        try
-                                                                                                                                        {
-                                                                                                                                            // tempNum
-                                                                                                                                            // =
-                                                                                                                                            // Integer
-                                                                                                                                            // .
-                                                                                                                                            // parseInt
-                                                                                                                                            // (
-                                                                                                                                            // tempStr
-                                                                                                                                            // )
-                                                                                                                                            // ;
-                                                                                                                                            tempNum = Double
-                                                                                                                                                .parseDouble( tempStr );
+                                                                                                                                    try{
+                                                                                                                                        tempNum = Integer.parseInt( tempStr );
                                                                                                                                         }
-                                                                                                                                        catch ( Exception ex )
-                                                                                                                                        {
+                                                                                                                                        catch(Exception ex){
                                                                                                                                             tempNum = 0;
                                                                                                                                         }
 
-                                                                                                                                    }
                                                                                                                                 }
-                                                                                                                                else
+                                                                                                                            } else
+                                                                                                                            {
+                                                                                                                                if ( sType.equalsIgnoreCase( "indicator-parent" ) )
                                                                                                                                 {
-                                                                                                                                    if ( sType
-                                                                                                                                        .equalsIgnoreCase( "dataelement-boolean" ) )
+                                                                                                                                    if ( aggCB == null )
                                                                                                                                     {
-                                                                                                                                        if ( aggCB == null )
-                                                                                                                                        {
-                                                                                                                                            tempStr = reportService.getBooleanDataValue(
-                                                                                                                                                deCodeString,
-                                                                                                                                                tempStartDate
-                                                                                                                                                    .getTime(),
-                                                                                                                                                tempEndDate
-                                                                                                                                                    .getTime(),
-                                                                                                                                                currentOrgUnit , reportModelTB );
-                                                                                                                                        }
-                                                                                                                                        else
-                                                                                                                                        {
-                                                                                                                                            tempStr = reportService.getBooleanDataValue(
-                                                                                                                                                deCodeString,
-                                                                                                                                                tempStartDate
-                                                                                                                                                    .getTime(),
-                                                                                                                                                tempEndDate
-                                                                                                                                                    .getTime(),
-                                                                                                                                                currentOrgUnit , reportModelTB);
-                                                                                                                                        }
+                                                                                                                                        tempStr = getIndividualResultIndicatorValue( deCodeString, tempStartDate.getTime(),
+                                                                                                                                            tempEndDate.getTime(), currentOrgUnit.getParent() );
+                                                                                                                                    } else
+                                                                                                                                    {
+                                                                                                                                        tempStr = getResultIndicatorValue( deCodeString, tempStartDate.getTime(), tempEndDate.getTime(), currentOrgUnit.getParent() );
                                                                                                                                     }
-                                                                                                                                    else
+                                                                                                                                    if ( deFlag2 == 1 )
+                                                                                                                                    {
+                                                                                                                                        try{
+                                                                                                                                            tempNum = Integer.parseInt( tempStr );
+                                                                                                                                            }
+                                                                                                                                            catch(Exception ex){
+                                                                                                                                                tempNum = 0;
+                                                                                                                                            }
+
+                                                                                                                                    }
+                                                                                                                                } else
+                                                                                                                                {
+                                                                                                                                    if ( sType.equalsIgnoreCase( "dataelement-boolean" ) )
                                                                                                                                     {
                                                                                                                                         if ( aggCB == null )
                                                                                                                                         {
-                                                                                                                                            tempStr = getIndividualResultIndicatorValue(
-                                                                                                                                                deCodeString,
-                                                                                                                                                tempStartDate
-                                                                                                                                                    .getTime(),
-                                                                                                                                                tempEndDate
-                                                                                                                                                    .getTime(),
-                                                                                                                                                currentOrgUnit );
-                                                                                                                                        }
-                                                                                                                                        else
+                                                                                                                                            tempStr = getBooleanDataValue( deCodeString, tempStartDate.getTime(),
+                                                                                                                                                tempEndDate.getTime(), currentOrgUnit );
+                                                                                                                                        } else
                                                                                                                                         {
-                                                                                                                                            tempStr = getResultIndicatorValue(
-                                                                                                                                                deCodeString,
-                                                                                                                                                tempStartDate
-                                                                                                                                                    .getTime(),
-                                                                                                                                                tempEndDate
-                                                                                                                                                    .getTime(),
-                                                                                                                                                currentOrgUnit );
+                                                                                                                                            tempStr = getBooleanDataValue( deCodeString, tempStartDate.getTime(),
+                                                                                                                                                tempEndDate.getTime(), currentOrgUnit );
+                                                                                                                                        }
+                                                                                                                                    } else
+                                                                                                                                    {
+                                                                                                                                        if ( aggCB == null )
+                                                                                                                                        {
+                                                                                                                                            tempStr = getIndividualResultIndicatorValue( deCodeString, tempStartDate.getTime(),
+                                                                                                                                                tempEndDate.getTime(), currentOrgUnit );
+                                                                                                                                        } else
+                                                                                                                                        {
+                                                                                                                                            tempStr = getResultIndicatorValue( deCodeString, tempStartDate.getTime(), tempEndDate.getTime(), currentOrgUnit );
                                                                                                                                         }
                                                                                                                                         if ( deFlag2 == 1 )
                                                                                                                                         {
-                                                                                                                                            try
-                                                                                                                                            {
-                                                                                                                                                // tempNum
-                                                                                                                                                // =
-                                                                                                                                                // Integer
-                                                                                                                                                // .
-                                                                                                                                                // parseInt
-                                                                                                                                                // (
-                                                                                                                                                // tempStr
-                                                                                                                                                // )
-                                                                                                                                                // ;
-                                                                                                                                                tempNum = Double
-                                                                                                                                                    .parseDouble( tempStr );
-                                                                                                                                            }
-                                                                                                                                            catch ( Exception ex )
-                                                                                                                                            {
-                                                                                                                                                tempNum = 0;
-                                                                                                                                            }
+                                                                                                                                            try{
+                                                                                                                                                tempNum = Integer.parseInt( tempStr );
+                                                                                                                                                }
+                                                                                                                                                catch(Exception ex){
+                                                                                                                                                    tempNum = 0;
+                                                                                                                                                }
 
                                                                                                                                         }
                                                                                                                                     }
@@ -1715,55 +1386,30 @@ public class GenerateUpwardReportAnalyserResultAction
                     wCellformat.setAlignment( Alignment.CENTRE );
 
                     sheet0.addCell( new Blank( tempColNo, tempRowNo, wCellformat ) );
-                }
-                else
+                } else
                 {
 
                     if ( reportModelTB.equalsIgnoreCase( "STATIC" ) )
                     {
                         if ( deCodeString.equalsIgnoreCase( "FACILITYP" ) )
                         {
-                        }
-                        else
+                        } else
                         {
                             if ( deCodeString.equalsIgnoreCase( "FACILITYPP" ) )
                             {
-                            }
-                            else
+                            } else
                             {
                                 if ( deCodeString.equalsIgnoreCase( "FACILITYPPP" ) )
                                 {
-                                }
-                                else
+                                } else
                                 {
                                     if ( deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
                                     {
-                                    }
-                                    else
+                                    } else
                                     {
-                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-END" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
+                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" ) || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" ) || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" ) || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" ) || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" ) || deCodeString.equalsIgnoreCase( "MONTH-START" ) || deCodeString.equalsIgnoreCase( "MONTH-END" ) || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" ) || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" ) || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" ) || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-START" ) || deCodeString.equalsIgnoreCase( "QUARTER-END" ) || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" ) || deCodeString.equalsIgnoreCase( "YEAR-END" ) || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
                                         {
-                                        }
-                                        else
+                                        } else
                                         {
                                             // tempColNo +=
                                             // orgUnitCount;
@@ -1786,14 +1432,12 @@ public class GenerateUpwardReportAnalyserResultAction
                             Label l = (Label) cell;
                             l.setString( tempStr );
                             l.setCellFormat( cellFormat );
-                        }
-                        else
+                        } else
                         {
                             if ( deFlag2 == 1 )
                             {
                                 sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
-                            }
-                            else
+                            } else
                             {
                                 sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
                             }
@@ -1802,37 +1446,13 @@ public class GenerateUpwardReportAnalyserResultAction
 
                     if ( reportModelTB.equalsIgnoreCase( "DYNAMIC-ORGUNIT" ) )
                     {
-                        if ( deCodeString.equalsIgnoreCase( "FACILITYP" )
-                            || deCodeString.equalsIgnoreCase( "FACILITYPP" )
-                            || deCodeString.equalsIgnoreCase( "FACILITYPPP" )
-                            || deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
+                        if ( deCodeString.equalsIgnoreCase( "FACILITYP" ) || deCodeString.equalsIgnoreCase( "FACILITYPP" ) || deCodeString.equalsIgnoreCase( "FACILITYPPP" ) || deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
                         {
-                        }
-                        else
+                        } else
                         {
-                            if ( deCodeString.equalsIgnoreCase( "PERIOD" )
-                                || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" )
-                                || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" )
-                                || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" )
-                                || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" )
-                                || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" )
-                                || deCodeString.equalsIgnoreCase( "MONTH-START" )
-                                || deCodeString.equalsIgnoreCase( "MONTH-END" )
-                                || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" )
-                                || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" )
-                                || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" )
-                                || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" )
-                                || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" )
-                                || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" )
-                                || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" )
-                                || deCodeString.equalsIgnoreCase( "QUARTER-START" )
-                                || deCodeString.equalsIgnoreCase( "QUARTER-END" )
-                                || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" )
-                                || deCodeString.equalsIgnoreCase( "YEAR-END" )
-                                || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
+                            if ( deCodeString.equalsIgnoreCase( "PERIOD" ) || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" ) || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" ) || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" ) || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" ) || deCodeString.equalsIgnoreCase( "MONTH-START" ) || deCodeString.equalsIgnoreCase( "MONTH-END" ) || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" ) || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" ) || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" ) || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-START" ) || deCodeString.equalsIgnoreCase( "QUARTER-END" ) || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" ) || deCodeString.equalsIgnoreCase( "YEAR-END" ) || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
                             {
-                            }
-                            else
+                            } else
                             {
                                 tempColNo += orgUnitCount;
                             }
@@ -1852,68 +1472,40 @@ public class GenerateUpwardReportAnalyserResultAction
                             Label l = (Label) cell;
                             l.setString( tempStr );
                             l.setCellFormat( cellFormat );
-                        }
-                        else
+                        } else
                         {
                             if ( deFlag2 == 1 )
                             {
                                 sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
-                            }
-                            else
+                            } else
                             {
                                 sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
                             }
-
                         }
                     }
 
-                    if ( reportModelTB.equalsIgnoreCase( "STATIC-DATAELEMENTS" )
-                        || reportModelTB.equalsIgnoreCase( "STATIC-FINANCIAL" ) )
+                    if ( reportModelTB.equalsIgnoreCase( "STATIC-DATAELEMENTS" ) || reportModelTB.equalsIgnoreCase( "STATIC-FINANCIAL" ) )
                     {
-                        if ( deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" )
-                            || deCodeString.equalsIgnoreCase( "FACILITY" ) )
+                        if ( deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) || deCodeString.equalsIgnoreCase( "FACILITY" ) )
                         {
                         }
                         if ( deCodeString.equalsIgnoreCase( "FACILITYP" ) )
                         {
-                        }
-                        else
+                        } else
                         {
                             if ( deCodeString.equalsIgnoreCase( "FACILITYPP" ) )
                             {
-                            }
-                            else
+                            } else
                             {
                                 if ( deCodeString.equalsIgnoreCase( "FACILITYPPP" ) )
                                 {
-                                }
-                                else
+                                } else
                                 {
                                     if ( deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
                                     {
-                                    }
-                                    else
+                                    } else
                                     {
-                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-END" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
+                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" ) || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" ) || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" ) || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" ) || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" ) || deCodeString.equalsIgnoreCase( "MONTH-START" ) || deCodeString.equalsIgnoreCase( "MONTH-END" ) || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" ) || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" ) || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" ) || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-START" ) || deCodeString.equalsIgnoreCase( "QUARTER-END" ) || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" ) || deCodeString.equalsIgnoreCase( "YEAR-END" ) || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
                                         {
                                         }
                                     }
@@ -1934,14 +1526,12 @@ public class GenerateUpwardReportAnalyserResultAction
                             Label l = (Label) cell;
                             l.setString( tempStr );
                             l.setCellFormat( cellFormat );
-                        }
-                        else
+                        } else
                         {
                             if ( deFlag2 == 1 )
                             {
                                 sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
-                            }
-                            else
+                            } else
                             {
                                 sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
                             }
@@ -1952,47 +1542,23 @@ public class GenerateUpwardReportAnalyserResultAction
                     {
                         if ( deCodeString.equalsIgnoreCase( "FACILITYP" ) )
                         {
-                        }
-                        else
+                        } else
                         {
                             if ( deCodeString.equalsIgnoreCase( "FACILITYPP" ) )
                             {
-                            }
-                            else
+                            } else
                             {
                                 if ( deCodeString.equalsIgnoreCase( "FACILITYPPP" ) )
                                 {
-                                }
-                                else
+                                } else
                                 {
                                     if ( deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
                                     {
-                                    }
-                                    else
+                                    } else
                                     {
-                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-END" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
+                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" ) || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" ) || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" ) || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" ) || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" ) || deCodeString.equalsIgnoreCase( "MONTH-START" ) || deCodeString.equalsIgnoreCase( "MONTH-END" ) || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" ) || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" ) || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" ) || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-START" ) || deCodeString.equalsIgnoreCase( "QUARTER-END" ) || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" ) || deCodeString.equalsIgnoreCase( "YEAR-END" ) || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
                                         {
-                                        }
-                                        else
+                                        } else
                                         {
                                             // tempColNo +=
                                             // (orgUnitCount * 2);
@@ -2014,69 +1580,40 @@ public class GenerateUpwardReportAnalyserResultAction
                             Label l = (Label) cell;
                             l.setString( tempStr );
                             l.setCellFormat( cellFormat );
-                            System.out.println( "cell type = " + cell.getType() + " tempstr = " + tempStr );
-                        }
-                        else
+                        } else
                         {
-                            System.out.println( "deFlag2 = " + deFlag2 + " tempstr = " + tempStr );
                             if ( deFlag2 == 1 )
                             {
                                 sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
-                            }
-                            else
+                            } else
                             {
                                 sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
                             }
                         }
                     }
 
-                    if ( reportModelTB.equalsIgnoreCase( "INDICATOR-AGAINST-SIBLINGS" )
-                        || reportModelTB.equalsIgnoreCase( "INDICATOR-FOR-FEEDBACK" ) )
+                    if ( reportModelTB.equalsIgnoreCase( "INDICATOR-AGAINST-SIBLINGS" ) || reportModelTB.equalsIgnoreCase( "INDICATOR-FOR-FEEDBACK" ) )
                     {
 
                         if ( deCodeString.equalsIgnoreCase( "FACILITYP" ) )
                         {
-                        }
-                        else
+                        } else
                         {
                             if ( deCodeString.equalsIgnoreCase( "FACILITYPP" ) )
                             {
-                            }
-                            else
+                            } else
                             {
                                 if ( deCodeString.equalsIgnoreCase( "FACILITYPPP" ) )
                                 {
-                                }
-                                else
+                                } else
                                 {
                                     if ( deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
                                     {
-                                    }
-                                    else
+                                    } else
                                     {
-                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-END" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
+                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" ) || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" ) || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" ) || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" ) || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" ) || deCodeString.equalsIgnoreCase( "MONTH-START" ) || deCodeString.equalsIgnoreCase( "MONTH-END" ) || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" ) || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" ) || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" ) || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-START" ) || deCodeString.equalsIgnoreCase( "QUARTER-END" ) || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" ) || deCodeString.equalsIgnoreCase( "YEAR-END" ) || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
                                         {
-                                        }
-                                        else
+                                        } else
                                         {
                                             tempColNo += orgUnitCount;
                                         }
@@ -2100,14 +1637,12 @@ public class GenerateUpwardReportAnalyserResultAction
                             Label l = (Label) cell;
                             l.setString( tempStr );
                             l.setCellFormat( cellFormat );
-                        }
-                        else
+                        } else
                         {
                             if ( deFlag2 == 1 )
                             {
                                 sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
-                            }
-                            else
+                            } else
                             {
                                 sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
                             }
@@ -2115,50 +1650,25 @@ public class GenerateUpwardReportAnalyserResultAction
                     }
                     if ( reportModelTB.equalsIgnoreCase( "dynamicwithrootfacility" ) )
                     {
-                        if ( deCodeString.equalsIgnoreCase( "FACILITYP" )
-                            || deCodeString.equalsIgnoreCase( "FACILITY-NOREPEAT" ) )
+                        if ( deCodeString.equalsIgnoreCase( "FACILITYP" ) || deCodeString.equalsIgnoreCase( "FACILITY-NOREPEAT" ) )
                         {
-                        }
-                        else
+                        } else
                         {
                             if ( deCodeString.equalsIgnoreCase( "FACILITYPP" ) )
                             {
-                            }
-                            else
+                            } else
                             {
                                 if ( deCodeString.equalsIgnoreCase( "FACILITYPPP" ) )
                                 {
-                                }
-                                else
+                                } else
                                 {
                                     if ( deCodeString.equalsIgnoreCase( "FACILITYPPPP" ) )
                                     {
-                                    }
-                                    else
+                                    } else
                                     {
-                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-START" )
-                                            || deCodeString.equalsIgnoreCase( "QUARTER-END" )
-                                            || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-END" )
-                                            || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
+                                        if ( deCodeString.equalsIgnoreCase( "PERIOD" ) || deCodeString.equalsIgnoreCase( "PERIOD-NOREPEAT" ) || deCodeString.equalsIgnoreCase( "PERIOD-WEEK" ) || deCodeString.equalsIgnoreCase( "PERIOD-MONTH" ) || deCodeString.equalsIgnoreCase( "PERIOD-QUARTER" ) || deCodeString.equalsIgnoreCase( "PERIOD-YEAR" ) || deCodeString.equalsIgnoreCase( "MONTH-START" ) || deCodeString.equalsIgnoreCase( "MONTH-END" ) || deCodeString.equalsIgnoreCase( "MONTH-START-SHORT" ) || deCodeString.equalsIgnoreCase( "MONTH-END-SHORT" ) || deCodeString.equalsIgnoreCase( "SIMPLE-QUARTER" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-MONTHS" ) || deCodeString.equalsIgnoreCase( "QUARTER-START-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-END-SHORT" ) || deCodeString.equalsIgnoreCase( "QUARTER-START" ) || deCodeString.equalsIgnoreCase( "QUARTER-END" ) || deCodeString.equalsIgnoreCase( "SIMPLE-YEAR" ) || deCodeString.equalsIgnoreCase( "YEAR-END" ) || deCodeString.equalsIgnoreCase( "YEAR-FROMTO" ) )
                                         {
-                                        }
-                                        else
+                                        } else
                                         {
                                             tempRowNo += orgUnitCount;
                                         }
@@ -2182,16 +1692,12 @@ public class GenerateUpwardReportAnalyserResultAction
                             Label l = (Label) cell;
                             l.setString( tempStr );
                             l.setCellFormat( cellFormat );
-                            System.out.println( "cell type = " + cell.getType() + " tempstr = " + tempStr );
-                        }
-                        else
+                        } else
                         {
-                            System.out.println( "deFlag2 = " + deFlag2 + " tempstr = " + tempStr );
                             if ( deFlag2 == 1 )
                             {
                                 sheet0.addCell( new Number( tempColNo, tempRowNo, tempNum, wCellformat ) );
-                            }
-                            else
+                            } else
                             {
                                 sheet0.addCell( new Label( tempColNo, tempRowNo, tempStr, wCellformat ) );
                             }
@@ -2218,7 +1724,8 @@ public class GenerateUpwardReportAnalyserResultAction
 
         fileName = reportFileNameTB.replace( ".xls", "" );
         fileName += "_" + orgUnitList.get( 0 ).getShortName() + "_";
-        fileName += "_" + simpleDateFormat.format( selectedPeriod.getStartDate() ) + ".xls";
+        fileName += "_" + simpleDateFormat.format( sDate ) + "_";
+        fileName += "_" + simpleDateFormat.format( eDate ) + ".xls";
         File outputReportFile = new File( outputReportPath );
         inputStream = new BufferedInputStream( new FileInputStream( outputReportFile ) );
 
@@ -2244,18 +1751,17 @@ public class GenerateUpwardReportAnalyserResultAction
 
         if ( deType.equalsIgnoreCase( "ccmcy" ) )
         {
-            tempStartDate.setTime( selectedPeriod.getStartDate() );
+            tempStartDate.setTime( sDate );
             if ( tempStartDate.get( Calendar.MONTH ) < Calendar.APRIL )
             {
                 tempStartDate.roll( Calendar.YEAR, -1 );
             }
             tempStartDate.set( Calendar.MONTH, Calendar.APRIL );
-            tempEndDate.setTime( selectedPeriod.getEndDate() );
+            tempEndDate.setTime( eDate );
             // System.out.println("CCMCY : "+ String.valueOf(
             // tempStartDate.getTime()) +" ------ "+String.valueOf(
             // tempEndDate.getTime()));
-        }
-        else
+        } else
         {
             if ( deType.equalsIgnoreCase( "cpmcy" ) )
             {
@@ -2266,23 +1772,21 @@ public class GenerateUpwardReportAnalyserResultAction
                 }
                 tempStartDate.set( Calendar.MONTH, Calendar.APRIL );
                 tempEndDate.setTime( previousPeriod.getEndDate() );
-            }
-            else
+            } else
             {
                 if ( deType.equalsIgnoreCase( "cmpy" ) )
                 {
-                    tempStartDate.setTime( selectedPeriod.getStartDate() );
-                    tempEndDate.setTime( selectedPeriod.getEndDate() );
+                    tempStartDate.setTime( sDate );
+                    tempEndDate.setTime( eDate );
 
                     tempStartDate.roll( Calendar.YEAR, -1 );
                     tempEndDate.roll( Calendar.YEAR, -1 );
-                }
-                else
+                } else
                 {
                     if ( deType.equalsIgnoreCase( "ccmpy" ) )
                     {
-                        tempStartDate.setTime( selectedPeriod.getStartDate() );
-                        tempEndDate.setTime( selectedPeriod.getEndDate() );
+                        tempStartDate.setTime( sDate );
+                        tempEndDate.setTime( eDate );
 
                         tempStartDate.roll( Calendar.YEAR, -1 );
                         tempEndDate.roll( Calendar.YEAR, -1 );
@@ -2293,20 +1797,18 @@ public class GenerateUpwardReportAnalyserResultAction
                         }
                         tempStartDate.set( Calendar.MONTH, Calendar.APRIL );
 
-                    }
-                    else
+                    } else
                     {
                         if ( deType.equalsIgnoreCase( "pmcy" ) )
                         {
                             tempStartDate.setTime( previousPeriod.getStartDate() );
                             tempEndDate.setTime( previousPeriod.getEndDate() );
 
-                        }
-                        else
+                        } else
                         {
 
-                            tempStartDate.setTime( selectedPeriod.getStartDate() );
-                            tempEndDate.setTime( selectedPeriod.getEndDate() );
+                            tempStartDate.setTime( sDate );
+                            tempEndDate.setTime( eDate );
                         }
                     }
                 }
@@ -2324,14 +1826,13 @@ public class GenerateUpwardReportAnalyserResultAction
     {
         Period period = new Period();
         Calendar tempDate = Calendar.getInstance();
-        tempDate.setTime( selectedPeriod.getStartDate() );
+        tempDate.setTime( sDate );
         if ( tempDate.get( Calendar.MONTH ) == Calendar.JANUARY )
         {
             tempDate.set( Calendar.MONTH, Calendar.DECEMBER );
             tempDate.roll( Calendar.YEAR, -1 );
 
-        }
-        else
+        } else
         {
             tempDate.roll( Calendar.MONTH, -1 );
         }
@@ -2343,7 +1844,10 @@ public class GenerateUpwardReportAnalyserResultAction
 
     public Period getPeriodByMonth( int month, int year, PeriodType periodType )
     {
-        int monthDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        int monthDays[] =
+        {
+            31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+        };
 
         Calendar cal = Calendar.getInstance();
         cal.set( year, month, 1, 0, 0, 0 );
@@ -2355,13 +1859,11 @@ public class GenerateUpwardReportAnalyserResultAction
             if ( year % 4 == 0 )
             {
                 cal.set( Calendar.DAY_OF_MONTH, monthDays[month] + 1 );
-            }
-            else
+            } else
             {
                 cal.set( Calendar.DAY_OF_MONTH, monthDays[month] );
             }
-        }
-        else
+        } else
         {
             if ( periodType.getName().equals( "Yearly" ) )
             {
@@ -2406,8 +1908,7 @@ public class GenerateUpwardReportAnalyserResultAction
     public List<String> getDECodes( String fileName )
     {
         List<String> deCodes = new ArrayList<String>();
-        String path = System.getProperty( "user.home" ) + File.separator + "dhis" + File.separator + raFolderName
-            + File.separator + fileName;
+        String path = System.getProperty( "user.home" ) + File.separator + "dhis" + File.separator + raFolderName + File.separator + fileName;
         try
         {
             String newpath = System.getenv( "DHIS2_HOME" );
@@ -2415,8 +1916,7 @@ public class GenerateUpwardReportAnalyserResultAction
             {
                 path = newpath + File.separator + raFolderName + File.separator + fileName;
             }
-        }
-        catch ( NullPointerException npe )
+        } catch ( NullPointerException npe )
         {
             // do nothing, but we might be using this somewhere without
             // USER_HOME set, which will throw a NPE
@@ -2441,7 +1941,7 @@ public class GenerateUpwardReportAnalyserResultAction
             {
                 Element deCodeElement = (Element) listOfDECodes.item( s );
                 NodeList textDECodeList = deCodeElement.getChildNodes();
-                deCodes.add( ((Node) textDECodeList.item( 0 )).getNodeValue().trim() );
+                deCodes.add( ( (Node) textDECodeList.item( 0 ) ).getNodeValue().trim() );
                 serviceType.add( deCodeElement.getAttribute( "stype" ) );
                 deCodeType.add( deCodeElement.getAttribute( "type" ) );
                 sheetList.add( new Integer( deCodeElement.getAttribute( "sheetno" ) ) );
@@ -2454,13 +1954,11 @@ public class GenerateUpwardReportAnalyserResultAction
         {
             System.out.println( "** Parsing error" + ", line " + err.getLineNumber() + ", uri " + err.getSystemId() );
             System.out.println( " " + err.getMessage() );
-        }
-        catch ( SAXException e )
+        } catch ( SAXException e )
         {
             Exception x = e.getException();
-            ((x == null) ? e : x).printStackTrace();
-        }
-        catch ( Throwable t )
+            ( ( x == null ) ? e : x ).printStackTrace();
+        } catch ( Throwable t )
         {
             t.printStackTrace();
         }
@@ -2497,18 +1995,14 @@ public class GenerateUpwardReportAnalyserResultAction
      * 
      * @return The generated expression
      */
-/*   // 28/08/2010 following methods are declare in ReportService.java(dhis-in-api) and define in  DefaultReportService.java(dhis-in-services) 
- * 
-    private String getResultDataValue( String formula, Date startDate, Date endDate, OrganisationUnit organisationUnit , String reportModelTB)
+    private String getResultDataValue( String formula, Date startDate, Date endDate, OrganisationUnit organisationUnit )
     {
-        isAggregated = 0;
-
         try
         {
-            // 6b1b7b5b7b5b7
             // System.out.println( "expression : " + formula + " ***** " +
             // String.valueOf( startDate ) + " **** "
             // + String.valueOf( endDate ) );
+
             Pattern pattern = Pattern.compile( "(\\[\\d+\\.\\d+\\])" );
 
             Matcher matcher = pattern.matcher( formula );
@@ -2521,8 +2015,7 @@ public class GenerateUpwardReportAnalyserResultAction
                 String replaceString = matcher.group();
 
                 replaceString = replaceString.replaceAll( "[\\[\\]]", "" );
-                String optionComboIdStr = replaceString.substring( replaceString.indexOf( '.' ) + 1, replaceString
-                    .length() );
+                String optionComboIdStr = replaceString.substring( replaceString.indexOf( '.' ) + 1, replaceString.length() );
 
                 replaceString = replaceString.substring( 0, replaceString.indexOf( '.' ) );
 
@@ -2545,19 +2038,15 @@ public class GenerateUpwardReportAnalyserResultAction
                     if ( aggregatedValue == null )
                     {
                         replaceString = NULL_REPLACEMENT;
-                        deFlag2 = 0;
-                    }
-                    else
+                        deFlag2 = 1;
+                    } else
                     {
                         replaceString = String.valueOf( aggregatedValue );
 
                         deFlag2 = 1;
-
-                        isAggregated = 0;
                     }
 
-                }
-                else
+                } else
                 {
                     deFlag1 = 1;
                     deFlag2 = 0;
@@ -2570,8 +2059,7 @@ public class GenerateUpwardReportAnalyserResultAction
                         replaceString = "";
                         matcher.appendReplacement( buffer, replaceString );
                         continue;
-                    }
-                    else
+                    } else
                     {
                         tempPeriod = (Period) periodList.get( 0 );
                     }
@@ -2584,8 +2072,7 @@ public class GenerateUpwardReportAnalyserResultAction
                         // Works for both text and boolean data types
 
                         replaceString = dataValue.getValue();
-                    }
-                    else
+                    } else
                     {
                         replaceString = "";
                     }
@@ -2609,8 +2096,7 @@ public class GenerateUpwardReportAnalyserResultAction
                 try
                 {
                     d = MathUtils.calculateExpression( buffer.toString() );
-                }
-                catch ( Exception e )
+                } catch ( Exception e )
                 {
                     d = 0.0;
                     resultValue = "";
@@ -2619,8 +2105,7 @@ public class GenerateUpwardReportAnalyserResultAction
                 {
                     d = 0.0;
                     resultValue = "";
-                }
-                else
+                } else
                 {
 
                     // This is to display financial data as it is like 2.1476838
@@ -2639,7 +2124,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                     // These line are to display non financial data that do not
                     // require decimals
-                    if ( !(reportModelTB.equalsIgnoreCase( "STATIC-FINANCIAL" )) )
+                    if ( !( reportModelTB.equalsIgnoreCase( "STATIC-FINANCIAL" ) ) )
                     {
                         resultValue = "" + (int) d;
                     }
@@ -2650,16 +2135,9 @@ public class GenerateUpwardReportAnalyserResultAction
                     // }
                 }
 
-            }
-            else
+            } else
             {
-                deFlag2 = 0;
                 resultValue = buffer.toString();
-            }
-
-            if( isAggregated == 0 )
-            {
-                resultValue = " ";
             }
 
             if ( resultValue.equalsIgnoreCase( "" ) )
@@ -2668,14 +2146,12 @@ public class GenerateUpwardReportAnalyserResultAction
             }
 
             return resultValue;
-        }
-        catch ( NumberFormatException ex )
+        } catch ( NumberFormatException ex )
         {
             throw new RuntimeException( "Illegal DataElement id", ex );
         }
     }
-*/
-/*    
+
     private String getIndividualResultDataValue( String formula, Date startDate, Date endDate,
         OrganisationUnit organisationUnit )
     {
@@ -2693,11 +2169,11 @@ public class GenerateUpwardReportAnalyserResultAction
             while ( matcher.find() )
             {
 
+
                 String replaceString = matcher.group();
 
                 replaceString = replaceString.replaceAll( "[\\[\\]]", "" );
-                String optionComboIdStr = replaceString.substring( replaceString.indexOf( '.' ) + 1, replaceString
-                    .length() );
+                String optionComboIdStr = replaceString.substring( replaceString.indexOf( '.' ) + 1, replaceString.length() );
 
                 replaceString = replaceString.substring( 0, replaceString.indexOf( '.' ) );
 
@@ -2725,8 +2201,7 @@ public class GenerateUpwardReportAnalyserResultAction
                         replaceString = "";
                         matcher.appendReplacement( buffer, replaceString );
                         continue;
-                    }
-                    else
+                    } else
                     {
 
                         double aggregatedValue = 0.0;
@@ -2747,8 +2222,8 @@ public class GenerateUpwardReportAnalyserResultAction
 
                         deFlag2 = 1;
                     }
-                }
-                else
+
+                } else
                 {
                     deFlag1 = 1;
                     deFlag2 = 0;
@@ -2761,8 +2236,7 @@ public class GenerateUpwardReportAnalyserResultAction
                         replaceString = "";
                         matcher.appendReplacement( buffer, replaceString );
                         continue;
-                    }
-                    else
+                    } else
                     {
                         tempPeriod = (Period) periodList.get( 0 );
                     }
@@ -2776,8 +2250,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                         replaceString = dataValue.getValue();
                         valueDoesNotExist = false;
-                    }
-                    else
+                    } else
                     {
                         replaceString = "";
                     }
@@ -2800,8 +2273,7 @@ public class GenerateUpwardReportAnalyserResultAction
                 try
                 {
                     d = MathUtils.calculateExpression( buffer.toString() );
-                }
-                catch ( Exception e )
+                } catch ( Exception e )
                 {
                     d = 0.0;
 
@@ -2812,8 +2284,7 @@ public class GenerateUpwardReportAnalyserResultAction
                     d = 0.0;
 
                     resultValue = "";
-                }
-                else
+                } else
                 {
                     // This is to display financial data as it is like 2.1476838
                     resultValue = "" + d;
@@ -2831,7 +2302,7 @@ public class GenerateUpwardReportAnalyserResultAction
 
                     // These line are to display non financial data that do not
                     // require decimals
-                    if ( !(reportModelTB.equalsIgnoreCase( "STATIC-FINANCIAL" )) )
+                    if ( !( reportModelTB.equalsIgnoreCase( "STATIC-FINANCIAL" ) ) )
                     {
                         resultValue = "" + (int) d;
                     }
@@ -2841,10 +2312,8 @@ public class GenerateUpwardReportAnalyserResultAction
                     // resultValue = "";
                     // }
                 }
-            }
-            else
+            } else
             {
-                deFlag2 = 0;
                 resultValue = buffer.toString();
             }
 
@@ -2859,14 +2328,12 @@ public class GenerateUpwardReportAnalyserResultAction
             }
 
             return resultValue;
-        }
-        catch ( NumberFormatException ex )
+        } catch ( NumberFormatException ex )
         {
             throw new RuntimeException( "Illegal DataElement id", ex );
         }
     }
-*/
-/*    
+
     private String getBooleanDataValue( String formula, Date startDate, Date endDate, OrganisationUnit organisationUnit )
     {
         try
@@ -2881,8 +2348,7 @@ public class GenerateUpwardReportAnalyserResultAction
                 String replaceString = matcher.group();
 
                 replaceString = replaceString.replaceAll( "[\\[\\]]", "" );
-                String optionComboIdStr = replaceString.substring( replaceString.indexOf( '.' ) + 1, replaceString
-                    .length() );
+                String optionComboIdStr = replaceString.substring( replaceString.indexOf( '.' ) + 1, replaceString.length() );
 
                 replaceString = replaceString.substring( 0, replaceString.indexOf( '.' ) );
 
@@ -2912,8 +2378,7 @@ public class GenerateUpwardReportAnalyserResultAction
                         replaceString = "";
                         matcher.appendReplacement( buffer, replaceString );
                         continue;
-                    }
-                    else
+                    } else
                     {
                         tempPeriod = (Period) periodList.get( 0 );
                     }
@@ -2928,34 +2393,30 @@ public class GenerateUpwardReportAnalyserResultAction
                         if ( dataValue.getValue().equalsIgnoreCase( "true" ) )
                         {
                             replaceString = "Yes";
-                        }
-                        else
+                        } else
                         {
                             if ( dataValue.getValue().equalsIgnoreCase( "false" ) )
                             {
                                 replaceString = "No";
-                            }
-                            else
+                            } else
                             {
                                 replaceString = dataValue.getValue();
                             }
                         }
-                    }
-                    else
+                    } else
                     {
                         replaceString = "";
                     }
 
-                }
-                else
+                } else
                 {
                     Double aggregatedValue = aggregationService.getAggregatedDataValue( dataElement, optionCombo,
                         startDate, endDate, organisationUnit );
                     if ( aggregatedValue == null )
                     {
                         replaceString = NULL_REPLACEMENT;
-                    }
-                    else
+                        deFlag2 = 1;
+                    } else
                     {
                         replaceString = String.valueOf( aggregatedValue );
 
@@ -2974,16 +2435,14 @@ public class GenerateUpwardReportAnalyserResultAction
                 try
                 {
                     d = MathUtils.calculateExpression( buffer.toString() );
-                }
-                catch ( Exception e )
+                } catch ( Exception e )
                 {
                     d = 0.0;
                 }
                 if ( d == -1 )
                 {
                     d = 0.0;
-                }
-                else
+                } else
                 {
                     d = Math.round( d * Math.pow( 10, 1 ) ) / Math.pow( 10, 1 );
                     resultValue = "" + (int) d;
@@ -2993,20 +2452,18 @@ public class GenerateUpwardReportAnalyserResultAction
                 {
                     resultValue = " ";
                 }
-            }
-            else
+            } else
             {
-                deFlag2 = 0;
                 resultValue = buffer.toString();
+                deFlag2 = 0;
             }
             return resultValue;
-        }
-        catch ( NumberFormatException ex )
+        } catch ( NumberFormatException ex )
         {
             throw new RuntimeException( "Illegal DataElement id", ex );
         }
     }
-*/
+
     private String getResultIndicatorValue( String formula, Date startDate, Date endDate,
         OrganisationUnit organisationUnit )
     {
@@ -3044,8 +2501,8 @@ public class GenerateUpwardReportAnalyserResultAction
                 if ( aggregatedValue == null )
                 {
                     replaceString = NULL_REPLACEMENT;
-                }
-                else
+                    deFlag2 = 1;
+                } else
                 {
                     replaceString = String.valueOf( aggregatedValue );
                     deFlag2 = 1;
@@ -3062,16 +2519,14 @@ public class GenerateUpwardReportAnalyserResultAction
                 try
                 {
                     d = MathUtils.calculateExpression( buffer.toString() );
-                }
-                catch ( Exception e )
+                } catch ( Exception e )
                 {
                     d = 0.0;
                 }
                 if ( d == -1 )
                 {
                     d = 0.0;
-                }
-                else
+                } else
                 {
                     d = Math.round( d * Math.pow( 10, 1 ) ) / Math.pow( 10, 1 );
                     resultValue = "" + d;
@@ -3081,15 +2536,13 @@ public class GenerateUpwardReportAnalyserResultAction
                 {
                     resultValue = " ";
                 }
-            }
-            else
+            } else
             {
                 resultValue = buffer.toString();
                 deFlag2 = 0;
             }
             return resultValue;
-        }
-        catch ( NumberFormatException ex )
+        } catch ( NumberFormatException ex )
         {
             throw new RuntimeException( "Illegal DataElement id", ex );
         }
@@ -3100,6 +2553,7 @@ public class GenerateUpwardReportAnalyserResultAction
     {
         try
         {
+
             Pattern pattern = Pattern.compile( "(\\[\\d+\\.\\d+\\])" );
 
             Matcher matcher = pattern.matcher( formula );
@@ -3128,16 +2582,17 @@ public class GenerateUpwardReportAnalyserResultAction
                 String numeratorExp = indicator.getNumerator();
                 String denominatorExp = indicator.getDenominator();
                 int indicatorFactor = indicator.getIndicatorType().getFactor();
-                String numeratorVal = reportService.getIndividualResultDataValue( numeratorExp, startDate, endDate, organisationUnit , reportModelTB );
-                String denominatorVal = reportService.getIndividualResultDataValue( denominatorExp, startDate, endDate, organisationUnit , reportModelTB);
+                String numeratorVal = getIndividualResultDataValue( numeratorExp, startDate, endDate, organisationUnit );
+                String denominatorVal = getIndividualResultDataValue( denominatorExp, startDate, endDate,
+                    organisationUnit );
 
                 double numeratorValue;
                 try
                 {
                     numeratorValue = Double.parseDouble( numeratorVal );
-                }
-                catch ( Exception e )
+                } catch ( Exception e )
                 {
+                    System.out.println( "Exception while getting Numerator : " + numeratorExp + " for Indicaotr " + indicator.getName() );
                     numeratorValue = 0.0;
                 }
 
@@ -3145,21 +2600,19 @@ public class GenerateUpwardReportAnalyserResultAction
                 try
                 {
                     denominatorValue = Double.parseDouble( denominatorVal );
-                }
-                catch ( Exception e )
+                } catch ( Exception e )
                 {
+                    System.out.println( "Exception while getting Deniminator : " + denominatorExp + " for Indicaotr " + indicator.getName() );
                     denominatorValue = 1.0;
                 }
 
                 double aggregatedValue;
                 try
                 {
-                    aggregatedValue = (numeratorValue / denominatorValue) * indicatorFactor;
-                }
-                catch ( Exception e )
+                    aggregatedValue = ( numeratorValue / denominatorValue ) * indicatorFactor;
+                } catch ( Exception e )
                 {
-                    System.out.println( "Exception while calculating Indicator value for Indicaotr "
-                        + indicator.getName() );
+                    System.out.println( "Exception while calculating Indicator value for Indicaotr " + indicator.getName() );
                     aggregatedValue = 0.0;
                 }
 
@@ -3178,16 +2631,14 @@ public class GenerateUpwardReportAnalyserResultAction
                 try
                 {
                     d = MathUtils.calculateExpression( buffer.toString() );
-                }
-                catch ( Exception e )
+                } catch ( Exception e )
                 {
                     d = 0.0;
                 }
                 if ( d == -1 )
                 {
                     d = 0.0;
-                }
-                else
+                } else
                 {
                     d = Math.round( d * Math.pow( 10, 1 ) ) / Math.pow( 10, 1 );
                     resultValue = "" + d;
@@ -3197,17 +2648,20 @@ public class GenerateUpwardReportAnalyserResultAction
                 {
                     resultValue = " ";
                 }
-            }
-            else
+            } else
             {
-                deFlag2 = 0;
                 resultValue = buffer.toString();
+                deFlag2 = 0;
             }
             return resultValue;
-        }
-        catch ( NumberFormatException ex )
+        } catch ( NumberFormatException ex )
         {
             throw new RuntimeException( "Illegal DataElement id", ex );
         }
     }
 }
+
+
+        
+
+

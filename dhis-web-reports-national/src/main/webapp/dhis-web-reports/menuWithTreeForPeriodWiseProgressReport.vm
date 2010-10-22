@@ -2,9 +2,7 @@
 <ul>
     <li>Report Analysis</li>
     <ul>
-    	<li>
-            OraganisationUnit Wise Progress Reports
-        </li>
+        <li>Periodwise Progress Reports</li>
     </ul>
 </ul>
 <div style=" float:right; font-size:6pt; cursor:pointer; margin-top:-15px; ">
@@ -18,22 +16,15 @@
 
 function orgUnitHasBeenSelected( orgUnitIds )
 {    
-
     document.reportForm.ouIDTB.value = orgUnitIds;
+    
     reportTypeName = document.reportForm.reportTypeNameTB.value;
-	
-	if(orgUnitIds == null || orgUnitIds == "" )
-	{
-		return;
-	}
-	
-    if(orgUnitIds !=null)
-	   {
-	    // getOUDetailsForOuWiseProgressReport(orgUnitIds);
-	     getReports(orgUnitIds, reportTypeName );
-	   }
-	
-	}
+
+    if(orgUnitIds != null && orgUnitIds != "" )
+    {
+        getReports(orgUnitIds, reportTypeName)      
+    }
+}
 
 selection.setListenerFunction( orgUnitHasBeenSelected );
 
