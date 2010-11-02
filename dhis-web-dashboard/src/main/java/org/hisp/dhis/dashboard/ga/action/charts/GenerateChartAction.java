@@ -140,6 +140,8 @@ public class GenerateChartAction
         String[] categories1S = (String[]) session.getAttribute( "categories1" );
         String[] categories2S = (String[]) session.getAttribute( "categories2" );
                         
+       // series2 = (String[]) session.getAttribute( "series2" );
+        
         chartTitle = (String) session.getAttribute( "chartTitle" );
         xAxis_Title = (String) session.getAttribute( "xAxisTitle" );
         yAxis_Title = (String) session.getAttribute( "yAxisTitle" );
@@ -255,6 +257,7 @@ public class GenerateChartAction
     }
     
     public void initialzeAllLists(String[]series1S, String[] series2S, String[] categories1S, String[] categories2S)
+    
     {
         int i;
         series1 = new String[series1S.length];
@@ -276,12 +279,12 @@ public class GenerateChartAction
         {
                 categories1[i] = categories1S[i];
         }
-        
+       
         for(i = 0; i < categories2S.length; i++)
         {
                 categories2[i] = categories2S[i];
         }
-        
+      
     }
     
     public double[][] convertDoubleTodouble( Double[][] objData )
