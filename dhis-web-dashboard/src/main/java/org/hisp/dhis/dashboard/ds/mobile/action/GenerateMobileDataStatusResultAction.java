@@ -380,7 +380,7 @@ implements Action
     public String execute()
         throws Exception
     {
-        
+        System.out.println("Inside Mobile DataStatus Result Action");
         orgUnitCount = 0;
         dataViewName = "";
 
@@ -499,8 +499,8 @@ implements Action
         Period endPeriod = periodService.getPeriod( eDateLB );
 
         PeriodType dataSetPeriodType = selDataSet.getPeriodType();        
-        periodList = new ArrayList<Period>( periodService.getIntersectingPeriodsByPeriodType( dataSetPeriodType,
-            startPeriod.getStartDate(), endPeriod.getEndDate() ) );
+        periodList = periodService.getPeriodsBetweenDates( dataSetPeriodType, startPeriod.getStartDate(),
+            endPeriod.getEndDate() );
 
         periodInfo = "-1";
         for ( Period p : periodList )
