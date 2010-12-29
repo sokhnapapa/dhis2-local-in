@@ -186,8 +186,6 @@ public class SaveMappingAction
         {
             deTargetMapping = new DeTargetMapping( dataElement, deoptioncombo, target, detargetoptioncombo );
 
-            System.out.println( deTargetMapping.getDataelement().getName() );
-
             deTargetMappingService.addDeTargetMapping( deTargetMapping );
         }
         else
@@ -198,18 +196,9 @@ public class SaveMappingAction
         }
         dename = dataElement.getName() + ":" + deoptioncombo.getName();
 
-        if ( deTargetMapping == null )
-        {
-
-            targetname = "None";
-            targetid = "-1";
-        }
-        else
-        {
-            targetname = deTargetMapping.getTargetDataelement().getName();
-            targetid = "" + deTargetMapping.getTargetDataelement().getId() + ":"
-                + deTargetMapping.getTargetoptioncombo().getId();
-        }
+        targetname = deTargetMapping.getTargetDataelement().getName();
+        targetid = "" + deTargetMapping.getTargetDataelement().getId() + ":"
+        + deTargetMapping.getTargetoptioncombo().getId();
 
         // dataElementCategoryOptionComboService.getDefaultDataElementCategoryOptionCombo();
         return SUCCESS;
