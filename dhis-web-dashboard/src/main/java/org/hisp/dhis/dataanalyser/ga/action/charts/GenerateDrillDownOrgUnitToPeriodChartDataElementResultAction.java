@@ -230,7 +230,7 @@ public class GenerateDrillDownOrgUnitToPeriodChartDataElementResultAction implem
     
     //private String drillDownPeriodStartDate;
     //private String drillDownPeriodEndDate;
-    private String drillDownPeriodNames;
+    //private String drillDownPeriodNames;
     
     // -------------------------------------------------------------------------
     // Action implements
@@ -281,7 +281,7 @@ public class GenerateDrillDownOrgUnitToPeriodChartDataElementResultAction implem
         
         //drillDownPeriodStartDate = values[5];
         //drillDownPeriodEndDate = values[6];
-        drillDownPeriodNames = values[7];
+        //drillDownPeriodNames = values[7];
         
         startDateArray = values[5].split( ";" );
         //String startDateArray[] = startDateString.split(";");  
@@ -328,10 +328,11 @@ public class GenerateDrillDownOrgUnitToPeriodChartDataElementResultAction implem
             int periodCount = 0;
             for( Date startDate : selStartPeriodList )
             {
+                String drillDownPeriodName = periodNames.get( periodCount );
                 Date endDate = selEndPeriodList.get( periodCount );
                 String tempStartDate = format.formatDate( startDate );
                 String tempEndDate   = format.formatDate( endDate );
-                String drillDownData = selectedOrgUnit.getId() + ":" + "0" + ":" + dataElement.getId() + ":"+ categoryCombo.getId() + ":"  + periodTypeLB + ":" + tempStartDate + ":" + tempEndDate + ":" + drillDownPeriodNames + ":" + deSelection + ":" + aggDataCB;
+                String drillDownData = selectedOrgUnit.getId() + ":" + "0" + ":" + dataElement.getId() + ":"+ categoryCombo.getId() + ":"  + periodTypeLB + ":" + tempStartDate + ":" + tempEndDate + ":" + drillDownPeriodName + ":" + deSelection + ":" + aggDataCB;
                 selectedDrillDownData.add( drillDownData );
                 periodCount++;
             }
@@ -344,10 +345,11 @@ public class GenerateDrillDownOrgUnitToPeriodChartDataElementResultAction implem
             int periodCount = 0;
             for( Date startdate : selStartPeriodList )
             {
+                String drillDownPeriodName = periodNames.get( periodCount );
                 Date endDate = selEndPeriodList.get( periodCount );
                 String tempStartDate = format.formatDate( startdate );
                 String tempEndDate   = format.formatDate( endDate );
-                String drillDownData = selectedOrgUnit.getId() + ":" + "0" + ":" + dataElement.getId() + ":"+ categoryCombo.getId() + ":"  + periodTypeLB + ":" + tempStartDate + ":" + tempEndDate + ":" + drillDownPeriodNames + ":" + deSelection + ":" + aggDataCB;
+                String drillDownData = selectedOrgUnit.getId() + ":" + "0" + ":" + dataElement.getId() + ":"+ categoryCombo.getId() + ":"  + periodTypeLB + ":" + tempStartDate + ":" + tempEndDate + ":" + drillDownPeriodName + ":" + deSelection + ":" + aggDataCB;
                 selectedDrillDownData.add( drillDownData );
                 periodCount++;
             }
@@ -358,11 +360,11 @@ public class GenerateDrillDownOrgUnitToPeriodChartDataElementResultAction implem
         //if( orgUnitGroup != 0 && categoryLB.equalsIgnoreCase( SELECTED ) )
         {
             //System.out.println( "Inside the method when orgUnit view by selected and group checked" );
-            dataElementChartResult = dashBoardService.generateChartDataWithGroupToPeriodWise( selStartPeriodList, selEndPeriodList, periodNames ,periodTypeLB, dataElementList, deSelection, selectedOptionComboList, selectedOrgUnit, selectedOrgUnitGroup ,aggDataCB );
+            dataElementChartResult = dashBoardService.generateDataElementChartDataWithGroupToPeriodWise( selStartPeriodList, selEndPeriodList, periodNames ,periodTypeLB, dataElementList, deSelection, selectedOptionComboList, selectedOrgUnit, selectedOrgUnitGroup ,aggDataCB );
         }
         else
         {
-            dataElementChartResult = dashBoardService.generateChartDataWithPeriodWise( selStartPeriodList, selEndPeriodList,periodNames, periodTypeLB, dataElementList, deSelection, selectedOptionComboList, selectedOrgUnit, aggDataCB );
+            dataElementChartResult = dashBoardService.generateDataElementChartDataWithPeriodWise( selStartPeriodList, selEndPeriodList,periodNames, periodTypeLB, dataElementList, deSelection, selectedOptionComboList, selectedOrgUnit, aggDataCB );
         }
         
         ActionContext ctx = ActionContext.getContext();
