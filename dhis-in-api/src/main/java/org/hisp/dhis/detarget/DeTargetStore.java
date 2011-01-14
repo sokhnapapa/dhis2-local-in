@@ -135,7 +135,7 @@ public interface DeTargetStore
      * 
      * @param DeTargetMember The DeTargetMember to delete.
      */
-    int deleteDeTargetMember( DeTargetMember deTargetMember ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo );
+    int deleteDeTargetMember( DeTarget deTarget ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo );
     
     /**
      * Returns Collection of DeTarget members.
