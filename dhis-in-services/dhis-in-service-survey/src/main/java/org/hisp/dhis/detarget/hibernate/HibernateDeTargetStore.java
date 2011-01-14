@@ -152,7 +152,7 @@ public class HibernateDeTargetStore implements DeTargetStore
 
        Criteria criteria = session.createCriteria( DeTarget.class );
        criteria.createAlias( "dataelements", "i" );
-       criteria.createAlias( "deoptioncombos", "j" );
+       criteria.createAlias( "decategoryOptionCombo", "j" );
        criteria.add( Restrictions.eq( "i.id", dataelement.getId() ) );
        criteria.add( Restrictions.eq( "j.id", deoptioncombo.getId() ) );
 
@@ -185,15 +185,15 @@ public class HibernateDeTargetStore implements DeTargetStore
        session.update( deTargetMember );
    }
 
-   public int deleteDeTargetMember( DeTargetMember deTargetMember ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
+   public int deleteDeTargetMember( DeTarget deTarget ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
    {
        Session session = sessionFactory.getCurrentSession();
 
-       List<DeTargetDataValue> deTargetDataValueList = new ArrayList<DeTargetDataValue>( deTargetDataValueService.getDeTargetMemberDataValues( deTargetMember, dataelement, deoptioncombo ) );
+       List<DeTargetDataValue> deTargetDataValueList = new ArrayList<DeTargetDataValue>( deTargetDataValueService.getDeTargetDataValues(  deTarget , dataelement , deoptioncombo  ) );
        
        if( deTargetDataValueList == null || deTargetDataValueList.isEmpty() )        
        {
-           session.delete( deTargetMember );
+           session.delete( deTarget );
        }
        else
        {            
@@ -207,10 +207,11 @@ public class HibernateDeTargetStore implements DeTargetStore
    {
        Session session = sessionFactory.getCurrentSession();
 
-       Criteria criteria = session.createCriteria( DeTarget.class );
-       criteria.createAlias( "detargets", "d" );
-       criteria.add( Restrictions.eq( "d.id", deTarget.getId() ) );
-
+       Criteria criteria = session.createCriteria( DeTargetMember.class );
+       //criteria.createAlias( "detarget", "d" );
+       //criteria.add( Restrictions.eq( "d.id", deTarget.getId() ) );
+       criteria.add( Restrictions.eq( "detarget", deTarget ) );
+       
        return criteria.list();
    }
 

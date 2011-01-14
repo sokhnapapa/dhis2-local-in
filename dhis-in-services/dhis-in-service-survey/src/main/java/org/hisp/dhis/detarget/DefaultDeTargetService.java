@@ -120,9 +120,9 @@ public class DefaultDeTargetService implements DeTargetService
         deTargetStore.updateDeTargetMember( deTargetMember );
     }
    
-    public int deleteDeTargetMember( DeTargetMember deTargetMember ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
+    public int deleteDeTargetMember( DeTarget deTarget ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
      {
-         return deTargetStore.deleteDeTargetMember( deTargetMember , dataelement, deoptioncombo );
+         return deTargetStore.deleteDeTargetMember( deTarget , dataelement, deoptioncombo );
      }
 }
 
