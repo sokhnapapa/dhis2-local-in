@@ -99,7 +99,7 @@ public interface DeTargetStore
     /**
      * Returns all DeTarget associated with the specified indicator.
      */
-    Collection<DeTarget> getDeTargetsByDataElementAndCategoryOptionCombo( DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo );
+    Collection<DeTargetMember> getDeTargetsByDataElementAndCategoryOptionCombo( DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo );
 
     /**
      * Get all DeTargets.
@@ -121,7 +121,7 @@ public interface DeTargetStore
      * @param survey The DeTarget to add.
      * @return The generated unique identifier for this DeTarget.
      */
-    int addDeTargetMember( DeTargetMember  deTargetMember );
+    void addDeTargetMember( DeTargetMember  deTargetMember );
 
     /**
      * Updates a DeTargetMember.
