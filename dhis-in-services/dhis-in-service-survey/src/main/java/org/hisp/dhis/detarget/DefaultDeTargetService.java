@@ -90,7 +90,7 @@ public class DefaultDeTargetService implements DeTargetService
         return deTargetStore.getDeTargetsBySource( source );
     }
     
-    public Collection<DeTarget> getDeTargetsByDataElementAndCategoryOptionCombo( DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
+    public Collection<DeTargetMember> getDeTargetsByDataElementAndCategoryOptionCombo( DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
     {
         return deTargetStore.getDeTargetsByDataElementAndCategoryOptionCombo( dataelement, deoptioncombo );
     }
@@ -109,9 +109,9 @@ public class DefaultDeTargetService implements DeTargetService
         return deTargetStore.getDeTargetMembers( deTarget );
     }
     
-    public int addDeTargetMember( DeTargetMember  deTargetMember )
+    public void addDeTargetMember( DeTargetMember  deTargetMember )
     {
-        return deTargetStore.addDeTargetMember( deTargetMember );
+        deTargetStore.addDeTargetMember( deTargetMember );
     }
     
     

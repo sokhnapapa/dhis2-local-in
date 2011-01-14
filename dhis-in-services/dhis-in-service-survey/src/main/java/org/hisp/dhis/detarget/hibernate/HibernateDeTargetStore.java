@@ -146,11 +146,11 @@ public class HibernateDeTargetStore implements DeTargetStore
    }
    @SuppressWarnings( "unchecked" )
    
-   public Collection<DeTarget> getDeTargetsByDataElementAndCategoryOptionCombo( DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
+   public Collection<DeTargetMember> getDeTargetsByDataElementAndCategoryOptionCombo( DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
    {
        Session session = sessionFactory.getCurrentSession();
 
-       Criteria criteria = session.createCriteria( DeTarget.class );
+       Criteria criteria = session.createCriteria( DeTargetMember.class );
        criteria.createAlias( "dataelements", "i" );
        criteria.createAlias( "decategoryOptionCombo", "j" );
        criteria.add( Restrictions.eq( "i.id", dataelement.getId() ) );
@@ -171,11 +171,11 @@ public class HibernateDeTargetStore implements DeTargetStore
    // DeTargetMember
    // -------------------------------------------------------------------------
    
-   public int addDeTargetMember( DeTargetMember  deTargetMember )
+   public void addDeTargetMember( DeTargetMember  deTargetMember )
    {
        Session session = sessionFactory.getCurrentSession();
 
-       return (Integer) session.save( deTargetMember );
+       session.save( deTargetMember );
    }
    
    public void updateDeTargetMember( DeTargetMember deTargetMember )
