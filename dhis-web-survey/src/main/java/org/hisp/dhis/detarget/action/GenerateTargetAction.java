@@ -1,4 +1,4 @@
-package org.hisp.dhis.target.action;
+package org.hisp.dhis.detarget.action;
 
 import java.util.ArrayList;
 import java.util.Collections;

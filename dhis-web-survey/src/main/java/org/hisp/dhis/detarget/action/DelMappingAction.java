@@ -1,4 +1,4 @@
-package org.hisp.dhis.target.action;
+package org.hisp.dhis.detarget.action;
 
 /*
  * Copyright (c) 2004-2007, University of Oslo
@@ -36,38 +36,27 @@ import org.hisp.dhis.target.DeTargetMappingService;
 
 import com.opensymphony.xwork2.Action;
 
-public class GetMesageAction
+public class DelMappingAction
     implements Action
 {
+
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
-
-    
-    private DeTargetMappingService deTargetMappingService;
-    
-    public void setDeTargetMappingService( DeTargetMappingService deTargetMappingService )
-    {
-        this.deTargetMappingService = deTargetMappingService;
-    }
-    
-    
-    /*
     private DeTargetMappingService deTargetMappingService;
 
     public void setDeTargetMappingService( DeTargetMappingService deTargetMappingService )
     {
         this.deTargetMappingService = deTargetMappingService;
     }
-    */
-    
+
     private DataElementService dataElementService;
 
     public void setDataElementService( DataElementService dataElementService )
     {
         this.dataElementService = dataElementService;
     }
-    
+
     private DataElementCategoryService dataElementCategoryService;
 
     public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
@@ -79,67 +68,66 @@ public class GetMesageAction
     // Input/output
     // -------------------------------------------------------------------------
 
-    private String id;
-    
-    public void setId( String id )
+    private String deID;
+
+    public void setDeID( String deID )
     {
-        this.id = id;
+        this.deID = deID;
     }
-    
-    private String dename;
-    
-    public String getDename()
+
+    @SuppressWarnings( "unused" )
+    private String detargetID;
+
+    public void setDetargetID( String detargetID )
     {
-        return dename;
+        this.detargetID = detargetID;
     }
-    
+
     private String targetname;
-    
+
     public String getTargetname()
     {
         return targetname;
     }
-    
+
     private String targetid;
-    
+
     public String getTargetid()
     {
         return targetid;
     }
-    
-    // -------------------------------------------------------------------------
-    // Action implementation
-    // -------------------------------------------------------------------------
+
+    private String dename;
+
+    public String getDename()
+    {
+        return dename;
+    }
 
     public String execute()
         throws Exception
     {
-        System.out.println("Inside GetMessage Action");
-        
-        String[] de_option = id.split( ":" );
-        int deid = Integer.parseInt( de_option[0] );
-        int optioncomboid = Integer.parseInt( de_option[1] );
-        
-        DataElement de = dataElementService.getDataElement( deid );
-        DataElementCategoryOptionCombo deoptioncombo = dataElementCategoryService.getDataElementCategoryOptionCombo( optioncomboid );
-                
-        DeTargetMapping deTargetMapping = deTargetMappingService.getDeTargetMapping( de, deoptioncombo );
-                
-        dename = de.getName() + ":" + deoptioncombo.getName();
-               
-        if ( deTargetMapping == null )
+        String[] de_option = deID.split( ":" );
+        int dataelementId = Integer.parseInt( de_option[0] );
+        int dataelementoptioncombo = Integer.parseInt( de_option[1] );
+
+        DataElement dataElement = dataElementService.getDataElement( dataelementId );
+
+        DataElementCategoryOptionCombo deoptioncombo = dataElementCategoryService
+            .getDataElementCategoryOptionCombo( dataelementoptioncombo );
+
+        DeTargetMapping deTargetMapping = deTargetMappingService.getDeTargetMapping( dataElement, deoptioncombo );
+
+        if( deTargetMapping != null )
         {
-         
-            targetname = "None";
-            targetid = "-1";
-        }
-        else
-        {
-            targetname = deTargetMapping.getTargetDataelement().getName();
-            targetid = "" + deTargetMapping.getTargetDataelement().getId() + ":" + deTargetMapping.getTargetoptioncombo().getId();
+            deTargetMappingService.deleteDeTargetMapping( deTargetMapping );
         }
         
-        System.out.println(dename + " : " + targetname);
+        dename = dataElement.getName() + ":" + deoptioncombo.getName();
+
+        targetname = "None";
+        targetid = "-1";
+
         return SUCCESS;
     }
 }

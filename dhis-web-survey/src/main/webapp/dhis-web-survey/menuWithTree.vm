@@ -9,3 +9,11 @@
 </div>
 
 #parse( "/dhis-web-commons/ouwt/orgunittree.vm" )
+<script>
+	function organisationUnitSelected( orgUnits )
+	{
+  	  window.location.href = 'select.action';
+	}
+
+	selection.setListenerFunction( organisationUnitSelected );
+</script>

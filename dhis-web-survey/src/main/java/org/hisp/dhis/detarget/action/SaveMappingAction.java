@@ -1,4 +1,4 @@
-package org.hisp.dhis.target.action;
+package org.hisp.dhis.detarget.action;
 
 /*
  * Copyright (c) 2004-2007, University of Oslo
