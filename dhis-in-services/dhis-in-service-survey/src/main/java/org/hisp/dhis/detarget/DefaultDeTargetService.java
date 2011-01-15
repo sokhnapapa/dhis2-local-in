@@ -31,12 +31,14 @@ import java.util.Collection;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.source.Source;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Mithilesh Kumar Thakur
  *
  * @version DefaultDeTargetService.java Jan 13, 2011 10:34:54 AM
  */
+@Transactional
 public class DefaultDeTargetService implements DeTargetService
 {
     // -------------------------------------------------------------------------

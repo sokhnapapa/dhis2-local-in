@@ -151,11 +151,13 @@ public class HibernateDeTargetStore implements DeTargetStore
        Session session = sessionFactory.getCurrentSession();
 
        Criteria criteria = session.createCriteria( DeTargetMember.class );
-       criteria.createAlias( "dataelements", "i" );
-       criteria.createAlias( "decategoryOptionCombo", "j" );
-       criteria.add( Restrictions.eq( "i.id", dataelement.getId() ) );
-       criteria.add( Restrictions.eq( "j.id", deoptioncombo.getId() ) );
-
+       //criteria.createAlias( "dataelements", "i" );
+       //criteria.createAlias( "decategoryOptionCombo", "j" );
+       //criteria.add( Restrictions.eq( "i.id", dataelement.getId() ) );
+       //criteria.add( Restrictions.eq( "j.id", deoptioncombo.getId() ) );
+       criteria.add( Restrictions.eq( "dataelements", dataelement ) );
+       criteria.add( Restrictions.eq( "decategoryOptionCombo", deoptioncombo ) );
+       
        return criteria.list();
    }
    @SuppressWarnings( "unchecked" )
