@@ -27,9 +27,12 @@
 package org.hisp.dhis.detarget;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hisp.dhis.dataelement.DataElement;
+import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.source.Source;
 
 /**
@@ -58,12 +61,12 @@ public class DeTarget implements Serializable
     /**
      * All DataElements associated with this DataElement Target.
      */
-   // private Collection<DataElement> dataelements = new HashSet<DataElement>();
+    private Collection<DataElement> dataelements = new HashSet<DataElement>();
     
     /**
      * All DataElement Category Option Combo associated with this DataElement Target.
      */
-    //private Collection<DataElementCategoryOptionCombo> decategoryOptionCombo = new HashSet<DataElementCategoryOptionCombo>();
+    private Collection<DataElementCategoryOptionCombo> decategoryOptionCombo = new HashSet<DataElementCategoryOptionCombo>();
     
     
     /**
@@ -175,7 +178,7 @@ public class DeTarget implements Serializable
     {
         this.shortName = shortName;
     }
-/*
+
     public Collection<DataElement> getDataelements()
     {
         return dataelements;
@@ -195,7 +198,7 @@ public class DeTarget implements Serializable
     {
         this.decategoryOptionCombo = decategoryOptionCombo;
     }
-*/
+
     public Set<Source> getSources()
     {
         return sources;
