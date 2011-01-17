@@ -36,6 +36,9 @@ import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementGroup;
 import org.hisp.dhis.dataelement.DataElementService;
+import org.hisp.dhis.detarget.DeTarget;
+import org.hisp.dhis.detarget.DeTargetMember;
+import org.hisp.dhis.detarget.DeTargetService;
 
 import com.opensymphony.xwork2.Action;
 
@@ -57,14 +60,14 @@ public class DataElementListFilterByGroupAction  implements Action
     {
         this.dataElementService = dataElementService;
     }
-/*
+
     private DeTargetService deTargetService;
     
     public void setDeTargetService( DeTargetService deTargetService )
     {
         this.deTargetService = deTargetService;
     }
-*/    
+   
     private DataElementCategoryService dataElementCategoryService;
 
     public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
@@ -77,7 +80,7 @@ public class DataElementListFilterByGroupAction  implements Action
     // Getters & Setters
     // -------------------------------------------------------------------------
 
-   
+ 
     private String dataElementGroupId;
     
     public void setDataElementGroupId( String dataElementGroupId )
@@ -85,6 +88,8 @@ public class DataElementListFilterByGroupAction  implements Action
         this.dataElementGroupId = dataElementGroupId;
     }
 
+    
+    /*
     private String selectedDataElements[];
 
 
@@ -92,7 +97,15 @@ public class DataElementListFilterByGroupAction  implements Action
     {
         this.selectedDataElements = selectedDataElements;
     }
+    */
+ /*  
+    private List<String> selectedList;
     
+    public void setSelectedList( List<String> selectedList )
+    {
+        this.selectedList = selectedList;
+    }
+    */
     private List<DataElement> dataElements;
     
     public List<DataElement> getDataElements()
@@ -115,35 +128,48 @@ public class DataElementListFilterByGroupAction  implements Action
         return optionComboIds;
     }
     
+  
+    private Integer deTargetId;
     
+    public void setDeTargetId( Integer deTargetId )
+    {
+        this.deTargetId = deTargetId;
+    }
     
+    private List<String> selectedDeTargetMember;
     
+    public List<String> getSelectedDeTargetMember()
+    {
+        return selectedDeTargetMember;
+    }
     // -------------------------------------------------------------------------
     // Action
     // -------------------------------------------------------------------------
+
 
     public String execute() throws Exception
     {
         
         optionComboIds = new ArrayList<String>();
         optionComboNames = new ArrayList<String>();
+        selectedDeTargetMember = new ArrayList<String>();
         
-        
-        
+        //System.out.println(" deTarget Id is    : " + deTargetId  );
         
         if (  dataElementGroupId == null || dataElementGroupId.equalsIgnoreCase( "ALL" ) )
         {
-            System.out.println("\n\n +++ \n Inside dataElementGroupId null dataElementGroup Id is   : " + dataElementGroupId  );
+            //System.out.println("\n\n +++ \n Inside dataElementGroupId null dataElementGroup Id is   : " + dataElementGroupId  );
             dataElements = new ArrayList<DataElement>( dataElementService.getAllDataElements() );
         }
         else
         {
-                DataElementGroup dataElementGroup = dataElementService.getDataElementGroup( Integer.parseInt( dataElementGroupId ) );
+            //System.out.println("\n\n +++ \n Inside dataElementGroupId " + dataElementGroupId  );    
+            DataElementGroup dataElementGroup = dataElementService.getDataElementGroup( Integer.parseInt( dataElementGroupId ) );
 
-                dataElements = new ArrayList<DataElement>( dataElementGroup.getMembers() );
+            dataElements = new ArrayList<DataElement>( dataElementGroup.getMembers() );
         }
        
-        
+ /*       
         if ( selectedDataElements != null && selectedDataElements.length > 0 )
         {
             Iterator<DataElement> iter = dataElements.iterator();
@@ -163,6 +189,24 @@ public class DataElementListFilterByGroupAction  implements Action
                 }
             }
         }
+*/        
+    
+        if ( deTargetId != null )
+        {
+             DeTarget deTarget = deTargetService.getDeTarget( deTargetId );
+        
+             List<DeTargetMember>  deTargetMemberList = new ArrayList<DeTargetMember>(deTargetService.getDeTargetMembers( deTarget ));
+             for( DeTargetMember dataElementTarget : deTargetMemberList )
+             {
+                 selectedDeTargetMember.add( dataElementTarget.getDataelements().getId()+":" + dataElementTarget.getDecategoryOptionCombo().getId() );
+             }
+                //indicators.removeAll( survey.getIndicators() );
+        }
+
+      //  Collections.sort( indicators, indicatorComparator );
+
+      //  displayPropertyHandler.handle( indicators );
+
         
        
         Iterator<DataElement> deIterator = dataElements.iterator();
@@ -177,24 +221,21 @@ public class DataElementListFilterByGroupAction  implements Action
             while ( optionComboIterator.hasNext() )
             {
                 DataElementCategoryOptionCombo decoc = optionComboIterator.next();
+                
+                String deOptComboId = de.getId() + ":" + decoc.getId();
+        
+       
+        
+            if( !selectedDeTargetMember.contains( deOptComboId ) )
+            {
                 optionComboIds.add( de.getId() + ":" + decoc.getId() );
                 optionComboNames.add( de.getName() + ":" + dataElementCategoryService.getDataElementCategoryOptionCombo( decoc ).getName() );
+            }
+               
             }
 
         }
        
-/*
-        if ( surveyId != null )
-        {
-                Survey survey = surveyService.getSurvey( surveyId );
-
-                indicators.removeAll( survey.getIndicators() );
-        }
-
-      //  Collections.sort( indicators, indicatorComparator );
-
-      //  displayPropertyHandler.handle( indicators );
-*/
         return SUCCESS;
     }
 }

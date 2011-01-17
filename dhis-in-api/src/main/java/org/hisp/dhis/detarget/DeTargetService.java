@@ -38,6 +38,7 @@ import org.hisp.dhis.source.Source;
  *
  * @version DeTargetService.java Jan 12, 2011 12:46:10 PM
  */
+
 public interface DeTargetService
 {
     String ID = DeTargetService.class.getName();
@@ -144,7 +145,16 @@ public interface DeTargetService
      * 
      * @param DeTargetMember The DeTargetMember to delete.
      */
-    int deleteDeTargetMember( DeTarget deTargetr,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo );
+    //int deleteDeTargetMember( DeTarget deTargetr,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo );
+    
+    /**
+     * Deletes a DeTarget.
+     * 
+     * @param survey The Survey to delete.
+     */
+    int deleteDeTargetMember( DeTargetMember  deTargetMember );
+    
+    void deleteDeTargetMembers( DeTarget deTarget );
     
     /**
      * Returns Collection of DeTarget members.

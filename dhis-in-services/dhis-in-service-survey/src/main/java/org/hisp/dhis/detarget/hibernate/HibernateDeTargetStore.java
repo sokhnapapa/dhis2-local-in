@@ -186,7 +186,7 @@ public class HibernateDeTargetStore implements DeTargetStore
 
        session.update( deTargetMember );
    }
-
+/*
    public int deleteDeTargetMember( DeTarget deTarget ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
    {
        Session session = sessionFactory.getCurrentSession();
@@ -204,6 +204,28 @@ public class HibernateDeTargetStore implements DeTargetStore
        
        return 0;
    }
+   */
+   
+   public int deleteDeTargetMember( DeTargetMember  deTargetMember )
+   {
+       Session session = sessionFactory.getCurrentSession();
+
+       List<DeTargetDataValue> deTargetDataValueList = new ArrayList<DeTargetDataValue>( deTargetDataValueService.getDeTargetDataValues(  deTargetMember.getDetarget() , deTargetMember.getDataelements() , deTargetMember.getDecategoryOptionCombo()  ) );
+       
+       if( deTargetDataValueList == null || deTargetDataValueList.isEmpty() )        
+       {
+           session.delete( deTargetMember );
+       }
+       else
+       {            
+           return -1;
+       }
+       
+       return 0;
+   }
+   
+   
+   
    @SuppressWarnings( "unchecked" )
    public  List<DeTargetMember> getDeTargetMembers( DeTarget deTarget )
    {

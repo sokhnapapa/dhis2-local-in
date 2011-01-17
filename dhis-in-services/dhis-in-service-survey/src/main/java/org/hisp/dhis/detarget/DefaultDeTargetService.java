@@ -26,7 +26,9 @@
  */
 package org.hisp.dhis.detarget;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
@@ -121,10 +123,32 @@ public class DefaultDeTargetService implements DeTargetService
     {
         deTargetStore.updateDeTargetMember( deTargetMember );
     }
-   
+ /*  
     public int deleteDeTargetMember( DeTarget deTarget ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo )
      {
          return deTargetStore.deleteDeTargetMember( deTarget , dataelement, deoptioncombo );
      }
+ */   
+    
+    public int deleteDeTargetMember( DeTargetMember  deTargetMember )
+    {
+        return deTargetStore.deleteDeTargetMember( deTargetMember );
+    }
+    
+    public void deleteDeTargetMembers( DeTarget deTarget )
+    {
+        List<DeTargetMember>  deTargetMemberList = new ArrayList<DeTargetMember>( getDeTargetMembers( deTarget ));
+        
+        for( DeTargetMember dataElementTarget : deTargetMemberList )
+        {
+            
+            deleteDeTargetMember( dataElementTarget );
+            //deTargetService.
+            //selectedDeTargetMember.add( dataElementTarget.getDataelements().getId()+":" + dataElementTarget.getDecategoryOptionCombo().getId() );
+        }
+        
+    }
+    
+    
 }
 

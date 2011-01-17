@@ -26,24 +26,37 @@
  */
 package org.hisp.dhis.detarget.action;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.hisp.dhis.detarget.DeTarget;
 import org.hisp.dhis.detarget.DeTargetService;
-import org.hisp.dhis.i18n.I18n;
-
+import org.hisp.dhis.organisationunit.OrganisationUnit;
+import org.hisp.dhis.oust.manager.SelectionTreeManager;
+import org.hisp.dhis.source.Source;
 
 import com.opensymphony.xwork2.Action;
 
 /**
  * @author Mithilesh Kumar Thakur
  *
- * @version ValidateDeTargetAction.java Jan 14, 2011 11:10:57 AM
+ * @version SetupAssociationsTreeAction.java Jan 15, 2011 11:08:15 AM
  */
-public class ValidateDeTargetAction implements Action
+public class SetupAssociationsTreeAction implements Action
 {
-   
+    
+
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
+
+    private SelectionTreeManager selectionTreeManager;
+
+    public void setSelectionTreeManager( SelectionTreeManager selectionTreeManager )
+    {
+        this.selectionTreeManager = selectionTreeManager;
+    }
 
     private DeTargetService deTargetService;
     
@@ -51,121 +64,67 @@ public class ValidateDeTargetAction implements Action
     {
         this.deTargetService = deTargetService;
     }
-  
+
     // -------------------------------------------------------------------------
-    // I18n
+    // Getters & Setters
     // -------------------------------------------------------------------------
 
-    private I18n i18n;
-
+    private int deTargetId;
     
-    public void setI18n( I18n i18n )
+   
+    
+    public int getDeTargetId()
     {
-        this.i18n = i18n;
+        return deTargetId;
     }
-    
-    private Integer deTargetId;
 
-    public void setDeTargetId( Integer deTargetId )
+    public void setDeTargetId( int deTargetId )
     {
         this.deTargetId = deTargetId;
     }
-
-    private String name;
-
-    public void setName( String name )
-    {
-        this.name = name;
-    }
-
-    private String shortName;
-
-    public void setShortName( String shortName )
-    {
-        this.shortName = shortName;
-    }
-
-    // -------------------------------------------------------------------------
-    // Output
-    // -------------------------------------------------------------------------
-
-    private String message;
-
-    public String getMessage()
-    {
-        return message;
-    }
-
-    // -------------------------------------------------------------------------
-    // Execution
-    // -------------------------------------------------------------------------
-
-    public String execute()
-        throws Exception
-    {
-        // ---------------------------------------------------------------------
-        // Name
-        // ---------------------------------------------------------------------
-
-        if ( name == null )
-        {
-            message = i18n.getString( "specify_name" );
-
-            return INPUT;
-        }
-        else
-        {
-            name = name.trim();
-            
-            if ( name.length() == 0 )
-            {
-                message = i18n.getString( "specify_name" );
-
-                return INPUT;
-            }
-
-            DeTarget match = deTargetService.getDeTargetByName( name );
-    
-            if ( match != null && ( deTargetId == null || match.getId() != deTargetId ) )
-            {
-                message = i18n.getString( "duplicate_names" );
-    
-                return INPUT;
-           
-            }
-        }
-        // ---------------------------------------------------------------------
-        // Short name
-        // ---------------------------------------------------------------------
-
-        if ( shortName == null )
-        {
-            message = i18n.getString( "specify_short_name" );
-
-            return INPUT;
-        }
-        else
-        {
-            shortName = shortName.trim();
-            
-            if ( shortName.length() == 0 )
-            {
-                message = i18n.getString( "specify_short_name" );
-
-                return INPUT;
-            }
-
-            DeTarget match = deTargetService.getDeTargetByShortName( shortName );
    
-            if ( match != null && ( deTargetId == null || match.getId() != deTargetId ) )
-            {
-                message = i18n.getString( "duplicate_short_names" );
+    private DeTarget deTarget;
     
-                return INPUT;
-            }
-        }
+    public DeTarget getDeTarget()
+    {
+        return deTarget;
+    }
+
+    public void setDeTarget( DeTarget deTarget )
+    {
+        this.deTarget = deTarget;
+    }
    
-        message = "validation success";
+
+    // -------------------------------------------------------------------------
+    // Execute
+    // -------------------------------------------------------------------------
+
+
+
+    public String execute() throws Exception
+    {
+        deTarget = deTargetService.getDeTarget( deTargetId );
+        
+        selectionTreeManager.setSelectedOrganisationUnits( convert( deTarget.getSources() ) );
+
         return SUCCESS;
     }
- }
+
+    // -------------------------------------------------------------------------
+    // Supportive methods
+    // -------------------------------------------------------------------------
+
+    private Set<OrganisationUnit> convert( Collection<Source> sources )
+    {
+        Set<OrganisationUnit> organisationUnits = new HashSet<OrganisationUnit>();
+        
+        for ( Source source : sources )
+        {               
+            organisationUnits.add( (OrganisationUnit) source );
+        }       
+        
+        return organisationUnits;
+    }
+}
+

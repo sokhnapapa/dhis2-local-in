@@ -26,19 +26,26 @@
  */
 package org.hisp.dhis.detarget.action;
 
-import org.hisp.dhis.detarget.DeTarget;
-import org.hisp.dhis.detarget.DeTargetService;
-import org.hisp.dhis.i18n.I18n;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import org.hisp.dhis.dataelement.DataElement;
+import org.hisp.dhis.dataelement.DataElementGroup;
+import org.hisp.dhis.dataelement.DataElementService;
+import org.hisp.dhis.dataelement.comparator.DataElementGroupNameComparator;
+import org.hisp.dhis.detarget.DeTarget;
+import org.hisp.dhis.detarget.DeTargetMember;
+import org.hisp.dhis.detarget.DeTargetService;
 
 import com.opensymphony.xwork2.Action;
 
 /**
  * @author Mithilesh Kumar Thakur
  *
- * @version ValidateDeTargetAction.java Jan 14, 2011 11:10:57 AM
+ * @version GetDeTargetAction.java Jan 15, 2011 1:16:51 PM
  */
-public class ValidateDeTargetAction implements Action
+public class GetDeTargetAction  implements Action
 {
    
     // -------------------------------------------------------------------------
@@ -51,121 +58,93 @@ public class ValidateDeTargetAction implements Action
     {
         this.deTargetService = deTargetService;
     }
-  
-    // -------------------------------------------------------------------------
-    // I18n
-    // -------------------------------------------------------------------------
-
-    private I18n i18n;
-
     
-    public void setI18n( I18n i18n )
+    private DataElementService dataElementService;
+
+    public void setDataElementService( DataElementService dataElementService )
     {
-        this.i18n = i18n;
+        this.dataElementService = dataElementService;
+    }
+    // -------------------------------------------------------------------------
+    // Getters & Setters
+    // -------------------------------------------------------------------------
+
+    private List<DataElementGroup> dataElementGroups;
+    
+    public List<DataElementGroup> getDataElementGroups()
+    {
+        return dataElementGroups;
     }
     
-    private Integer deTargetId;
+    private int deTargetId;
 
-    public void setDeTargetId( Integer deTargetId )
+    public void setDeTargetId( int deTargetId )
     {
         this.deTargetId = deTargetId;
     }
-
-    private String name;
-
-    public void setName( String name )
+    
+    private DeTarget deTarget;
+    
+    public DeTarget getDeTarget()
     {
-        this.name = name;
+        return deTarget;
     }
 
-    private String shortName;
+    private List<DataElement> deTargetDataElement;
 
-    public void setShortName( String shortName )
+
+    public List<DataElement> getDeTargetDataElement()
     {
-        this.shortName = shortName;
+        return deTargetDataElement;
     }
 
-    // -------------------------------------------------------------------------
-    // Output
-    // -------------------------------------------------------------------------
+    private String description;
 
-    private String message;
-
-    public String getMessage()
+    public void setDescription( String description )
     {
-        return message;
+        this.description = description;
     }
+    
+    public String getDescription()
+    {
+        return description;
+    }
+    private List<DeTargetMember>  deTargetMemberList;
+    
+    public List<DeTargetMember> getDeTargetMemberList()
+    {
+        return deTargetMemberList;
+    }
+    
+    // -------------------------------------------------------------------------
+    // Action
+    // -------------------------------------------------------------------------
 
-    // -------------------------------------------------------------------------
-    // Execution
-    // -------------------------------------------------------------------------
+ 
 
     public String execute()
         throws Exception
     {
-        // ---------------------------------------------------------------------
-        // Name
-        // ---------------------------------------------------------------------
+        deTarget = deTargetService.getDeTarget( deTargetId );
+        
+        deTargetMemberList = new ArrayList<DeTargetMember>(deTargetService.getDeTargetMembers( deTarget ));
+        
+        dataElementGroups = new ArrayList<DataElementGroup>( dataElementService.getAllDataElementGroups() );
 
-        if ( name == null )
-        {
-            message = i18n.getString( "specify_name" );
+        Collections.sort( dataElementGroups, new DataElementGroupNameComparator() );
+        
+        
+        
+        
+        
+        //deTargetDataElement = new ArrayList<DataElement>( deTarget. );
+        
+        //Collections.sort( surveyIndicators, dataElementComparator );       
+                        
+        //displayPropertyHandler.handle( dataSetDataElements );
 
-            return INPUT;
-        }
-        else
-        {
-            name = name.trim();
-            
-            if ( name.length() == 0 )
-            {
-                message = i18n.getString( "specify_name" );
-
-                return INPUT;
-            }
-
-            DeTarget match = deTargetService.getDeTargetByName( name );
-    
-            if ( match != null && ( deTargetId == null || match.getId() != deTargetId ) )
-            {
-                message = i18n.getString( "duplicate_names" );
-    
-                return INPUT;
-           
-            }
-        }
-        // ---------------------------------------------------------------------
-        // Short name
-        // ---------------------------------------------------------------------
-
-        if ( shortName == null )
-        {
-            message = i18n.getString( "specify_short_name" );
-
-            return INPUT;
-        }
-        else
-        {
-            shortName = shortName.trim();
-            
-            if ( shortName.length() == 0 )
-            {
-                message = i18n.getString( "specify_short_name" );
-
-                return INPUT;
-            }
-
-            DeTarget match = deTargetService.getDeTargetByShortName( shortName );
-   
-            if ( match != null && ( deTargetId == null || match.getId() != deTargetId ) )
-            {
-                message = i18n.getString( "duplicate_short_names" );
-    
-                return INPUT;
-            }
-        }
-   
-        message = "validation success";
+        //dataEntryForm = dataEntryFormService.getDataEntryFormByDataSet( dataSet );
+        
         return SUCCESS;
     }
- }
+}

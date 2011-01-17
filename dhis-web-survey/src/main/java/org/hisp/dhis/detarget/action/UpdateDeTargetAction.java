@@ -26,8 +26,10 @@
  */
 package org.hisp.dhis.detarget.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
@@ -37,19 +39,22 @@ import org.hisp.dhis.detarget.DeTarget;
 import org.hisp.dhis.detarget.DeTargetMember;
 import org.hisp.dhis.detarget.DeTargetService;
 
+
+
 import com.opensymphony.xwork2.Action;
 
 /**
  * @author Mithilesh Kumar Thakur
  *
- * @version AddDeTargetAction.java Jan 14, 2011 3:48:26 PM
+ * @version UpdateDeTargetAction.java Jan 15, 2011 4:04:58 PM
  */
-public class AddDeTargetAction  implements Action
+public class UpdateDeTargetAction implements Action
 {
+    
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
-
+    
     private DeTargetService deTargetService;
     
     public void setDeTargetService( DeTargetService deTargetService )
@@ -70,66 +75,108 @@ public class AddDeTargetAction  implements Action
     {
         this.dataElementCategoryService = dataElementCategoryService;
     }
-
     // -------------------------------------------------------------------------
-    // Input & output
+    // Getters & Setters
     // -------------------------------------------------------------------------
     
-    private String name;
+    private int deTargetId;
+    
+    
+    public void setDeTargetId( int deTargetId )
+    {
+        this.deTargetId = deTargetId;
+    }
 
+    private String name;
+    
     public void setName( String name )
     {
         this.name = name;
     }
-
+    
     private String shortName;
-
+    
     public void setShortName( String shortName )
     {
         this.shortName = shortName;
     }
     
     private String url;
-
+    
     public void setUrl( String url )
     {
         this.url = url;
     }    
-    
+       
     private String description;
-
+    
     public void setDescription( String description )
     {
         this.description = description;
-    }    
-
+    }
+    
+    public String getDescription()
+    {
+        return description;
+    }
+    
     private Collection<String> selectedList = new HashSet<String>();
-
+    
     public void setSelectedList( Collection<String> selectedList )
     {
         this.selectedList = selectedList;
     }
-
+    
+    
+    private List<DeTargetMember>  deTargetMemberList;
+    
+    public List<DeTargetMember> getDeTargetMemberList()
+    {
+        return deTargetMemberList;
+    }
+    
     // -------------------------------------------------------------------------
     // Action
     // -------------------------------------------------------------------------
-
+    
     public String execute()
         throws Exception
     {
         // ---------------------------------------------------------------------
         // Prepare values
         // ---------------------------------------------------------------------
-
+    
         if ( shortName != null && shortName.trim().length() == 0 )
         {
-            shortName = null;
+                shortName = null;
         }
-
-        DeTarget deTarget = new DeTarget( name, shortName, url, description );
-        int deTargetId = deTargetService.addDeTarget( deTarget );
         
-        deTarget = deTargetService.getDeTarget( deTargetId );
+        System.out.println( " \n+++++++++ deTarget Id:" +  deTargetId );
+       
+        DeTarget deTarget = deTargetService.getDeTarget( deTargetId );
+        //deTargetService.getDeTarget( deTargetId );
+        deTarget.setName( name );
+        deTarget.setShortName( shortName );
+        deTarget.setUrl( url );
+        deTarget.setDescription( description );
+        
+        deTargetMemberList = new ArrayList<DeTargetMember>(deTargetService.getDeTargetMembers( deTarget ));
+        
+        
+        //Collection<Indicator> updatedIndicatorList = new HashSet<Indicator>();
+        
+        deTargetService.deleteDeTargetMembers( deTarget );
+       
+        /*
+        for( DeTargetMember dataElementTarget : deTargetMemberList )
+        {
+            
+            deTargetService.deleteDeTargetMember( dataElementTarget );
+            //deTargetService.
+            //selectedDeTargetMember.add( dataElementTarget.getDataelements().getId()+":" + dataElementTarget.getDecategoryOptionCombo().getId() );
+        }
+        */
+        
         
         for ( String selectedId : selectedList )
         {
@@ -140,15 +187,10 @@ public class AddDeTargetAction  implements Action
             DeTargetMember deTargetMember = new DeTargetMember( deTarget, dataElement, decoc);
             
             deTargetService.addDeTargetMember( deTargetMember );
-           // System.out.println( dataElement + ":" +  decoc );
+            //System.out.println( dataElement + ":" +  decoc );
             
            
         }
-        
-        //DeTargetMember deTargetMember = new DeTargetMember( );
-
-       
-    
         return SUCCESS;
     }
 }

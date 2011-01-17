@@ -30,15 +30,14 @@ import org.hisp.dhis.detarget.DeTarget;
 import org.hisp.dhis.detarget.DeTargetService;
 import org.hisp.dhis.i18n.I18n;
 
-
 import com.opensymphony.xwork2.Action;
 
 /**
  * @author Mithilesh Kumar Thakur
  *
- * @version ValidateDeTargetAction.java Jan 14, 2011 11:10:57 AM
+ * @version DelDeTargetAction.java Jan 15, 2011 5:07:57 PM
  */
-public class ValidateDeTargetAction implements Action
+public class DelDeTargetAction implements Action
 {
    
     // -------------------------------------------------------------------------
@@ -53,41 +52,24 @@ public class ValidateDeTargetAction implements Action
     }
   
     // -------------------------------------------------------------------------
-    // I18n
+    // Getters & setters
     // -------------------------------------------------------------------------
 
+   
     private I18n i18n;
 
-    
     public void setI18n( I18n i18n )
     {
         this.i18n = i18n;
     }
-    
-    private Integer deTargetId;
 
-    public void setDeTargetId( Integer deTargetId )
+    
+    private int deTargetId;
+
+    public void setDeTargetId( int deTargetId )
     {
         this.deTargetId = deTargetId;
     }
-
-    private String name;
-
-    public void setName( String name )
-    {
-        this.name = name;
-    }
-
-    private String shortName;
-
-    public void setShortName( String shortName )
-    {
-        this.shortName = shortName;
-    }
-
-    // -------------------------------------------------------------------------
-    // Output
-    // -------------------------------------------------------------------------
 
     private String message;
 
@@ -96,76 +78,63 @@ public class ValidateDeTargetAction implements Action
         return message;
     }
 
+    private String status;
+
+    public String getStatus()
+    {
+        return status;
+    }
+    /*
+    private List<DeTargetMember>  deTargetMemberList;
+    
+    public List<DeTargetMember> getDeTargetMemberList()
+    {
+        return deTargetMemberList;
+    }*/
     // -------------------------------------------------------------------------
-    // Execution
+    // Action
     // -------------------------------------------------------------------------
 
     public String execute()
         throws Exception
     {
-        // ---------------------------------------------------------------------
-        // Name
-        // ---------------------------------------------------------------------
 
-        if ( name == null )
+        status = "success";
+        
+        
+        
+        DeTarget deTarget = deTargetService.getDeTarget( deTargetId );
+        
+        deTargetService.deleteDeTargetMembers( deTarget );//delete target Members(that is delete dataElements )
+       
+        //deTargetMemberList = new ArrayList<DeTargetMember>(deTargetService.getDeTargetMembers( deTarget ));
+       
+        /*
+        for( DeTargetMember dataElementTarget : deTargetMemberList )
         {
-            message = i18n.getString( "specify_name" );
-
-            return INPUT;
-        }
-        else
-        {
-            name = name.trim();
             
-            if ( name.length() == 0 )
-            {
-                message = i18n.getString( "specify_name" );
-
-                return INPUT;
-            }
-
-            DeTarget match = deTargetService.getDeTargetByName( name );
-    
-            if ( match != null && ( deTargetId == null || match.getId() != deTargetId ) )
-            {
-                message = i18n.getString( "duplicate_names" );
-    
-                return INPUT;
-           
-            }
+            deTargetService.deleteDeTargetMember( dataElementTarget );
+            //deTargetService.
+            //selectedDeTargetMember.add( dataElementTarget.getDataelements().getId()+":" + dataElementTarget.getDecategoryOptionCombo().getId() );
         }
-        // ---------------------------------------------------------------------
-        // Short name
-        // ---------------------------------------------------------------------
-
-        if ( shortName == null )
+        
+        */
+        
+       // DeTarget deTarget = deTargetService.getDeTarget( deTargetId );
+        
+        
+        int flag = deTargetService.deleteDeTarget( deTarget ); // delete deTarget
+       
+        System.out.println( " Delete flag is flag is " + flag );
+        if ( flag < 0 )
         {
-            message = i18n.getString( "specify_short_name" );
+            status = "error";
+            String delMseg = i18n.getString( "not_del_contain_data" );
+            message = deTarget.getName() + " : "+  delMseg;
 
-            return INPUT;
+            return ERROR;
         }
-        else
-        {
-            shortName = shortName.trim();
-            
-            if ( shortName.length() == 0 )
-            {
-                message = i18n.getString( "specify_short_name" );
-
-                return INPUT;
-            }
-
-            DeTarget match = deTargetService.getDeTargetByShortName( shortName );
-   
-            if ( match != null && ( deTargetId == null || match.getId() != deTargetId ) )
-            {
-                message = i18n.getString( "duplicate_short_names" );
-    
-                return INPUT;
-            }
-        }
-   
-        message = "validation success";
+        
         return SUCCESS;
     }
- }
+}

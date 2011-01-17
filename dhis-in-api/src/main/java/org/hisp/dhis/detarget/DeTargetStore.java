@@ -135,7 +135,14 @@ public interface DeTargetStore
      * 
      * @param DeTargetMember The DeTargetMember to delete.
      */
-    int deleteDeTargetMember( DeTarget deTarget ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo );
+   // int deleteDeTargetMember( DeTarget deTarget ,DataElement dataelement ,DataElementCategoryOptionCombo deoptioncombo );
+    
+    /**
+     * Deletes a DeTarget.
+     * 
+     * @param survey The Survey to delete.
+     */
+    int deleteDeTargetMember( DeTargetMember  deTargetMember );
     
     /**
      * Returns Collection of DeTarget members.

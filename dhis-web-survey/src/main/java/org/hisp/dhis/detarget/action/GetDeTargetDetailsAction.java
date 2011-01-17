@@ -111,7 +111,7 @@ public class GetDeTargetDetailsAction   implements Action
     public String execute()
         throws Exception
     {
-        System.out.println( " DeTarget ID : "  + deTargetId );
+        //System.out.println( " DeTarget ID : "  + deTargetId );
         
         deTarget = deTargetService.getDeTarget( deTargetId );
        // survey = surveyService.getSurvey( surveyId );
@@ -128,8 +128,8 @@ public class GetDeTargetDetailsAction   implements Action
            
         }
         
-        System.out.println( " DeTarget Id : "  + deTarget.getId() + " DETarget Name "  + deTarget.getName() + " DETarget Description "  + deTarget.getDescription()  );
-        System.out.println( " DeTarget URL : "  + deTarget.getUrl() + " dataElementSize "  +dataElementSize );
+       // System.out.println( " DeTarget Id : "  + deTarget.getId() + " DETarget Name "  + deTarget.getName() + " DETarget Description "  + deTarget.getDescription()  );
+       // System.out.println( " DeTarget URL : "  + deTarget.getUrl() + " dataElementSize "  +dataElementSize );
         
         //surveyIndicators = new ArrayList<Indicator>( survey.getIndicators() );
         
