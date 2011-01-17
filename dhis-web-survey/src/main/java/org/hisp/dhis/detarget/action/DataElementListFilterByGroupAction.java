@@ -159,7 +159,7 @@ public class DataElementListFilterByGroupAction  implements Action
         if (  dataElementGroupId == null || dataElementGroupId.equalsIgnoreCase( "ALL" ) )
         {
             //System.out.println("\n\n +++ \n Inside dataElementGroupId null dataElementGroup Id is   : " + dataElementGroupId  );
-            dataElements = new ArrayList<DataElement>( dataElementService.getAllDataElements() );
+            //dataElements = new ArrayList<DataElement>( dataElementService.getAllDataElements() );
         }
         else
         {
