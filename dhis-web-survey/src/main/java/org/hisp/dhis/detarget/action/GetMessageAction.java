@@ -36,7 +36,7 @@ import org.hisp.dhis.target.DeTargetMappingService;
 
 import com.opensymphony.xwork2.Action;
 
-public class GetMesageAction
+public class GetMessageAction
     implements Action
 {
     // -------------------------------------------------------------------------
