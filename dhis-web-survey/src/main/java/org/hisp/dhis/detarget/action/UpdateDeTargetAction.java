@@ -38,8 +38,8 @@ import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.detarget.DeTarget;
 import org.hisp.dhis.detarget.DeTargetMember;
 import org.hisp.dhis.detarget.DeTargetService;
-
-
+import org.hisp.dhis.detargetdatavalue.DeTargetDataValue;
+import org.hisp.dhis.detargetdatavalue.DeTargetDataValueService;
 
 import com.opensymphony.xwork2.Action;
 
@@ -74,6 +74,13 @@ public class UpdateDeTargetAction implements Action
     public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
     {
         this.dataElementCategoryService = dataElementCategoryService;
+    }
+    
+    private DeTargetDataValueService deTargetdataValueService;
+    
+    public void setDeTargetdataValueService( DeTargetDataValueService deTargetdataValueService )
+    {
+        this.deTargetdataValueService = deTargetdataValueService;
     }
     // -------------------------------------------------------------------------
     // Getters & Setters
@@ -135,6 +142,12 @@ public class UpdateDeTargetAction implements Action
         return deTargetMemberList;
     }
     
+   private List<String> selectedDeTargetMember;
+    
+    public List<String> getSelectedDeTargetMember()
+    {
+        return selectedDeTargetMember;
+    }
     // -------------------------------------------------------------------------
     // Action
     // -------------------------------------------------------------------------
@@ -145,7 +158,9 @@ public class UpdateDeTargetAction implements Action
         // ---------------------------------------------------------------------
         // Prepare values
         // ---------------------------------------------------------------------
-    
+        
+        selectedDeTargetMember = new ArrayList<String>();
+        
         if ( shortName != null && shortName.trim().length() == 0 )
         {
                 shortName = null;
@@ -160,12 +175,98 @@ public class UpdateDeTargetAction implements Action
         deTarget.setUrl( url );
         deTarget.setDescription( description );
         
-        deTargetMemberList = new ArrayList<DeTargetMember>(deTargetService.getDeTargetMembers( deTarget ));
+        
+        if ( deTargetId != 0 )
+        {
+             deTarget = deTargetService.getDeTarget( deTargetId );
+        
+             List<DeTargetMember>  deTargetMemberList = new ArrayList<DeTargetMember>(deTargetService.getDeTargetMembers( deTarget ));
+             for( DeTargetMember dataElementTarget : deTargetMemberList )
+             {
+                 selectedDeTargetMember.add( dataElementTarget.getDataelements().getId()+":" + dataElementTarget.getDecategoryOptionCombo().getId() );
+             }
+                //indicators.removeAll( survey.getIndicators() );
+        }
+        
+        //deTargetMemberList = new ArrayList<DeTargetMember>(deTargetService.getDeTargetMembers( deTarget ));
         
         
+        
+      
+        
+        List<DeTargetDataValue> dataValueList = new ArrayList<DeTargetDataValue>( deTargetdataValueService.getDeTargetDataValues( deTarget));
+        
+        System.out.println( " \n+++++++++ size of datavalueList is " +  dataValueList.size() );
+       
+        if( dataValueList.size() == 0 || dataValueList == null  )
+        {
+            deTargetService.deleteDeTargetMembers( deTarget );
+            
+            for ( String selectedId : selectedList )
+            {
+                String[] parts = selectedId.split( ":" );
+                DataElement dataElement = dataElementService.getDataElement(  Integer.parseInt( parts[0] ) );
+                DataElementCategoryOptionCombo decoc = dataElementCategoryService.getDataElementCategoryOptionCombo( Integer.parseInt( parts[1] ));
+                
+               // List<DeTargetDataValue> dataValueList = new ArrayList<DeTargetDataValue>(deTargetdataValueService.getDeTargetDataValues( deTarget, dataElement, decoc ));
+                
+                DeTargetMember deTargetMember = new DeTargetMember( deTarget, dataElement, decoc);
+                
+                deTargetService.addDeTargetMember( deTargetMember );
+                
+                //deTargetService.updateDeTargetMember( deTargetMember );
+                //System.out.println( dataElement + ":" +  decoc );
+                
+               
+            }
+            
+        }
+        else
+        {
+            for ( String selectedId : selectedList )
+            {
+                String[] parts = selectedId.split( ":" );
+                DataElement dataElement = dataElementService.getDataElement(  Integer.parseInt( parts[0] ) );
+                DataElementCategoryOptionCombo decoc = dataElementCategoryService.getDataElementCategoryOptionCombo( Integer.parseInt( parts[1] ));
+                
+               // List<DeTargetDataValue> dataValueList = new ArrayList<DeTargetDataValue>(deTargetdataValueService.getDeTargetDataValues( deTarget, dataElement, decoc ));
+                
+                String deOptComboId = dataElement.getId() + ":" + decoc.getId();
+                
+                if( !selectedDeTargetMember.contains( deOptComboId ) )
+                {
+                    DeTargetMember deTargetMember = new DeTargetMember( deTarget, dataElement, decoc);
+                    
+                    deTargetService.addDeTargetMember( deTargetMember );
+                }
+                   
+                
+                
+               // DeTargetMember deTargetMember = new DeTargetMember( deTarget, dataElement, decoc);
+                
+               // deTargetService.addDeTargetMember( deTargetMember );
+                
+                //deTargetService.updateDeTargetMember( deTargetMember );
+                //System.out.println( dataElement + ":" +  decoc );
+                
+               
+            }
+        }
+        
+        //deTargetdataValueService.getDeTargetDataValues( deTarget, dataelement, decategoryOptionCombo )
+        
+       // int flag = deTargetService.deleteDeTarget( deTarget );
+        
+       // deTargetService.deleteDeTargetMembers( deTarget );
+      
+ 
+        
+        
+     
+     
         //Collection<Indicator> updatedIndicatorList = new HashSet<Indicator>();
         
-        deTargetService.deleteDeTargetMembers( deTarget );
+       // deTargetService.deleteDeTargetMembers( deTarget );
        
         /*
         for( DeTargetMember dataElementTarget : deTargetMemberList )
@@ -178,6 +279,7 @@ public class UpdateDeTargetAction implements Action
         */
         
         
+        /*
         for ( String selectedId : selectedList )
         {
             String[] parts = selectedId.split( ":" );
@@ -187,10 +289,15 @@ public class UpdateDeTargetAction implements Action
             DeTargetMember deTargetMember = new DeTargetMember( deTarget, dataElement, decoc);
             
             deTargetService.addDeTargetMember( deTargetMember );
+            
+            //deTargetService.updateDeTargetMember( deTargetMember );
             //System.out.println( dataElement + ":" +  decoc );
             
            
         }
+        */
+        
+        //deTargetService.updateDeTarget( deTarget );
         return SUCCESS;
     }
 }
