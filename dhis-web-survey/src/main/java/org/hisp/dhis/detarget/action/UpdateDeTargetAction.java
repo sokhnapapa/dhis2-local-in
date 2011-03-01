@@ -169,12 +169,10 @@ public class UpdateDeTargetAction implements Action
         System.out.println( " \n+++++++++ deTarget Id:" +  deTargetId );
        
         DeTarget deTarget = deTargetService.getDeTarget( deTargetId );
-        //deTargetService.getDeTarget( deTargetId );
         deTarget.setName( name );
         deTarget.setShortName( shortName );
         deTarget.setUrl( url );
         deTarget.setDescription( description );
-        
         
         if ( deTargetId != 0 )
         {
@@ -185,16 +183,9 @@ public class UpdateDeTargetAction implements Action
              {
                  selectedDeTargetMember.add( dataElementTarget.getDataelements().getId()+":" + dataElementTarget.getDecategoryOptionCombo().getId() );
              }
-                //indicators.removeAll( survey.getIndicators() );
         }
         
-        //deTargetMemberList = new ArrayList<DeTargetMember>(deTargetService.getDeTargetMembers( deTarget ));
-        
-        
-        
-      
-        
-        List<DeTargetDataValue> dataValueList = new ArrayList<DeTargetDataValue>( deTargetdataValueService.getDeTargetDataValues( deTarget));
+        List<DeTargetDataValue> dataValueList = new ArrayList<DeTargetDataValue>( deTargetdataValueService.getDeTargetDataValues( deTarget) );
         
         System.out.println( " \n+++++++++ size of datavalueList is " +  dataValueList.size() );
        
@@ -208,18 +199,10 @@ public class UpdateDeTargetAction implements Action
                 DataElement dataElement = dataElementService.getDataElement(  Integer.parseInt( parts[0] ) );
                 DataElementCategoryOptionCombo decoc = dataElementCategoryService.getDataElementCategoryOptionCombo( Integer.parseInt( parts[1] ));
                 
-               // List<DeTargetDataValue> dataValueList = new ArrayList<DeTargetDataValue>(deTargetdataValueService.getDeTargetDataValues( deTarget, dataElement, decoc ));
-                
                 DeTargetMember deTargetMember = new DeTargetMember( deTarget, dataElement, decoc);
                 
                 deTargetService.addDeTargetMember( deTargetMember );
-                
-                //deTargetService.updateDeTargetMember( deTargetMember );
-                //System.out.println( dataElement + ":" +  decoc );
-                
-               
             }
-            
         }
         else
         {

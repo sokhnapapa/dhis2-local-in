@@ -106,6 +106,13 @@ implements Action
         return optionComboId;
     }
 
+    private int statusCode=0;
+
+    public int getStatusCode()
+    {
+        return statusCode;
+    }
+
     private Date timestamp;
 
     public Date getTimestamp()
@@ -177,20 +184,27 @@ implements Action
                 dataValue = new DeTargetDataValue( deTarget, dataElement, optionCombo, orgUnit, period, value, storedBy, new Date() );
 
                 deTargetdataValueService.addDeTargetDataValue( dataValue );
-                
             }
         }
         else
-            {       
-                    LOG.debug( "Updating DataValue, value added/changed" );
-            
-                    dataValue.setValue( value );
-                    dataValue.setTimestamp( new Date() );
-                    dataValue.setStoredBy( storedBy );
-            
-                    deTargetdataValueService.updateDeTargetDataValue( dataValue );
-                    
+        {
+            if( value != null )
+            {
+                LOG.debug( "Updating DataValue, value added/changed" );
+        
+                dataValue.setValue( value );
+                dataValue.setTimestamp( new Date() );
+                dataValue.setStoredBy( storedBy );
+        
+                deTargetdataValueService.updateDeTargetDataValue( dataValue );
             }
+            else
+            {
+                LOG.debug( "Deleting DataValue, null value deleted" );
+                
+                deTargetdataValueService.deleteDeTargetDataValue( dataValue );                
+            }
+        }
             
         return SUCCESS;
     }
