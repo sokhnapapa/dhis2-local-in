@@ -35,7 +35,6 @@ import org.hisp.dhis.detarget.DeTargetService;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.organisationunit.OrganisationUnitService;
 import org.hisp.dhis.oust.manager.SelectionTreeManager;
-import org.hisp.dhis.source.Source;
 
 import com.opensymphony.xwork2.Action;
 
@@ -96,19 +95,17 @@ public class DefineDeTargetAssociationsAction implements Action
         
         Set<OrganisationUnit> unitsInTheTree = new HashSet<OrganisationUnit>();        
         
-        organisationUnitService.getUnitsInTheTree( rootUnits, unitsInTheTree );          
-        
         DeTarget deTarget = deTargetService.getDeTarget( deTargetId );            
         
         System.out.println( " DeTarget Id : "  + deTarget.getId() + " DETarget Name "  + deTarget.getName() );
         
-        Set<Source> assignedSources = deTarget.getSources();
+        Set<OrganisationUnit> assignedSources = deTarget.getSources();
         
-        assignedSources.removeAll( convert( unitsInTheTree ) );        
+        assignedSources.removeAll( unitsInTheTree );        
 
         Collection<OrganisationUnit> selectedOrganisationUnits = selectionTreeManager.getReloadedSelectedOrganisationUnits();
         
-        assignedSources.addAll( organisationUnitService.convert( selectedOrganisationUnits ) );         
+        assignedSources.addAll( selectedOrganisationUnits );         
         
         deTarget.setSources( assignedSources );
         
@@ -118,27 +115,5 @@ public class DefineDeTargetAssociationsAction implements Action
         
         return SUCCESS;
     }
-
-    // -------------------------------------------------------------------------
-    // Supportive methods
-    // -------------------------------------------------------------------------
-
-    private Set<Source> convert( Collection<OrganisationUnit> organisationUnits )
-    {
-        Set<Source> sources = new HashSet<Source>();
-        
-        sources.addAll( organisationUnits );
-        
-        return sources;
-    }   
- /*   
-    private void getUnitsInTheTree( Collection<OrganisationUnit> rootUnits, Set<OrganisationUnit> unitsInTheTree )
-    {
-        for( OrganisationUnit root : rootUnits )
-        {
-                unitsInTheTree.add( root );
-                getUnitsInTheTree( root.getChildren(), unitsInTheTree );                
-        }
-    }*/
 }
 

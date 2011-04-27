@@ -30,8 +30,7 @@ import java.util.Collection;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.source.Source;
-
+import org.hisp.dhis.organisationunit.OrganisationUnit;
 
 /**
  * @author Mithilesh Kumar Thakur
@@ -95,7 +94,7 @@ public interface DeTargetService
     /**
      * Returns all DeTarget associated with the specified source.
      */
-    Collection<DeTarget> getDeTargetBySource( Source source );
+    Collection<DeTarget> getDeTargetBySource( OrganisationUnit source );
 
     /**
      * Returns all DeTarget associated with the specified dataelement.

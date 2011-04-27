@@ -33,7 +33,7 @@ import java.util.Set;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.source.Source;
+import org.hisp.dhis.organisationunit.OrganisationUnit;
 
 /**
  * @author Mithilesh Kumar Thakur
@@ -72,7 +72,7 @@ public class DeTarget implements Serializable
     /**
      * All Sources that register data with this DataElement Target.
      */
-    private Set<Source> sources = new HashSet<Source>();
+    private Set<OrganisationUnit> sources = new HashSet<OrganisationUnit>();
     
     /**
      * Description of this DataElement Target.
@@ -199,12 +199,12 @@ public class DeTarget implements Serializable
         this.decategoryOptionCombo = decategoryOptionCombo;
     }
 
-    public Set<Source> getSources()
+    public Set<OrganisationUnit> getSources()
     {
         return sources;
     }
 
-    public void setSources( Set<Source> sources )
+    public void setSources( Set<OrganisationUnit> sources )
     {
         this.sources = sources;
     }

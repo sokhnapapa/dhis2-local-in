@@ -32,7 +32,7 @@ import java.util.List;
 
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
-import org.hisp.dhis.source.Source;
+import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -89,7 +89,7 @@ public class DefaultDeTargetService implements DeTargetService
         return deTargetStore.getDeTargetByShortName( shortName );
     }
     
-    public Collection<DeTarget> getDeTargetBySource( Source source )
+    public Collection<DeTarget> getDeTargetBySource( OrganisationUnit source )
     {
         return deTargetStore.getDeTargetsBySource( source );
     }

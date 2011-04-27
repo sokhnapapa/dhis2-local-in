@@ -34,7 +34,6 @@ import org.hisp.dhis.detarget.DeTarget;
 import org.hisp.dhis.detarget.DeTargetService;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.oust.manager.SelectionTreeManager;
-import org.hisp.dhis.source.Source;
 
 import com.opensymphony.xwork2.Action;
 
@@ -100,31 +99,13 @@ public class SetupAssociationsTreeAction implements Action
     // Execute
     // -------------------------------------------------------------------------
 
-
-
     public String execute() throws Exception
     {
         deTarget = deTargetService.getDeTarget( deTargetId );
         
-        selectionTreeManager.setSelectedOrganisationUnits( convert( deTarget.getSources() ) );
+        selectionTreeManager.setSelectedOrganisationUnits( deTarget.getSources() );
 
         return SUCCESS;
-    }
-
-    // -------------------------------------------------------------------------
-    // Supportive methods
-    // -------------------------------------------------------------------------
-
-    private Set<OrganisationUnit> convert( Collection<Source> sources )
-    {
-        Set<OrganisationUnit> organisationUnits = new HashSet<OrganisationUnit>();
-        
-        for ( Source source : sources )
-        {               
-            organisationUnits.add( (OrganisationUnit) source );
-        }       
-        
-        return organisationUnits;
     }
 }
 

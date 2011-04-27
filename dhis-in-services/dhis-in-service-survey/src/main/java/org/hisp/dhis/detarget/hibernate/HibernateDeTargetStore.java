@@ -41,7 +41,7 @@ import org.hisp.dhis.detarget.DeTargetMember;
 import org.hisp.dhis.detarget.DeTargetStore;
 import org.hisp.dhis.detargetdatavalue.DeTargetDataValue;
 import org.hisp.dhis.detargetdatavalue.DeTargetDataValueService;
-import org.hisp.dhis.source.Source;
+import org.hisp.dhis.organisationunit.OrganisationUnit;
 
 /**
  * @author Mithilesh Kumar Thakur
@@ -134,7 +134,7 @@ public class HibernateDeTargetStore implements DeTargetStore
     
    @SuppressWarnings( "unchecked" )
    
-   public Collection<DeTarget> getDeTargetsBySource( Source source )
+   public Collection<DeTarget> getDeTargetsBySource( OrganisationUnit source )
    {
        Session session = sessionFactory.getCurrentSession();
 

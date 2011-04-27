@@ -7,12 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DefaultDeTargetMappingService implements DeTargetMappingService
 {
-	// -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
 
-    @SuppressWarnings("unused")
-    
     private DeTargetMappingStore deTargetMappingStore;
 
     public void setDeTargetMappingStore( DeTargetMappingStore deTargetMappingStore )
