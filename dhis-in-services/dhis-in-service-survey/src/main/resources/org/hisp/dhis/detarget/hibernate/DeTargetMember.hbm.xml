@@ -7,14 +7,11 @@
   
 	<class name="org.hisp.dhis.detarget.DeTargetMember" table="detargetmember">
 		<composite-id>
+			
 		  <key-many-to-one name="detarget" class="org.hisp.dhis.detarget.DeTarget" 
 			  column="detargetid" foreign-key="fk_detargetmember_detargetid"/>	
 		  <key-many-to-one name="dataelements" class="org.hisp.dhis.dataelement.DataElement"
-			  column="dataelementid" foreign-key="fk_detargetmember_dataelementid"/>
-		  <!--
-			The source relationship is made not lazy so that Hibernate won't put a
-			proxy on the reference which cannot be casted to the desired subclass.
-		  -->
+			  column="dataelementid" foreign-key="fk_detargetmember_dataelementid"/>		 
 		  <key-many-to-one name="decategoryOptionCombo" class="org.hisp.dhis.dataelement.DataElementCategoryOptionCombo" 
 			  column="categoryoptioncomboid" foreign-key="fk_detargetmember_categoryoptioncomboid"/>
 			
