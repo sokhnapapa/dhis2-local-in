@@ -26,14 +26,11 @@
  */
 package org.hisp.dhis.detarget.action;
 
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.hisp.dhis.detarget.DeTarget;
 import org.hisp.dhis.detarget.DeTargetService;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
-import org.hisp.dhis.organisationunit.OrganisationUnitService;
 import org.hisp.dhis.oust.manager.SelectionTreeManager;
 
 import com.opensymphony.xwork2.Action;
@@ -64,14 +61,14 @@ public class DefineDeTargetAssociationsAction implements Action
     {
         this.deTargetService = deTargetService;
     }
-    
+/*    
     private OrganisationUnitService organisationUnitService;
 
     public void setOrganisationUnitService( OrganisationUnitService organisationUnitService )
     {
         this.organisationUnitService = organisationUnitService;
     }
-
+*/
  
     // -------------------------------------------------------------------------
     // Getters & Setters
@@ -91,17 +88,27 @@ public class DefineDeTargetAssociationsAction implements Action
     public String execute() throws Exception
     {
         
-        Collection<OrganisationUnit> rootUnits = selectionTreeManager.getRootOrganisationUnits(); 
+        DeTarget deTarget = deTargetService.getDeTarget( deTargetId );
         
-        Set<OrganisationUnit> unitsInTheTree = new HashSet<OrganisationUnit>();        
+        deTarget.updateOrganisationUnits( new HashSet<OrganisationUnit>( selectionTreeManager.getReloadedSelectedOrganisationUnits() ) );
         
+        deTargetService.updateDeTarget( deTarget );
+        
+        //Collection<OrganisationUnit> rootUnits = selectionTreeManager.getRootOrganisationUnits(); 
+        
+        //Set<OrganisationUnit> unitsInTheTree = new HashSet<OrganisationUnit>();  
+        
+        //getUnitsInTheTree( rootUnits, unitsInTheTree ); 
+        /*
         DeTarget deTarget = deTargetService.getDeTarget( deTargetId );            
         
         System.out.println( " DeTarget Id : "  + deTarget.getId() + " DETarget Name "  + deTarget.getName() );
         
         Set<OrganisationUnit> assignedSources = deTarget.getSources();
         
-        assignedSources.removeAll( unitsInTheTree );        
+        //assignedSources.removeAll( unitsInTheTree );
+        
+        assignedSources.removeAll( assignedSources );  
 
         Collection<OrganisationUnit> selectedOrganisationUnits = selectionTreeManager.getReloadedSelectedOrganisationUnits();
         
@@ -112,8 +119,22 @@ public class DefineDeTargetAssociationsAction implements Action
         System.out.println( " size of selected Organisation Units : "  + selectedOrganisationUnits.size() + " Size of assigned Sources "  + assignedSources.size() );
         
         deTargetService.updateDeTarget( deTarget );
-        
+        */
         return SUCCESS;
     }
+    
+    // -------------------------------------------------------------------------
+    // Supportive methods
+    // -------------------------------------------------------------------------
+/*    
+    private void getUnitsInTheTree( Collection<OrganisationUnit> rootUnits, Set<OrganisationUnit> unitsInTheTree )
+    {
+        for( OrganisationUnit root : rootUnits )
+        {
+                unitsInTheTree.add( root );
+                getUnitsInTheTree( root.getChildren(), unitsInTheTree );                
+        }
+    }
+    */
 }
 
