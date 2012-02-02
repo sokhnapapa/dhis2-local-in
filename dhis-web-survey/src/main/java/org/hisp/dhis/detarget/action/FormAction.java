@@ -16,7 +16,6 @@ import org.hisp.dhis.detarget.DeTargetService;
 import org.hisp.dhis.detargetdatavalue.DeTargetDataValue;
 import org.hisp.dhis.detargetdatavalue.DeTargetDataValueService;
 import org.hisp.dhis.i18n.I18n;
-import org.hisp.dhis.options.displayproperty.DisplayPropertyHandler;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.period.Period;
 import org.hisp.dhis.period.PeriodService;
@@ -71,14 +70,15 @@ implements Action
     // DisplayPropertyHandler
     // -------------------------------------------------------------------------
    
-    @SuppressWarnings("unused")
+    
+    /*
     private DisplayPropertyHandler displayPropertyHandler;
 
     public void setDisplayPropertyHandler( DisplayPropertyHandler displayPropertyHandler )
     {
         this.displayPropertyHandler = displayPropertyHandler;
     }
-    
+    */
     //--------------------------------------------------------------------------
     //Input/Output
     //--------------------------------------------------------------------------

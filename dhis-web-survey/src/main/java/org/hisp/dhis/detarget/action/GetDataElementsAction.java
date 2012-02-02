@@ -39,7 +39,6 @@ import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementGroup;
 import org.hisp.dhis.dataelement.DataElementService;
-import org.hisp.dhis.options.displayproperty.DisplayPropertyHandler;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -85,14 +84,14 @@ public class GetDataElementsAction
     // -------------------------------------------------------------------------
     // DisplayPropertyHandler
     // -------------------------------------------------------------------------
-
+    /*
     private DisplayPropertyHandler displayPropertyHandler;
 
     public void setDisplayPropertyHandler( DisplayPropertyHandler displayPropertyHandler )
     {
         this.displayPropertyHandler = displayPropertyHandler;
     }
-
+    */
     // -------------------------------------------------------------------------
     // Input & output
     // -------------------------------------------------------------------------
@@ -167,7 +166,7 @@ public class GetDataElementsAction
          
         Collections.sort( dataElements, dataElementComparator );
 
-        displayPropertyHandler.handle( dataElements );
+        //displayPropertyHandler.handle( dataElements );
         
         if ( deOptionValue != null )
         {

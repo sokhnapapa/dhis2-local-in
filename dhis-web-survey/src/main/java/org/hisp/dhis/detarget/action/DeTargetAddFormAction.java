@@ -30,11 +30,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hisp.dhis.common.comparator.IdentifiableObjectNameComparator;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementGroup;
 import org.hisp.dhis.dataelement.DataElementService;
-import org.hisp.dhis.dataelement.comparator.DataElementGroupNameComparator;
-import org.hisp.dhis.dataelement.comparator.DataElementNameComparator;
 
 import com.opensymphony.xwork2.Action;
 
@@ -88,8 +87,8 @@ public class DeTargetAddFormAction implements Action
         /* DataElements and Groups */
         dataElements = new ArrayList<DataElement>( dataElementService.getAllDataElements() );
         dataElementGroups = new ArrayList<DataElementGroup>( dataElementService.getAllDataElementGroups() );
-        Collections.sort( dataElements, new DataElementNameComparator() );
-        Collections.sort( dataElementGroups, new DataElementGroupNameComparator() );
+        Collections.sort( dataElements, new IdentifiableObjectNameComparator() );
+        Collections.sort( dataElementGroups, new IdentifiableObjectNameComparator() );
             
        // indicatorgroups = new ArrayList<IndicatorGroup>(indicatorService.getAllIndicatorGroups() );
         
