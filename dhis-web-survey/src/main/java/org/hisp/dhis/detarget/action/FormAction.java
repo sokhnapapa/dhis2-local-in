@@ -16,6 +16,7 @@ import org.hisp.dhis.detarget.DeTargetService;
 import org.hisp.dhis.detargetdatavalue.DeTargetDataValue;
 import org.hisp.dhis.detargetdatavalue.DeTargetDataValueService;
 import org.hisp.dhis.i18n.I18n;
+import org.hisp.dhis.i18n.I18nFormat;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.period.Period;
 import org.hisp.dhis.period.PeriodService;
@@ -70,7 +71,7 @@ implements Action
     // DisplayPropertyHandler
     // -------------------------------------------------------------------------
    
-    
+    @SuppressWarnings("unused")
     /*
     private DisplayPropertyHandler displayPropertyHandler;
 
@@ -164,13 +165,138 @@ implements Action
         this.selectedPeriodIndex = selectedPeriodIndex;
     }
     
+    // source code of SelectAction.java
+    private OrganisationUnit orgUnit;
     
+    public OrganisationUnit getOrgUnit()
+    {
+        return orgUnit;
+    }
+    
+    private int flage;
+    
+    public int getFlage()
+    {
+        return flage;
+    }
+
+    public void setFlage( int flage )
+    {
+        this.flage = flage;
+    }
+    
+    private List<Period> periods = new ArrayList<Period>();
+
+    public Collection<Period> getPeriods()
+    {
+        return periods;
+    }
+    
+    private List<DeTarget> deTargets = new ArrayList<DeTarget>();
+    
+    public List<DeTarget> getDeTargets()
+    {
+        return deTargets;
+    }
+    
+    private I18nFormat format;
+
+    public void setFormat( I18nFormat format )
+    {
+        this.format = format;
+    }
+    
+    private Period period;
+    
+    public Period getPeriod()
+    {
+        return period;
+    }
     //--------------------------------------------------------------------------
     //Action Implementation
     //--------------------------------------------------------------------------
 
     public String execute()
     {
+        // source code of SelectAction.java
+        
+        orgUnit = selectedStateManager.getSelectedOrganisationUnit();
+        
+        if( orgUnit == null )
+        {
+            selectedDeTargetId = null;
+            
+            selectedStateManager.clearSelectedDeTarget();
+            
+            return SUCCESS;
+        }
+
+        // ---------------------------------------------------------------------
+        // Load Targets
+        // ---------------------------------------------------------------------
+        
+        deTargets = selectedStateManager.loadDeTargetsForSelectedOrgUnit( orgUnit );
+        
+        DeTarget selectedDeTarget;
+        
+        if( selectedDeTargetId != null )
+        {
+            selectedDeTarget = deTargetService.getDeTarget( selectedDeTargetId );
+        }
+        else
+        {
+            selectedDeTarget = selectedStateManager.getSelectedDeTarget();
+        }
+        
+        if( selectedDeTarget != null && deTargets.contains( selectedDeTarget ) )
+        {
+            selectedDeTargetId = selectedDeTarget.getId();
+            
+            selectedStateManager.setSelectedDeTarget( selectedDeTarget );
+            
+            periods = selectedStateManager.getPeriodList();
+            
+            for ( Period period : periods )
+            {
+                period.setName( format.formatPeriod( period ) );
+            }
+        }
+        else
+        {
+            selectedDeTargetId = null;
+            
+            selectedStateManager.clearSelectedDeTarget();
+            
+            return SUCCESS;
+        }
+        
+        // ---------------------------------------------------------------------
+        // Validate selected period
+        // ---------------------------------------------------------------------
+
+        if ( selectedPeriodIndex == null )
+        {
+            selectedPeriodIndex = selectedStateManager.getSelectedPeriodIndex();
+            
+        }
+
+        if ( selectedPeriodIndex != null && selectedPeriodIndex >= 0 )
+        {
+            selectedStateManager.setSelectedPeriodIndex( selectedPeriodIndex );
+            
+            period = selectedStateManager.getSelectedPeriod();
+        }
+        
+        else
+        {
+            selectedStateManager.clearSelectedPeriod();
+
+            return SUCCESS;
+        }
+        //return "defaulttargetform";
+        flage = 1;
+ 
+        
         deTargetDataValueMap = new HashMap<String, DeTargetDataValue>();
         
         OrganisationUnit orgUnit = selectedStateManager.getSelectedOrganisationUnit();
