@@ -1,18 +1,14 @@
 <script >
 $(function() {
-datePickerValid( 'startDate', true );
-datePickerValid( 'endDate', true );
 
 $("#openAddTariff").button()
 			.click(function() {
 				$( "#addTariff" ).dialog( "open" );
-				$('#pbfType option[value=-1]').attr('selected','selected');
-			$("#pbfType ").removeAttr('disabled');
-			$("#tariff").val('');			
-			$("#startDate").val('');
-			$("#startDate ").removeAttr('disabled');
-			$("#endDate").val('');
-			$("#endDate ").removeAttr('disabled');
+                $('#pbfType option[value=-1]').attr('selected','selected');
+                $('#bank option[value=-1]').attr('selected','selected');			
+                $("#branchName").val('');
+                $("#accountName").val('');
+                $("#accountNumber").val('');
 });
 			
 			
@@ -126,15 +122,15 @@ $( "#addTariff" ).dialog({
 	<input type="button" value="Add New Tariff" style="float:right;" id="openAddTariff"/>
 </div>
 <br/><br/>
-<input type="hidden" id="dataElementId" name="dataElementId" value="$!selecteddataElement.id"/>
 
 <table style="width:100%" class="mainPageTable">
 	<thead >
 		<tr >
 			<th >PBF Type</th>
-			<th >Tariff</th>
-			<th >Start Date</th>
-			<th >End Date</th>
+			<th >Bank</th>
+			<th >Branch Name</th>
+			<th >Account Name</th>
+			<th >Account Number</th>
 			#if( $updateAuthority == 'Yes' )
 				<th >Operations</th>
 			#end
@@ -142,17 +138,18 @@ $( "#addTariff" ).dialog({
 	</thead>
 	<tbody id="list">
 		#set( $mark = false )
-		#foreach( $tariff in $tariffList )
+		#foreach( $bankDetails in $bankDetailsList )
 			#if( $mark )
                 #set( $mark = false )
 			#else
 				#set( $mark = true )
 			#end
             <tr #if( $mark ) bgcolor = "#FFFFFF" #else bgcolor="#E0ECF8"  #end>
-				<td >$!tariff.dataSet.name</td>
-				<td >$!tariff.value</td>
-				<td >$!tariff.startDate</td>
-				<td >$!tariff.endDate</td>
+				<td >$!bankDetails.dataSet.name</td>
+				<td >$!bankDetails.bank</td>
+				<td >$!bankDetails.branchName</td>
+				<td >$!bankDetails.accountName</td>
+				<td >$!bankDetails.accountNumber</td>
 			#if($updateAuthority == 'Yes')
 	            <td>
 					<a href="javascript:deleteTariffDataValue('$tariff.organisationUnit.id','$tariff.dataElement.id','$tariff.dataSet.id','$tariff.startDate','$tariff.endDate')">
@@ -182,16 +179,27 @@ $( "#addTariff" ).dialog({
 			</td>
         </tr>
 		<tr >
-			<td style="width:40%;">Tariff</td>
-			<td style="width:60%;"><input type="text" id="tariff" style="width:100%;"/></td>
+			<td style="width:40%;">Bank</td>
+            <td style="width:60%;">
+                <select id="bank" style="width:100%;">
+                    <option value="-1">Select Bank</option>
+                    #foreach( $bank in $banks )
+                        <option value="$bank">$bank</option>
+                    #end
+                </select>
+            </td>
         </tr>
 		<tr >
-			<td style="width:40%;">Start Date</td>
-			<td style="width:60%;"><input type="text" id="startDate" style="width:100%;"/></td>
+			<td style="width:40%;">Branch Name</td>
+			<td style="width:60%;"><input type="text" id="branchName" style="width:100%;"/></td>
         </tr>
 		<tr >
-			<td style="width:40%;">End Date</td>
-			<td style="width:60%;"><input type="text" id="endDate" style="width:100%;"/></td>
+			<td style="width:40%;">Account Name</td>
+			<td style="width:60%;"><input type="text" id="accountName" style="width:100%;"/></td>
+        </tr>
+        <tr >
+            <td style="width:40%;">Account Number</td>
+            <td style="width:60%;"><input type="text" id="accountNumber" style="width:100%;"/></td>
         </tr>
     </table>
 </div>
