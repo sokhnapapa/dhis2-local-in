@@ -68,6 +68,15 @@
 		<property name="organisationUnitService" ref="org.hisp.dhis.organisationunit.OrganisationUnitService" />
 		<property name="dataSetService" ref="org.hisp.dhis.dataset.DataSetService" />
     </bean>
+    
+    <!-- Validate Tariff  -->
+    <bean id="org.hisp.dhis.pbf.action.ValidateTariffDataAction" class="org.hisp.dhis.pbf.action.ValidateTariffDataAction" scope="prototype">
+		<property name="tariffDataValueService" ref="org.hisp.dhis.pbf.api.TariffDataValueService" />
+		<property name="dataElementService" ref="org.hisp.dhis.dataelement.DataElementService" />
+		<property name="organisationUnitService" ref="org.hisp.dhis.organisationunit.OrganisationUnitService" />
+		<property name="dataSetService" ref="org.hisp.dhis.dataset.DataSetService" />
+		<property name="currentUserService" ref="org.hisp.dhis.user.CurrentUserService" />
+    </bean>
 
     <!-- Load Bank Details -->
     <bean id="org.hisp.dhis.pbf.action.LoadBankDetailsAction" class="org.hisp.dhis.pbf.action.LoadBankDetailsAction" scope="prototype">
@@ -77,4 +86,17 @@
         <property name="lookupService" ref="org.hisp.dhis.pbf.api.LookupService" />
     </bean>
     
+    <!-- Add Bank Detail -->
+	<bean id="org.hisp.dhis.pbf.action.AddBankDataAction" class="org.hisp.dhis.pbf.action.AddBankDataAction" scope="prototype">
+		<property name="bankDetailsService" ref="org.hisp.dhis.pbf.api.BankDetailsService" />		
+		<property name="organisationUnitService" ref="org.hisp.dhis.organisationunit.OrganisationUnitService" />
+		<property name="dataSetService" ref="org.hisp.dhis.dataset.DataSetService" />		
+    </bean>
+    
+    <!-- Add Bank Detail -->
+	<bean id="org.hisp.dhis.pbf.action.DeleteBankDataAction" class="org.hisp.dhis.pbf.action.DeleteBankDataAction" scope="prototype">
+		<property name="bankDetailsService" ref="org.hisp.dhis.pbf.api.BankDetailsService" />		
+		<property name="organisationUnitService" ref="org.hisp.dhis.organisationunit.OrganisationUnitService" />
+		<property name="dataSetService" ref="org.hisp.dhis.dataset.DataSetService" />		
+    </bean>
 </beans>

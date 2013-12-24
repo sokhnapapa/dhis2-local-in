@@ -1,7 +1,3 @@
 {
-"c":"${statusCode}",
-"curValueDiv":"$!dataValue.value",
-"curCommentDiv":"$!dataValue.comment",
-"curStoredByDiv":"$!dataValue.storedBy",
-"curTimeStampDiv":"$standardDateFormat.format($!dataValue.timestamp)"
+"message":"${message}"
 }
