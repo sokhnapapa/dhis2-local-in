@@ -30,6 +30,8 @@
 	</tr>
 	<script>
 		var allTotal = 0.0;
+		var allScore = 0.0;
+		var allMax = 0.0;
 	</script>
 	
 	#set( $mark = false )
@@ -59,20 +61,31 @@
 					function changeInt()
 					{
 						var percentage = 0.0;
-    					if('$!dataValue.value' != '' && $!qualityMaxValue.value != '')
+    					if($("#score_"+$dataElement.id).val() != '' && $("#max_"+$dataElement.id).val() != '')
     					{
     						percentage = (parseFloat($dataValue.value) * 100) / parseFloat($qualityMaxValue.value);
     						$('#percentage_'+$dataElement.id).val(percentage.toFixed(2));
-    					}
-						
-						allTotal = (allTotal + percentage)/$count;
+    					}	
+    					
+                        if( $("#score_"+$dataElement.id).val() != '')
+                         {
+                             allScore = allScore + parseFloat($("#score_"+$dataElement.id).val());
+                         }
+                        if( $("#max_"+$dataElement.id).val() != '')
+                         {
+                             allMax = allMax + parseFloat($("#max_"+$dataElement.id).val());
+                         }
+                        if(allMax != 0.0)
+                        {
+						  allTotal = (allScore / allMax ) * 100;
+						 }
 					
 						$('#all-total').val(allTotal.toFixed(2));					
 					}
 					changeInt();
 			</script>
 			<td>
-				<input type="text" name="max_$dataElement.id" id="max_$dataElement.id" value="$!qualityMaxValue.value" tabindex="$tabIndex" style="text-align: center;" readonly/>
+				<input type="text" class="max" name="max_$dataElement.id" id="max_$dataElement.id" value="$!qualityMaxValue.value" tabindex="$tabIndex" style="text-align: center;" readonly/>
 			</td>
 			<td >
 				<input type="text" id="percentage_$dataElement.id" style="text-align: center;" readonly/>
@@ -92,12 +105,25 @@
 	function calPercenVal( dataElementId )
 	{
 		var percentage = 0.0;
+		
+		var score = 0.0;
+        
     	if($("#score_"+dataElementId).val() != '' && $("#max_"+dataElementId).val() != '')
     	{
     		percentage = (parseFloat($("#score_"+dataElementId).val()) * 100) / parseFloat($("#max_"+dataElementId).val());
     		$('#percentage_'+dataElementId).val(percentage.toFixed(2));
     	}
-		allTotal = (allTotal + percentage) / $count;
+    	#foreach($dataElement in $dataElements )
+    		if( $("#score_"+$dataElement.id).val() != '')
+            {
+              score = score + parseFloat($("#score_"+$dataElement.id).val());              
+            }
+	    #end
+    	if(allMax != 0.0)
+    	{
+		  allTotal = (score / allMax ) * 100;
+		}
+		
 		$('#all-total').val(allTotal.toFixed(2));
 	}
 </script>
