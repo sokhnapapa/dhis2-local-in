@@ -1,0 +1,66 @@
+<div id="leftBar">
+    <div class="left-bar-menu" ng-controller="LeftBarMenuController">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href ng-click="showHome()">{{'equipment_manager'| translate}}</a></li>
+            <li><a href ng-click="showModal()">{{'modal_manager'| translate}}</a></li>
+            <li><a href ng-click="showConfiguration()">{{'ccei_configuration'| translate}}</a></li>
+
+            <!--      <li><a href ng-click="showReportTypes()">{{'reports'| translate}}</a></li> -->
+
+        </ul>
+    </div>
+</div>
+<div id="mainPage">
+
+
+    <div class="vertical-spacing col-md-10" >
+        <form name="outerForm" novalidate>
+            <h2>{{'ccei_configuration_heading' | translate}}</h2><br>
+
+            <table class="dhis2-list-table-striped dhis2-table-hover">
+                <tr ng-repeat="parameter in configurationParameters.parameters" ng-switch="parameter.valueType">
+
+
+                    <td>
+                        {{parameter.key | translate}}
+                    </td>
+
+                    <td ng-switch-when="trackedEntity">
+                        <select class="form-control" ng-change="update()" ng-model="configurationParameters.parameters[$index].value" ng-options="trackedEntity.id as trackedEntity.name for trackedEntity in trackedEntityList"></select>
+                    </td>
+                    <td ng-switch-when="programMapping">
+                        <table class="dhis2-list-table-striped dhis2-table-hover ">
+                            <tr ng-repeat="map in parameter.programToProgramMapping">
+                                <td>
+                                    {{map.modelProgram[0].name}}
+                                </td>
+                                <td>
+                                    <select class="form-control" ng-model="map.equipmentProgram[0].UID" ng-options="program.id as program.name for program in equipmentProgramList"></select>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td ng-switch-when="attribute">
+                        <select class="form-control"  ng-model="configurationParameters.parameters[$index].value" ng-options="attribute.id as attribute.name for attribute in attributes"></select>
+                    </td>
+
+                    <td ng-switch-when="dataelement">
+                        <select class="form-control"  ng-model="configurationParameters.parameters[$index].value" ng-options="dataElement.id as dataElement.name for dataElement in trackerDataElements"></select>
+                    </td>
+
+                </tr>
+            </table><br>
+            <div class="vertical-spacing" >
+                <button type="button" class="btn btn-primary" ng-click="saveConfigurationAndGo()">{{'save'| translate}}</button>
+                <button type="button" class="btn btn-default small-horizonal-spacing" onclick="javascript:history.go(-1);">{{'back'| translate}}</button>
+                <button type="button" class="btn btn-danger" ng-click="deleteSetting()">{{'reset'| translate}}</button>
+
+            </div>
+        </form>
+        <div ng-show="showSuccess" class="alert alert-success">{{'success'| translate}}</div>
+
+
+    </div>
+
+</div>
