@@ -144,6 +144,8 @@ excelUpload.controller('ImportController',
 					periods = monthly( stDate , endDate );
 				else if(periodType == "Yearly")
 					periods = yearly( stDate , endDate );
+                else if(periodType == "Quarterly")
+                    periods = quartly( stDate , endDate );
 				
 				$("#importPeriod").html("");
 				periods.split(";").forEach(function(p){
