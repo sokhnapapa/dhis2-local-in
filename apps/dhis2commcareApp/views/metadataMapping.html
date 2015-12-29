@@ -1,0 +1,78 @@
+<div class="topBar" ng-controller="TopBarMenuController">
+    <img src="img/commcare-logo.png" height="37" width="186" style="display: inline; float: left;">
+
+    <ul>
+        <li  ng-click="goTo('/')"><a href >Home</a></li>
+        <li ng-click="goTo('configure-instance')"><a href >Configure Instance</a></li>
+        <li class="glow" ng-click="goTo('metadata-mapping')"><a href >Map Metadata</a></li>
+        <li ng-click="goTo('import')"><a href >Import</a></li>
+        <li ng-click="goTo('report')"><a href >Go to Reports</a></li>
+        <li ng-click="goTo('dashboard')"><a href >Dashboard</a></li>
+    </ul>
+    <img src="img/dhis2-logo.png" height="45" width="210" style="float: right; display: inline">
+
+</div>
+<div class="secondTopBar">
+
+<ul><b>Select Instance -   </b>
+
+    <li ng-repeat="configurationInstance in configurationInstances track by $index" ng-hide="!currentUserInstanceAuthorityMap[configurationInstance.appId]"  id="{{configurationInstance.appId}}"  ng-click="showInstanceMapping(configurationInstance);">{{configurationInstance.name}} </li>
+</ul>
+</div>
+<div ng-if="waitingList.length == 0 && metadataMapping.forms.length > 0" class="thirdTopBar">
+<ul>
+<b>Select Form -  </b>
+    <li ng-repeat="form in metadataMapping.forms" id="{{form.unique_id}}" ng-click="showForm(form);">{{form.name}}</li>
+</ul>
+</div>
+
+<div class="loadingCover" ng-if="waitingList.length > 0">
+<div class="loading" >
+    <img src="img/loader-circle.GIF">
+    <ul><li ng-repeat="waitingItem in waitingList">
+        {{waitingItem.description}}
+    </li></ul>
+</div>
+</div>
+<div class="mainDiv" ng-if="currentForm != ''">
+    <label class="col-sm-offset-4">Please connect CommCare Elements to DHIS Metadata</label><br>
+
+    <table class="mappingTable">
+    <tr>
+        <th>#</th>
+        <th>CommCare Question</th>
+        <th>Data Element</th>
+        <th>Category Option Combo</th>
+        <th>Frequency/Period</th>
+        <th>Facility Identifier</th>
+    </tr>
+    <tr ng-repeat="mappingElement in formIdMetadataMappingToObjectMap[currentForm.unique_id].mappingElements" ng-class="{'error ' : mappingElement.invalidState}">
+        <td class="serialNoCell">{{$index+1}}.</td>
+        <td title="{{mappingElement.commcareQuestion}} | Type:{{mappingElement.type}}" class="commcareQuestion">{{mappingElement.commcareQuestionDescription}}
+           <label ng-show="mappingElement.option!=undefined">Multi Select Option : {{mappingElement.option.label}}</label></td>
+        <td class="dhisDe"> <input type="text"
+                    name="foo"
+                    class="form-control"
+                    ng-model="mappingElement.dataElement"
+                    placeholder="{{'please_select_data_element'}}"
+                    uib-typeahead="dataElement as dataElement.name for dataElement in dataElements | filter:$viewValue | limitTo:20"
+                    uib-typeahead-focus-first="false"
+                    uib-typeahead-editable="false"
+                    ng-blur="updateCategoryCombo(this.mappingElement)"
+               /></td>
+
+        <td class="dhisCC"> <select  ng-model="mappingElement.categoryCombo" ng-options="categoryComboOption as categoryComboOption.name for categoryComboOption in categoryComboInputHolder[currentForm.unique_id+mappingElement.commcareQuestion] track by categoryComboOption.id" ng-init="mappingElement.categoryCombo">
+        </select></td>
+        <td class="dhisPeriod"> <select  ng-model="mappingElement.period" ng-options="period as period.name for period in periods">
+        </select></td>
+        <td class="dhisOuIdentifier"><input type="checkbox" ng-model="commcareQuestionToOrgUnitIdentifierMap[currentForm.unique_id+mappingElement.commcareQuestion]" ng-click="doOrgUnitUIOperations(this);" ng-disabled="!commcareQuestionToOrgUnitIdentifierMap[currentForm.unique_id+mappingElement.commcareQuestion]&&formIdToIsOrgUnitIdentifierPresentMap[currentForm.unique_id]"></td>
+    </tr>
+</table>
+
+<div class="center">
+    <button type="button" class="btn btn-default " ng-click="saveMetadataMapping()">{{'Save'}}</button>
+    <button type="button" class="btn btn-danger " ng-click="resetMapping()">{{'Reset All Forms'}}</button>
+
+</div>
+    <div ng-class="{'alert-info' : showInfoMessageToUser,'alert-danger' : !showInfoMessageToUser}" ng-show="messageToUser != ''">{{messageToUser}}</div>
+</div>

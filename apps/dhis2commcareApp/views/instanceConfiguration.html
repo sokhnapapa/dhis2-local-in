@@ -1,0 +1,156 @@
+<div class="topBar" ng-controller="TopBarMenuController">
+    <img src="img/commcare-logo.png" height="37" width="186" style="display: inline; float: left;">
+
+    <ul>
+    <li ng-click="goTo('/')"><a href >Home</a></li>
+    <li class="glow" ng-click="goTo('configure-instance')"><a href >Configure Instance</a></li>
+    <li ng-click="goTo('metadata-mapping')"><a href >Map Metadata</a></li>
+    <li ng-click="goTo('import')"><a href >Import</a></li>
+    <li ng-click="goTo('report')"><a href >Go to Reports</a></li>
+    <li ng-click="goTo('dashboard')"><a href >Dashboard</a></li>
+</ul>
+    <img src="img/dhis2-logo.png" height="45" width="210" style="float: right; display: inline">
+
+</div>
+
+<div class = "secondTopBar">
+<ul>
+    <li ng-click="addInstance();" id="addNewInstance" style="color: teal"><b>Add New</b></li>
+    <b>  Select Instance -  </b>
+    <li ng-repeat="configurationInstance in configurationInstances track by $index" ng-hide="!currentUserInstanceAuthorityMap[configurationInstance.appId]" id="{{configurationInstance.appId}}" ng-click="showInstance(configurationInstance);">{{configurationInstance.name}}</li>
+</ul>
+</div>
+<div class="mainDiv" ng-if="currentInstance != undefined">
+    <form name="instanceConfigurationForm" novalidate>
+
+        <label class="col-sm-offset-4">Please Enter Configuration Details for the Instance</label><br><br>
+<table class="containerTable">
+<thead>
+<th></th>
+<th>CommCare Specific Settings</th>
+<th></th>
+<th>DHIS2 Specific Settings</th>
+</thead>
+    <tr><td>.</td></tr>
+    <tr>
+        <td class="col-sm-1"></td>
+        <td>
+<table class="mappingTable" ng-if="currentInstance != undefined">
+    <thead>
+        <tr>
+            <th class="col-sm-1">Configuration Parameter</th>
+            <th class="col-sm-2">Value</th>
+        </tr>
+    </thead>
+
+    <tr>
+        <td>Name</td>
+        <td><input type="text"
+                   name="name"
+                   class="form-control"
+                   ng-model="currentInstance.name"
+                   ng-value="currentInstance.name" />
+        </td>
+
+    </tr>
+
+    <tr>
+    <td>Domain</td>
+        <td><input type="text"
+                   name="foo"
+                   class="form-control"
+                   ng-model="currentInstance.domain"
+                   ng-required="true"
+                   ng-value="currentInstance.domain"/>
+        </td>
+    </tr>
+
+    <tr>
+    <td>Version</td>
+        <td><input type="text"
+                   name="foo"
+                   class="form-control"
+                   ng-model="currentInstance.version"
+                   ng-required="true"
+                   ng-value="currentInstance.version"/>
+        </td>
+    </tr>
+
+    <tr>
+    <td>App Id</td>
+        <td><input type="text"
+                   name="foo"
+                   class="form-control"
+                   ng-model="currentInstance.appId"
+                   ng-required="true"
+                   ng-value="currentInstance.appId"/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Username</td>
+        <td><input type="text"
+                   name="foo"
+                   class="form-control"
+                   ng-model="currentInstance.username"
+                   ng-required="true"
+                   ng-value="currentInstance.username"/>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Password</td>
+        <td><input type="password"
+                   name="foo"
+                   class="form-control"
+                   ng-model="currentInstance.password"
+                   ng-required="true"
+                   ng-value="currentInstance.password"/>
+        </td></tr>
+</table>
+    </td>
+        <td class="col-sm-1"></td>
+    <td>
+    <table class="mappingTable" ng-if="currentInstance != undefined">
+        <thead>
+        <tr>
+            <th class="col-sm-1">Configuration Parameter</th>
+            <th class="col-sm-2">Value</th>
+        </tr>
+        </thead>
+        <tr>
+            <td>Select Root Org Unit for the Instance</td>
+            <td><input type="text"
+                       name="foo"
+                       class="form-control"
+                       ng-model="currentInstance.dhisSettings.rootOuUid"
+                       placeholder="{{'Facility Selection'}}"
+                       uib-typeahead="orgUnit as orgUnit.name for orgUnit in orgUnits | filter:$viewValue | limitTo:20"
+                       uib-typeahead-focus-first="false"
+                       uib-typeahead-editable="false"
+                    />
+            </td>
+        </tr>
+        <tr>
+            <td>Write the Org Unit Attribute Name</td>
+            <td><input type="text"
+                       name="foo"
+                       class="form-control"
+                       ng-model="currentInstance.dhisSettings.orgUnitAttributeName"
+                       ng-required="true"
+                       ng-value="currentInstance.dhisSettings.orgUnitAttributeName"/>
+            </td>
+        </tr>
+    </table>
+    </td></tr>
+</table>
+    </form>
+</div>
+
+    <div ng-if="currentInstance" class="buttons">
+    <button type="button" class="btn btn-default " ng-click="saveInstance()">{{'Save'}}</button>
+    <button type="button" class="btn btn-danger " ng-click="deleteInstance()">{{'Delete'}}</button>
+
+    </div>
+<div ng-class="{'alert-info' : showMessageToUser,'alert-danger' : !showMessageToUser}" >{{messageToUser}}</div>
+

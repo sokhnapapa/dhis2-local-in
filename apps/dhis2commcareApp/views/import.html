@@ -1,0 +1,76 @@
+<div class="topBar" ng-controller="TopBarMenuController">
+    <img src="img/commcare-logo.png" height="37" width="186" style="display: inline; float: left;">
+<ul>
+    <li ng-click="goTo('/')"><a href >Home</a></li>
+    <li ng-click="goTo('configure-instance')"><a href >Configure Instance</a></li>
+    <li ng-click="goTo('metadata-mapping')"><a href >Map Metadata</a></li>
+    <li class="glow" ng-click="goTo('import')"><a href >Import</a></li>
+    <li ng-click="goTo('report')"><a href >Go to Reports</a></li>
+    <li ng-click="goTo('dashboard')"><a href >Dashboard</a></li>
+</ul>
+    <img src="img/dhis2-logo.png" height="45" width="210" style="float: right; display: inline">
+
+</div>
+<div class="secondTopBar">
+    <ul><b>Select Instance -   </b>
+    <li ng-repeat="configurationInstance in configurationInstances track by $index" id="{{configurationInstance.appId}}" ng-hide="!currentUserInstanceAuthorityMap[configurationInstance.appId]" ng-click="selectInstanceFromWhichToImport(configurationInstance);">{{configurationInstance.name}}</li>
+</ul>
+</div>
+<div class="loadingCover" ng-if="waitingList.length > 0">
+
+<div class="loading" >
+    <br>
+    <img src="img/loader-circle.GIF">
+    <ul><li ng-repeat="waitingItem in waitingList">
+        {{waitingItem.description}}
+    </li>
+        <li ng-show="errorJson!=undefined">Details : <json-formatter json="errorJson" open="0"></json-formatter>
+        </li>
+    </ul>
+    {{importElementByElement ? 'No of Elements Processed':'No of forms Processed'}} : {{importSummary.postRequestCount}}
+</div>
+    </div>
+<div class="mainDiv" >
+
+
+    <div ng-show="showDateSelectionDiv">
+        <div class="col-sm-offset-1">
+            Import Element By Element(slower but useful for debugging purposes) :<input type="checkbox" ng-model="importElementByElement">
+        </div>
+        <br>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5">
+    <label>Select Start Date</label>
+    <uib-datepicker  ng-model="dates.startDate" ui-date="{ dateFormat: 'yy-mm-dd' }"></uib-datepicker>
+    </div>
+
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5">
+    <label >Select End Date </label>
+    <uib-datepicker ng-model="dates.endDate" max-date="today"></uib-datepicker>
+    </div>
+        <div >
+            <button type="button" class="btn btn-default center" ng-click="beginImport()">Import</button>
+        </div>
+    </div>
+    <div ng-if="dataImported" class="col-sm-offset-1">
+        <label>Import Summary :</label>
+        <br>
+        <table class="importSummaryTable" ng-repeat="form in importSummary.forms track by $index">
+            <tr><td colspan="4" style="background-color: white;">{{form.name}}</td></tr>
+            <tr><td>Total Forms Found : </td><td>{{form.totalForms}}</td> </tr>
+            <tr ng-if="form.totalForms > 0"><td>Total Mapped Elements Found : </td><td>{{form.totalElements}}</td></tr>
+            <tr ng-if="!importElementByElement && form.totalForms > 0"><td>Total Objects :</td><td>{{form.objects.length}}</td><td>Details:</td><td><json-formatter json="form.objects" open="0"></td></tr>
+            <tr ng-if="!importElementByElement && form.totalForms > 0"><td>Unmapped Facility Elements: :</td><td>{{form.objects.length}}</td><td>Details:</td><td><json-formatter json="form.unmappedFacilitiesElements" open="0"></td></tr>
+            <tr ng-if="importElementByElement && form.totalForms > 0"><td>Successfully Imported Elements: </td><td>{{form.successfullyImportedElements.length}}</td> <td>Details:</td> <td><json-formatter json="form.successfullyImportedElements" open="0"></json-formatter></td></tr>
+            <tr ng-if="importElementByElement && form.totalForms > 0"><td>Import Failed Elements: </td><td>{{form.importFailedElements.length}}</td> <td>Details:</td> <td><json-formatter json="form.importFailedElements" open="0"></json-formatter></td></tr></td></tr>
+            <tr ng-if="importElementByElement && form.totalForms > 0"><td>Unmapped Facility Elements: </td><td>{{form.unmappedFacilitiesElements.length}}</td> <td>Details:</td> <td><json-formatter json="form.unmappedFacilitiesElements" open="0"></json-formatter></td></tr></td></tr>
+            <tr ng-if="importElementByElement && form.totalForms > 0"><td>Data Not Present(Value Not Found In API Elements): </td><td>{{form.valueNotFoundInAPIElements.length}}</td> <td>Details:</td> <td><json-formatter json="form.valueNotFoundInAPIElements" open="0"></json-formatter></td></tr>
+            <tr ng-if="form.totalForms > 0"><td>No of Unmapped Facilities Found: </td><td>{{form.unMappedFacilities.length}}</td> <td>Details:</td> <td><json-formatter json="form.unMappedFacilities" open="0"></json-formatter></td></tr>
+
+        </table>
+
+    </div>
+    <div ng-class="{'alert-info' : showInfoMessageToUser,'alert-danger' : !showInfoMessageToUser}" ng-show="messageToUser != ''">{{messageToUser}}</div>
+
+</div>

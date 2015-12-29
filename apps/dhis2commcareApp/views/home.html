@@ -1,0 +1,37 @@
+<div class="topBar" ng-controller="TopBarMenuController">
+    <img src="img/commcare-logo.png" height="37" width="186" style="display: inline; float: left;">
+
+    <ul>
+        <li class="glow" ng-click="goTo('/')"><a href >Home</a></li>
+        <li ng-click="goTo('configure-instance')"><a href >Configure Instance</a></li>
+        <li ng-click="goTo('metadata-mapping')"><a href >Map Metadata</a></li>
+        <li ng-click="goTo('import')"><a href >Import</a></li>
+        <li ng-click="goTo('report')"><a href >Go to Reports</a></li>
+        <li ng-click="goTo('dashboard')"><a href >Dashboard</a></li>
+    </ul>
+    <img src="img/dhis2-logo.png" height="45" width="210" style="float: right; display: inline">
+
+</div>
+
+<div class="mainDiv">
+<div class="homeDiv">
+    <h2>Welcome <i>{{userDetails.displayName}}</i> !</h2><br>
+    <label>This DHIS2 App can help you fetch data from CommCare and import into DHIS<br></label>
+<p>
+    <ul>
+    <label>        Features:</label>
+    <li>Multiple Instances - Connect multiple CommCare applications from a single dhis2 app</li>
+    <li>Easy Mapping - Map CommCare questions with DHIS Metadata(DataElement, Period, Facility)</li>
+    <li>Support for multiple select type CommCare questions through DHIS Category Option Combos(Type:YesOnly)</li>
+    <li>Import data and see summary with details on how it went</li>
+    <li>See only those instances for which you have authority (Facility based authorization)</li>
+    </ul>
+</p>
+    <br>
+    <label>You have access to these facilities (including their descendants):</label>
+    <ul><li ng-repeat="organisationUnit in userDetails.organisationUnits">{{organisationUnit.name}}</li></ul>
+    <br>
+
+</div>
+
+</div>

@@ -1,0 +1,250 @@
+html{
+    background-color: white;
+}
+body {
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-bottom: .5%;
+    font-family: inherit;
+    font-size: small;
+    background-color: rgb(245, 245, 245);
+}
+
+.topBar {
+    background-color: inherit;
+    position: relative;
+    width: auto;
+    border-bottom: 1px solid #e1e1e1;
+    padding-right: 8px;
+    padding-left: 8px;
+    padding-bottom: 0px;
+    margin-top: .7%;
+    text-align: center;
+    font-size: 110%;
+}
+
+.topBar ul{
+    display: inline-block;
+    padding: 0;
+}
+
+.topBar li{
+    padding: 8px;
+    vertical-align: bottom;
+    display: inline-block;
+    font-weight:bold;
+
+}
+
+.topBar ul a
+{
+    color: black;
+    text-decoration: none;
+    cursor: default;
+}
+
+.topBar li:hover
+{
+    text-decoration: none;
+    box-shadow: 1px 1px 5px rgba(2,4,2,.3);
+    border-radius: 4px;
+}
+
+.floatRight{
+    float: right;
+}
+
+.mainDiv {
+    position: relative;
+    margin-top: 2%;
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-bottom: 2%;
+    border-width: medium;
+    border: medium;
+    border-color: #c4e3f3;
+}
+.center {
+    margin-left: 50%;
+    margin-right: 50%;
+    margin-bottom: 1%;
+}
+.instanceClass{
+    border: 1px solid black;
+}
+
+.glow {
+   /* box-shadow: 5px 5px 5px rgba(2,4,2,.3);*/
+    text-decoration: none;
+    box-shadow: 1px 1px 5px rgba(2,4,2,.3);
+    border-radius: 4px;
+    border-color: teal;
+    border-style: dotted;
+    border-width: thin;
+}
+
+.secondTopBar{
+    background-color: inherit;
+    position: relative;
+    width: auto;
+    border-bottom: 1px solid #e1e1e1;
+    margin-top: .7%;
+    text-align: inherit;
+    font-size: 110%;
+}
+.secondTopBar ul{
+    display: inline-block;
+
+}
+
+.secondTopBar li{
+    list-style-type: none;
+    display: inline;
+    color: #333;
+    text-decoration: none;
+    padding: 8px;
+    cursor: pointer;
+}
+.secondTopBar li:hover{
+    text-decoration: none;
+    box-shadow: 1px 1px 5px rgba(2,4,2,.3);
+    border-radius: 4px;
+}
+
+.thirdTopBar{
+    background-color: inherit;
+    position: relative;
+    width: auto;
+    border-bottom: 1px solid #e1e1e1;
+    margin-top: .7%;
+    text-align: inherit;
+    font-size: 110%;
+}
+.thirdTopBar ul{
+    display: inline-block;
+
+}
+.thirdTopBar li{
+    list-style-type: none;
+    display: inline-block;
+    color: #333;
+    text-decoration: none;
+    padding: 8px;
+    cursor: pointer;
+    word-wrap: break-word;
+
+    width: 15%;
+
+}
+.thirdTopBar li:hover{
+    text-decoration: none;
+    box-shadow: 1px 1px 5px rgba(2,4,2,.3);
+    border-radius: 4px;
+}
+.loading{
+    position: fixed;
+    top: 23%;
+    left: 40%;
+    display: inline;
+    width: auto;
+    background-color: inherit;
+    margin: auto;
+}
+.loading img{
+    float:left;
+    padding :4%;
+}
+.loading li{
+    list-style-type: none;
+    color: #333;
+    text-decoration: none;
+    padding: 4px;
+    cursor: pointer;
+}
+.serialNoCell{
+    width: 1%;
+}
+.commcareQuestion{
+    width: 20%;
+}
+.dhisDe{
+    width: 35%;
+}
+.dhisCC{
+    width: 15%;
+}
+.dhisPeriod{
+    width:10%;
+}
+.dhisOuIdentifier{
+    width: 3%;
+    text-align: center;
+}
+.mappingTable th{
+    background-color: rgb(245, 245, 245);
+/*
+    background-color: rgba(235, 238, 241, 0.85098);
+  */  text-align: center;
+}
+.mappingTable td{
+    padding : 1%;
+    text-align: center;
+}
+.mappingTable tr:hover{
+    text-decoration: none;
+    box-shadow: 1px 1px 5px rgba(2,4,2,.3);
+    border-radius: 4px;
+}
+.mappingTable  tr:nth-child(even) {
+    background-color: rgb(245, 245, 245);
+/* background: rgba(235, 238, 241, 0.85098);
+*/
+}
+.mappingTable  tr:nth-child(odd) {
+    background: #fdfdfd
+}
+
+.dateSelection{
+    display: inline;
+}
+
+.importButton{
+    width: auto;
+    background-color: inherit;
+    margin: auto;
+}
+
+.containerTable{
+
+}
+.containerTable td{
+vertical-align: top;
+}
+.importSummaryTable{
+    margin: 1.5%;
+}
+.importSummaryTable td{
+    padding : 1%;
+    width: 5%;
+}
+.loadingCover{
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    position: fixed;
+}
+.buttons{
+    display:inline;
+    margin-left: 40%;
+    margin-bottom: 1%;
+}
+.error {
+    color:red; !important;
+}
+.homeDiv{
+    margin-left: 10%;
+    margin-top: 5%;
+    margin-bottom: 4%;
+}

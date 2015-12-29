@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Facility Scorecard QuIC">
+
+    <title>Facility Scorecard QuIC</title>
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!-- Jasny Bootstrap-Extension CSS -->
+    <link href="assets/css/jasny-bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-select.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet'
+          type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='assets/css/bordered.css' rel='stylesheet' type='text/css'>
+
+    <style type="text/css" media="print">
+        @page {
+            size: auto;   /* auto is the initial value */
+            margin: 5mm 5mm 5mm 5mm;   /* this affects the margin in the printer settings */
+        }
+
+        body {
+            margin: 5mm; /* this affects the margin on the content before sending to printer */
+        }
+    </style>
+
+
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+    <script type="text/javascript" src="assets/js/jasny-bootstrap.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-select.js"></script>
+    <script type="text/javascript" src="assets/js/moment.js"></script>
+    <script type="text/javascript" src="assets/js/districtReport.js"></script>
+
+
+</head>
+<body id="pageBody">
+<div id="navigation" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <b> Dhis2QuIC </b>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="import.html" class="smoothScroll">
+                    Import
+                </a></li>
+                <li class="active"><a href="outputs.html" class="smoothScroll">
+                    Scorecard
+                </a></li>
+                <li><a id="districtDashBoardURL" href=""  onclick="goToDashBoardFromDistrictScoreCard();" class="smoothScroll">
+                    Dashboard
+                </a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+<div class="btn btn-primary" onclick="window.history.go(-1)">Back</div>
+<label><span class="btn btn-success" id="btnPrint">Print</span></label>
+
+<div class="container" id="page">
+    <div class="container">
+        <div class="col-md-12" id="tableContainer">
+            <div id="printArea">
+
+                <h2 align="middle">Safer Clinics Scorecard<br>
+                    Progress towards Emergency Obstetric and Neonatal Care Status, <label id="date"></label></h2>
+
+                <p>
+                    The Safer Clinic Scorecard uses data collected by brief telephone interviews with facilities to
+                    determine readiness to provide quality EmONC services. It complements the more resource
+                    intensive FIT assessments, providing data to track EmONC status at points in time between FIT
+                    visits. It gathers data about the same seven enablers for providing EmONC services as the FIT,
+                    but focuses on the presence of enablers either during the last 24 hours or at the point in time
+                    of the phone call. It also asks direct questions about ability to perform the signal functions.
+                </p>
+
+                <table class="bordered" width="30%" style="float:left">
+                    <thead>
+                    <th>Performance Rating</th>
+                    <th>Score</th>
+                    <th>Facility has:</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><img src=assets/img/green.png width=16 height=16 align=middle>Green</td>
+                        <td>4</td>
+                        <td>Met all criteria</td>
+                    </tr>
+                    <tr>
+                        <td><img src=assets/img/yellow.png width=16 height=16 align=middle>Yellow</td>
+                        <td>3</td>
+                        <td>Moslty met criteria</td>
+                    </tr>
+                    <tr>
+                        <td><img src=assets/img/orange.png width=16 height=16 align=middle>Orange</td>
+                        <td>2</td>
+                        <td>Partially met criteria</td>
+                    </tr>
+                    <tr>
+                        <td><img src=assets/img/red.png width=16 height=16 align=middle>Red</td>
+                        <td>1</td>
+                        <td>Not Met criteria</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+                <p>
+                    The Safer Clinic interview has fewer enabler questions than FIT and cannot give so complete a
+                    picture of quality of care at each facility assessed. It is possible; therefore, that FIT and
+                    Safer
+                    Clinic traffic light scoring might not always be exactly the same. The enabler questions which
+                    remain in this scorecard provide a means to verify responses to signal function questions
+                    (described
+                    below).
+                </p>
+
+                <p>
+                    The Safer Clinic interview asks a series of spot-check questions to assess a facility’s ability
+                    to perform EmONC signal function services within the next hour, an adaptation of the ‘last 3
+                    months’ question usually asked in EmONC surveys.
+                    Spot-check answers are cross-checked against responses from enabler questions to determine
+                    whether a signal function can be performed.
+
+                <table class="bordered" style="float:right">
+                    <thead>
+                    <th>EmONC status</th>
+                    <th>Facility has:</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>CEmONC</td>
+                        <td>Able to perform Comprehensive Emergency and Neonatal Care signal functions</td>
+                    </tr>
+                    <tr>
+                        <td>BEmONC</td>
+                        <td>Able to perform Basic Emergency and Neonatal Care signal functions</td>
+                    </tr>
+                    <tr>
+                        <td>Blank</td>
+                        <td>Unable to perform sufficient signal functions to achieve Emergency Obstetric Care
+                            status
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </p>
+
+                <p>
+                    Please note the criteria to achieve each enabler are different for hospitals and CHCs because
+                    CHCs are not expected to perform complicated deliveries that need instrumental or operative
+                    procedures.
+                </p>
+
+                <table class="bordered" width="30%" style="float:left">
+                    <thead>
+                    <th colspan=3>Ability to perform signal function</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><img src=assets/img/rightGreenCircle.png width=16 height=16 align=middle></td>
+                        <td>Yes</td>
+                        <td>Able to perform signal function</td>
+                    </tr>
+                    <tr>
+                        <td><img src=assets/img/wrongRedCircle.png width=16 height=16 align=middle></td>
+                        <td>No</td>
+                        <td>Not able to perform signal function</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+                <p>
+                    This scorecard assesses EmONC status based on responses to signal function questions.
+                    This is in contrast to the FIT which assessed EmONC status based on enabler questions only and does
+                    not include questions related to signal functions e.g. assisted vaginal delivery.
+                </p>
+
+
+
+
+                <br>
+
+                <p>For more details, please contact Dr. SAS Kargbo, Reproductive and Child Health, Ministry of Health
+                    and Sanitation
+
+                <table id="questionare" class="bordered">
+                    <thead>
+                    <th value="-1">Enabler</th>
+                    <th value="TU7YJCglJj4">Water and Sanitation</th>
+                    <th value="Z5reqVtbpLE">Electricity</th>
+                    <th value="ANK88sqN1lp">Referral</th>
+                    <th value="hZlgAu2zTuJ">Equipment</th>
+                    <th value="qRxRC6G8KXa">Laboratory</th>
+                    <th value="mZEdXsMl3Qz">Staffing</th>
+                    <th value="POX0wNKk1sS">Drugs</th>
+                    </thead>
+                    <tbody>
+                    <tr></tr>
+                    </tbody>
+                </table>
+                </p>
+
+
+                <p>Safer Clinic Scorecard: <label id="ouLabel2"></label> District Signal Functions</p>
+
+                <table id="signal" class="bordered">
+                    <thead>
+                    <th value="-1">Enabler</th>
+                    <th value="WnNauOrut2Z">SF1: Administer Parenteral antibiotics- mother</th>
+                    <th value="tijzd3cGV0V">SF2 : Administer Parenteral antibiotics- newborn</th>
+                    <th value="HHdMebQ6kb7">SF3: Administer Uterotonic drugs (such as Parenteral oxytocics)
+                    </th>
+                    <th value="Ud52cFxjq2f">SF4: Parenteral anti-convulsants</th>
+                    <th value="lbTGekn354w">SF5: Manual removal
+                        of placenta
+                    </th>
+                    <th value="FuxRnRYx3Fj">SF6: Removal of retained products</th>
+                    <th value="pACGZ5vnCiw">SF7: Assisted/ instrumental vaginal delivery</th>
+                    <th value="MzR5d7ELTb0">SF8 : Neonatal resuscitation</th>
+                    <th value="ycurw4VCRCs">SF9: Blood transfusion</th>
+                    <th value="ayIafCEj8Ed">SF10: Perform surgery</th>
+                    </thead>
+                    <tbody>
+                    <tr></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

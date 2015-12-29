@@ -1,0 +1,22 @@
+<div class="topBar" ng-controller="TopBarMenuController">
+    <img src="img/commcare-logo.png" height="37" width="186" style="display: inline; float: left;">
+
+    <ul>
+        <li  ng-click="goTo('/')"><a href >Home</a></li>
+        <li ng-click="goTo('configure-instance')"><a href >Configure Instance</a></li>
+        <li ng-click="goTo('metadata-mapping')"><a href >Map Metadata</a></li>
+        <li ng-click="goTo('import')"><a href >Import</a></li>
+        <li class="glow" ng-click="goTo('report')"><a href >Go to Reports</a></li>
+        <li ng-click="goTo('dashboard')"><a href >Dashboard</a></li>
+    </ul>
+    <img src="img/dhis2-logo.png" height="45" width="210" style="float: right; display: inline">
+</div>
+
+<div class="secondTopBar">
+    <ul><b>Select Instance -   </b>
+        <li ng-repeat="configurationInstance in configurationInstances" id="{{configurationInstance.domain}}" ng-hide="!currentUserInstanceAuthorityMap[configurationInstance.appId]" ng-click="goToReportsApp(configurationInstance);">{{configurationInstance.name}}</li>
+    </ul>
+</div>
+<div class="mainDiv">
+
+</div>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Facility Scorecard QuIC">
+
+    <title>Facility Scorecard QuIC</title>
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!-- Jasny Bootstrap-Extension CSS -->
+    <link href="assets/css/jasny-bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-select.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet'
+          type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+    <link href='assets/css/bordered.css' rel='stylesheet' type='text/css'>
+
+    <style type="text/css" media="print">
+        @page {
+            size: auto;   /* auto is the initial value */
+            margin: 5mm 5mm 5mm 5mm;   /* this affects the margin in the printer settings */
+        }
+
+        body {
+            margin: 5mm; /* this affects the margin on the content before sending to printer */
+        }
+    </style>
+
+
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.js"></script>
+    <script type="text/javascript" src="assets/js/jasny-bootstrap.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap-select.js"></script>
+    <script type="text/javascript" src="assets/js/moment.js"></script>
+    <script type="text/javascript" src="assets/js/facilityScoreCard.js"></script>
+
+    <script type="text/javascript">
+
+
+
+    </script>
+
+</head>
+<body id="pageBody">
+<div id="navigation" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <b> Dhis2QuIC Scorecards App  </b>
+            </a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <!--
+                <li><a href="import.html" class="smoothScroll">
+                    Import
+                </a></li>
+                -->
+                <li class="active"><a href="outputs.html" class="smoothScroll">
+                    Scorecard
+                </a></li>
+                <li><a id="facilityDashBoardURL" href=""  onclick="goToDashBoardFromFacilityScoreCard();" class="smoothScroll">
+                    Dashboard
+                </a></li>
+
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+<div class="btn btn-primary" onclick="window.history.go(-1)">Back</div>
+<label><span class="btn btn-success" id="btnPrint">Print</span></label>
+<!--<label><span class="btn btn-success" id="btnExportExcel">Download Excel</span></label>-->
+<!--<input type="button" id="btnExportExcel" value=" Download Excel " class="hideInPrint"/>-->
+
+<div id="exportToExcel">
+<div class="container" id="page">
+    <div class="container">
+        <div class="col-md-12" id="tableContainer">
+            <div id="printArea">
+                <div>
+                    <h2 align="middle">QuIC Scorecard : District : <label id="districtName"></label> Facility : <label id="facilityName"></label> <br>
+                        Progress towards emergency obstetric and neonatal care status, <br />
+                        From : <label id="startPeriod"></label> To : <label id="endPeriod"></label>
+                    </h2>
+                    <p>
+                        The QuIC Scorecard uses data collected by brief telephone interviews with facilities to determine readiness to provide quality EmONC services. It gathers data about the seven enablers for providing EmONC services and the presence of these enablers either during the last 24 hours or at the point in time of the phone call. It also asks direct questions about ability to perform the signal functions.
+                    </p>
+                    <table class="bordered" width="40%" style="float:left">
+                        <thead>
+                            <th>Performance Rating</th>
+                            <th>Facility has:</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><img src=assets/img/green.png width=16 height=16 align=middle>&nbsp;&nbsp;Green</td>
+                                <td>Met all items</td>
+                            </tr>
+                            <tr>
+                                <td><img src=assets/img/yellow.png width=16 height=16 align=middle>&nbsp;&nbsp;Yellow</td>
+                                <td>Met all but 1 item</td>
+                            </tr>
+                            <tr>
+                                <td><img src=assets/img/orange.png width=16 height=16 align=middle>&nbsp;&nbsp;Orange</td>
+                                <td>Met >50% of items</td>
+                            </tr>
+                            <tr>
+                                <td><img src=assets/img/red.png width=16 height=16 align=middle>&nbsp;&nbsp;Red&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>< 50% of items</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                <p>The brief QuIC interview cannot give a complete a picture of quality of care at each facility assessed. However QuIC can flag issues for further investigation at health facility or district level.  Lack of enabling factors will also affect a facility’s ability to provide other basic services.
+                </p>
+                <p>Please note the criteria to achieve each enabler are different according to whether a service is designated as Basic or Comprehensive EmONC (BEmONC or CEmONC), and whether a facility has a laboratory or not.  Enabler question responses are used to cross-check answers to signal function questions.
+                </p>
+
+                <table class="bordered" width="30%" style="float:right">
+                    <thead>
+                    <th colspan=3>Ability to perform signal function</th>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td><img src=assets/img/rightGreenCircle.png width=16 height=16 align=middle></td>
+                        <td>Yes</td>
+                        <td>Able to perform signal function</td>
+                    </tr>
+                    <tr>
+                        <td><img src=assets/img/wrongRedCircle.png width=16 height=16 align=middle></td>
+                        <td>No</td>
+                        <td>Not able to perform signal function</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    QuIC then asks a series of questions to create a snapshot of the number of EmONC ‘signal functions’ a facility is able to provide at the time of the call, an adaptation of the ‘last 3 months’ question usually asked in EmONC surveys.
+                </p>
+                <p>
+                    Health workers often improvise to provide EmONC signal functions when supplies and equipment are unavailable.  However QuIC only considers quality provision of a signal function to be available if provision is safe for the patient and safe for the health worker
+                </p>
+
+                <table class="bordered" style="float:right">
+                    <thead>
+                        <th>EmONC status</th>
+                        <th>Facility has:</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>CEmONC</td>
+                        <td>Able to perform Comprehensive Emergency and Neonatal Care signal functions</td>
+                    </tr>
+                    <tr>
+                        <td>BEmONC</td>
+                        <td>Able to perform Basic Emergency and Neonatal Care signal functions</td>
+                    </tr>
+                    <tr>
+                        <td>Blank</td>
+                        <td>Unable to perform sufficient signal functions to achieve Emergency Obstetric Care status</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>
+                    QuIC also assigns an EmONC status to each facility, based on the number of signal functions a facility can provide.
+                </p>
+
+
+
+                <p>For more details, please contact Evidence for Action Malawi <span style="text-decoration: underline;">QUIC.Malawi@options.co.uk</span></p>
+                </div>
+
+
+                <div style="page-break-before: always">
+                    <p align="middle">QuIC Enabler Scorecard: District : <label id="districtName1"></label> Facility : <label id="facilityName1"></label> ( From : <label id="startPeriod1"></label> To : <label id="endPeriod1"></label> )</p>
+                    <table id="questionareTable" class="bordered" style="width:100%;">
+                        <thead>
+                        <th value="-1" width="12.5%">Enabler</th>
+                        <th value ="zRaob2qACJv" width="12.5%"><img src=assets/img/tap.png width=16 height=16 align=middle> Water and Sanitation</th>
+                        <th value="NtltJEcIGmS" width="12.5%"><img src=assets/img/bulb.png width=16 height=16 align=middle> Electricity</th>
+                        <th value="CVsAE2K3BDF" width="12.5%"><img src=assets/img/ambulance.png width=16 height=16 align=middle> Referral</th>
+                        <th value="DwJRa5co6m3" width="12.5%"><img src=assets/img/stethoscope.png width=16 height=16 align=middle> Equipment</th>
+                        <th value="sx6jhOovLjs" width="12.5%"><img src=assets/img/microscope.png width=16 height=16 align=middle> Laboratory</th>
+                        <th value="IklPiHymNEj" width="12.5%"><img src=assets/img/nurse.png width=16 height=16 align=middle> Staffing</th>
+                        <th value="gPHqYtdm4Z1" width="12.5%"><img src=assets/img/capsule.png width=16 height=16 align=middle> Drugs</th>
+                        </thead>
+
+                        <tbody>
+                        <tr></tr>
+                        </tbody>
+
+                    </table>
+                    </p>
+                </div>
+                <div style="page-break-before: always">
+                    <p align="middle">QuIC Signal Function Scorecard: District : <label id="districtName2"></label> Facility : <label id="facilityName2"></label>Signal Functions ( From : <label id="startPeriod2"></label> To : <label id="endPeriod2"></label> )</p>
+                    <table id="dataElementTable" class="bordered" style="width:100%;">
+                        <thead>
+                            <th value="-1" >Signal Function</th>
+                            <th value ="af0zPvLV4jm"> SF1a: Parenteral antibiotics- mother</th>
+                            <th value="YYxAXeX23WE"> SF1b : Parenteral antibiotics- newborn</th>
+                            <th value="RA8UL8ZKgBi"> SF2: Parenteral oxytocics</th>
+                            <th value="ZcqV5IXjh5N"> SF3: Parenteral anti-convulsants</th>
+                            <th value="xywjnGwSMNN"> SF4: Manual removal of placenta</th>
+                            <th value="HEbC0pNMEmG"> SF5: Removal of retained products</th>
+                            <th value="PJaXFkttPuL"> SF6: Assisted/ instrumental vaginal delivery</th>
+                            <th value="IJgn9kvRPCg"> SF7: Neonatal resuscitation</th>
+                            <th value="x4YaJa97Qcb"> SF8: Blood transfusion</th>
+                            <th value="A1bEkhWHrKe"> SF9: Perform surgery</th>
+                            <th value="iYU6sX7XIH5"> SF10: Pre-term Cortico steroids</th>
+                        </thead>
+
+                        <tbody>
+                        <tr></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+        <!--
+<div class="col-md-12">
+    <div style="float: left"><label><span class="btn btn-default" id="btnPrint">Print</span></label></div>
+</div>-->
+
+    </div>
+</div>
+</body>
+</html>
