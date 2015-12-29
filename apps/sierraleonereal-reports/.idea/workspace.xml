@@ -64,8 +64,8 @@
       <file leaf-file-name="scorecardLogic.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/assets/js/scorecardLogic.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.27419356">
-              <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.84193546">
+              <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -109,13 +109,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/assets/js/scorecardLogic.js" />
         <option value="$PROJECT_DIR$/assets/js/facilityScoreCard.js" />
         <option value="$PROJECT_DIR$/assets/js/districtReport.js" />
         <option value="$PROJECT_DIR$/scorecard.html" />
         <option value="$PROJECT_DIR$/facilityScoreCard.html" />
         <option value="$PROJECT_DIR$/bulkScoreCard.html" />
         <option value="$PROJECT_DIR$/assets/js/bulkScoreCard.js" />
+        <option value="$PROJECT_DIR$/assets/js/scorecardLogic.js" />
       </list>
     </option>
   </component>
@@ -323,8 +323,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/js/scorecardLogic.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.27419356">
-          <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
+        <state vertical-scroll-proportion="-0.84193546">
+          <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
           <folding />
         </state>
       </provider>

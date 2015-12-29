@@ -21,7 +21,6 @@ $(document).ready(function(){
         orgUnitType=orgUnitTypeGettingArray[1].substring(0,orgUnitTypeGettingArray[1].length-1);
     }
 
-
     $('#orgName').append(orgUnitName);
     $('#orgType').append(orgUnitType);
     $('#facilityLevel').append(facilityLevel);
