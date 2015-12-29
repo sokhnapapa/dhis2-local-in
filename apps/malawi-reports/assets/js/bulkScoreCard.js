@@ -139,13 +139,13 @@ $(document).ready(function () {
     //getFacilityScoreCardData("dataElementTable", scoreCardPeriods, selectedFacilityUID);
 
 
-    $('#btnPrint').click(function () {
-        var printContents = document.getElementById('printArea').innerHTML;
-        var originalContents = document.body.innerHTML;
-        document.body.innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;
-    });
+    //$('#btnPrint').click(function () {
+    //    var printContents = document.getElementById('printArea').innerHTML;
+    //    var originalContents = document.body.innerHTML;
+    //    document.body.innerHTML = printContents;
+    //    window.print();
+    //    document.body.innerHTML = originalContents;
+    //});
 
 
     $("#btnExportExcel").click(function(e) {
