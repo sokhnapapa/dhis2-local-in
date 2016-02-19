@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>DHIS DATA SYNC MANAGER</title>
+	
+	
+	
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/style.css">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/font-awesome/css/font-awesome.css" rel="stylesheet"></link>
+	
+	<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+	
+	<style>
+		.pndLbl
+		{
+			width:150px;
+		}
+		
+		th
+		{
+			text-align:center;
+		}
+		
+		select,option
+		{
+			padding-top:0;
+		}
+		
+		.navbar-brand
+		{
+			font-size:30px;
+		}
+		
+		.glyphicon.glyphicon-pencil,.glyphicon.glyphicon-trash,.glyphicon.glyphicon-link
+		{
+			font-size: 15px;
+		}
+		
+		.glyphicon.glyphicon-inbox,.glyphicon.glyphicon-refresh,.glyphicon.glyphicon-globe,.glyphicon.glyphicon-time
+		{
+			font-size: 35px;
+			margin-top:18px;
+		}
+	</style>
+</head>
+
+<body data-ng-app="dataSyncManager">
+
+
+	<style>
+		#coverLoad
+		{
+			position:fixed;
+			width:100%;
+			height:100%;
+			background:rgba(0,0,0,0.7);
+			z-index:2147483647;
+			text-align : center;
+		}
+		
+		.loadImage
+		{
+			width:150px;
+			height:150px;
+			position:fixed;
+			top:50%;
+			left:50%;
+			margin-top:-75px;
+			margin-left:-75px;
+		}
+		
+	</style>
+	
+	<div id="coverLoad">
+		<image class="loadImage" src="images/loader.gif"/>
+		<div class="alert alert-info" id="syncMsg" style="display:none;width:900px;height:50px; position:fixed; bottom:80px; left:50%; background:rgba(0,0,0,0.7); margin-left:-450px;text-align:center;font-weight:bold; border: 1px solid #000; border-radius:15px">
+			<div id="progressbar" class="progress" style="display:none">
+			  <div id="deleteProgress"  style="display:none" class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
+				aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+				Deleting Existing Data Values - <span id="deleteProgressPer"> 40% </span>
+			  </div>
+			  
+			  <div  id="syncProgress" style="display:none" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+				aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+				Importing New Data Values - <span id="syncProgressPer"> 40% </span>
+			  </div>
+			</div>
+		</div>
+	</div>
+
+	 <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img class="img-responsive" src="images/syncicon.png" width="270px" ></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="navBack">
+				<nav>
+					<ul class="navig">
+						<li><a href="index.html" class="" data-toggle="tooltip" data-placement="bottom" title="Instances"><b class="glyphicon glyphicon-inbox"></b></a></li>
+						<li><a href="syncStatus.html" class="" data-toggle="tooltip" data-placement="bottom" title="Synchronize"><b class="glyphicon glyphicon-refresh"></b></a></li>
+						<li><a href="notifications.html" class="" data-toggle="tooltip" data-placement="bottom" title="Notifications"><b class="glyphicon glyphicon-globe"></b></a></li>
+						<li><a href="history.html" class="" data-toggle="tooltip" data-placement="bottom" title="History"><b class="glyphicon glyphicon-time"></b></a></li>
+					</ul>
+				</nav>
+			</div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> </br></br>
+	
+	
+		
+	<div class="container" style="text-align:center;margin-top:145px">	
+		
+		<!-- ***************************************************************************************** -->
+		
+		<div class="col-md-8 col-md-offset-2" data-ng-controller="syncController" style="text-align:center">
+		<div style="float:left;text-align:left; margin-top:-20px; font-size: 20px; color:#3399FF"> <b> Sync Instances </b> </div> </br>
+			<table class="table table-striped table-hover table-condensed table-bordered" id="mapping">
+				<tbody id="mapInputs">
+					<tr>
+						<td style="padding-top:10px;padding-bottom:10px;text-align:left;padding-left:30px">Instance</td>
+						<td style="padding-top:10px;padding-bottom:10px;text-align:left;padding-left:30px;font-weight:bold">{{selectedInstanceName}}</td>
+					</tr>
+					<tr>
+						<td style="padding-top:10px;padding-bottom:10px;text-align:left;padding-left:30px"> Selected Data Element Group </td>
+						<td style="padding-top:10px;padding-bottom:10px;text-align:left;padding-left:30px;font-weight:bold">{{selectedDEG}} </td>
+					</tr>
+					<tr>
+						<td style="padding-top:10px;padding-bottom:10px;text-align:left;padding-left:30px"> Selected OrgUnit Level </td>
+						<td style="padding-top:10px;padding-bottom:10px;text-align:left;padding-left:30px;font-weight:bold">{{selectedOULName}} </td>
+					</tr>
+					<tr>
+						<td style="padding-top:10px;text-align:left;padding-left:30px">Sync Start Date</td>
+						<td style="padding-top:10px;text-align:left;padding-left:30px"><input type="date" id="sdate" class="form-control input-sm" style="width:200px"/></td>
+					</tr>
+					<tr>
+						<td style="padding-top:10px;text-align:left;padding-left:30px">Sync End Date</td>
+						<td style="padding-top:10px;text-align:left;padding-left:30px"><input type="date" id="edate" class="form-control input-sm"  style="width:200px"/></td>
+					</tr>
+					<tr>
+						<td style="padding-top:10px;text-align:left;padding-left:30px">Previous Data</td>
+						<td style="padding-top:10px;text-align:left;padding-left:30px"><input type="checkbox" id="pdata" class="input-sm" value="delete" checked /> Delete and then import new data</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<input type="button" value="Start Sync" class="btn btn-success" data-ng-click="sync()"/>
+			<a href="syncStatus.html" class="btn btn-warning">Back</a>
+			</br></br>
+		</div>
+		
+		<!-- ***************************************************************************************** -->
+		
+	</div>
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+	<!-- Alert modal -->
+	<div class="modal fade bs-example-modal-lg" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModal">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">Invalid Dates</h4>
+		  </div>
+			<div class="modal-body">
+				<div class="alert alert-warning alert-dismissible" role="alert" id="alertBox">
+				  <div id="alertMsg" style="fon-weight:bold"> Invalid combination of start and end date </div>
+				</div>
+			</div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-info" style="width:75px" data-dismiss="modal">OK</button>
+			  </div>
+		  
+
+		</div>
+	  </div>
+	</div>
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+	<!-- Error modal -->
+	<div class="modal fade bs-example-modal-lg" id="loginErrModal" tabindex="-1" role="dialog" aria-labelledby="loginErrModal">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<a href="index.html" style="width:75px"><span aria-hidden="true">&times;</span></a>
+			<h4 class="modal-title" id="myModalLabel">Server Unavailable</h4>
+		  </div>
+			<div class="modal-body">
+				<div class="alert alert-warning alert-dismissible" role="alert" id="alertBox">
+				  <div id="loginErrMsg"></div>
+				</div>
+			</div>
+			  <div class="modal-footer">
+				<a href="index.html" class="btn btn-info" style="width:75px">OK</a>
+			  </div>
+		  
+
+		</div>
+	  </div>
+	</div>
+	<!-- --------------------------------------------------------------------------------------------------- -->
+    <footer class="footer">
+        <div class="container">
+            Powered by <a href="www.dhis2.org">DHIS2</a>
+        </div>
+    </footer>
+	
+	 <!-- jQuery -->
+    <script src="js/jquery-2.1.3.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+	
+	<!-- Angular JavaScript -->
+    <script src="js/angular.min.js"></script>
+	
+	<script src= "js/jquery-ui.js"></script>
+	
+	<script src= "scripts/controllers/app.js"></script>
+	<script src= "scripts/controllers/syncController.js"></script>
+	<script src= "scripts/controllers/saveEdit.js"></script>
+	<script src= "scripts/controllers/validateLogin.js"></script>
+	<script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
+	
+	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		
+		$(window).load(function() {
+			$("#coverLoad").hide();
+		});
+	</script>
+	
+</body>
+</html>

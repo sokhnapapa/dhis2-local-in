@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>DHIS DATA SYNC MANAGER</title>
+	
+	
+	
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/style.css">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/font-awesome/css/font-awesome.css" rel="stylesheet"></link>
+	
+	<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+	
+	<style>
+		.pndLbl
+		{
+			width:150px;
+		}
+		
+		th
+		{
+			text-align:center;
+		}
+		
+		select,option
+		{
+			padding-top:0;
+		}
+		
+		.navbar-brand
+		{
+			font-size:30px;
+		}
+		
+		.glyphicon.glyphicon-pencil,.glyphicon.glyphicon-trash,.glyphicon.glyphicon-link
+		{
+			font-size: 15px;
+		}
+		
+		.glyphicon.glyphicon-inbox,.glyphicon.glyphicon-refresh,.glyphicon.glyphicon-globe,.glyphicon.glyphicon-time
+		{
+			font-size: 35px;
+			margin-top:18px;
+		}
+	</style>
+</head>
+
+<body data-ng-app="dataSyncManager">
+
+
+	<style>
+		#coverLoad
+		{
+			position:fixed;
+			width:100%;
+			height:100%;
+			background:rgba(0,0,0,0.5);
+			z-index:2147483647;
+		}
+		
+		.loadImage
+		{
+			width:150px;
+			height:150px;
+			position:fixed;
+			top:50%;
+			left:50%;
+			margin-top:-75px;
+			margin-left:-75px;
+		}
+		
+		td
+		{
+			text-align:left;
+			padding-left:50px;
+		}
+	</style>
+	
+	<div id="coverLoad">
+		<image class="loadImage" src="images/loader.gif"/>
+	</div>
+
+	 <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img class="img-responsive" src="images/syncicon.png" width="270px" ></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="navBack">
+				<nav>
+					<ul class="navig">
+						<li><a href="index.html" class="" data-toggle="tooltip" data-placement="bottom" title="Instances"><b class="glyphicon glyphicon-inbox"></b></a></li>
+						<li><a href="syncStatus.html" class="" data-toggle="tooltip" data-placement="bottom" title="Synchronize"><b class="glyphicon glyphicon-refresh"></b></a></li>
+						<li><a href="notifications.html" class="" data-toggle="tooltip" data-placement="bottom" title="Notifications"><b class="glyphicon glyphicon-globe"></b></a></li>
+						<li><a href="history.html" class="" data-toggle="tooltip" data-placement="bottom" title="History"><b class="glyphicon glyphicon-time"></b></a></li>
+					</ul>
+				</nav>
+			</div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> </br></br>
+	
+	
+		
+	<div class="container" style="text-align:center;margin-top:145px">	
+		
+		<!-- ***************************************************************************************** -->
+		
+		<div class="col-md-6 col-md-offset-3" data-ng-controller="parentSettingController" style="text-align:center">
+		<div style="float:left;text-align:left; margin-top:-20px; font-size: 20px; color:#3399FF"> <b> National Instance Settings </b> </div> </br>
+			<table class="table table-striped table-hover table-condensed table-bordered" id="mapping">
+				<tbody>
+					<tr>
+						<td style="padding-left:30px" title="Select the DataElement Group that consists of all the needed DataElements and Indicators that are to be synchronized">
+							<b>DataElement Group</b>
+						</td>
+						<td  style="padding-left:30px">
+							<Select id="deg" data-ng-model="selectedDEgroup" style="width:300px"  data-ng-change="showAlert()">
+								<option value="" > -- Select -- </option>
+								<option  data-ng-repeat="DEG in DEgroups" value="{{DEG.id}}" data-ng-selected="isThisDEgroupSelected(DEG.id)">{{DEG.name}}</option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<input type="button" value="Save" class="btn btn-success" data-ng-click="saveSettings()"/>
+			<a type="button" href="index.html" class="btn btn-warning" >Cancel</a>
+			</br></br>
+		</div>
+		
+		<!-- ***************************************************************************************** -->
+		
+	</div>
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+	<!-- Alert modal -->
+	<div class="modal fade bs-example-modal-lg" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModal">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel">Remember</h4>
+		  </div>
+			<div class="modal-body">
+				<div class="alert alert-warning alert-dismissible" role="alert" id="alertBox">
+				  <div id="alertMsg" style="fon-weight:bold"> Changing Data Element Group will result in deletion of all saved mapping data of all instances </div>
+				</div>
+			</div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-info" style="width:75px" data-dismiss="modal">OK</button>
+			  </div>
+		</div>
+	  </div>
+	</div>
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+    <footer class="footer">
+        <div class="container">
+            Powered by <a href="www.dhis2.org">DHIS2</a>
+        </div>
+    </footer>
+	
+	 <!-- jQuery -->
+    <script src="js/jquery-2.1.3.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+	
+	<!-- Angular JavaScript -->
+    <script src="js/angular.min.js"></script>
+	
+	<script src= "js/jquery-ui.js"></script>
+	
+	<script src= "scripts/controllers/app.js"></script>
+	<script src= "scripts/controllers/parentSettingController.js"></script>
+	<script src= "scripts/controllers/saveEdit.js"></script>
+	<script src= "js/validations.js"></script>
+	<script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
+	
+	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		
+		$(window).load(function() {
+			$("#coverLoad").hide();
+		});
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,1559 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>DHIS META-DATA SYNC MANAGER</title>
+
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/jquery.toastmessage.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome/css/font-awesome.css" rel="stylesheet"></link>
+
+    <link href="css/dataTables.tableTools.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/jquery.dataTables.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/angular.min.js"></script>
+    <script src="js/jquery-2.1.3.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script src="js/dirPagination.js"></script>
+    <script type="text/javascript" src="js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="js/dataTables.tableTools.js"></script>
+    <script type="text/javascript" src="js/jquery.toastmessage.js"></script>
+
+
+    <style>
+
+        .pndLbl {
+            width: 150px;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        select, option {
+            padding-top: 0;
+        }
+
+        .input[type=checkbox]{
+            margin: 0;
+        }
+
+
+        .navbar-brand {
+            font-size: 30px;
+        }
+
+        .glyphicon.glyphicon-pencil, .glyphicon.glyphicon-trash, .glyphicon.glyphicon-link {
+            font-size: 15px;
+        }
+
+        .glyphicon.glyphicon-inbox, .glyphicon.glyphicon-refresh, .glyphicon.glyphicon-globe, .glyphicon.glyphicon-time {
+            font-size: 35px;
+            margin-top: 18px;
+        }
+
+
+
+        .btn3d {
+            position: relative;
+            border: 0;
+            border-radius: 3px;
+            margin: 15px 10px 0 0;
+            transition: all .09s linear;
+            box-shadow: 0 0 0 1px transparent inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 6px 6px 0 0 #ccc, 6px 6px 0 1px rgba(0, 0, 0, 0.2), 6px 6px 3px 0px rgba(0, 0, 0, 0.3);
+            outline: medium none;
+            -moz-outline-style: none;
+        }
+
+        .btn3d:active {
+            top: 7px;
+        }
+
+        .btn3d:focus {
+            outline: medium none;
+            -moz-outline-style: none;
+        }
+
+        .btn3d.btn-default {
+            background-color: #f5f5f5;
+        }
+
+
+
+        #coverLoad {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2147483647;
+        }
+
+
+        .loadImage {
+            width: 150px;
+            height: 150px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -75px;
+            margin-left: -75px;
+        }
+
+        .tab-content h2 {
+            margin: 0 10px 0 0;
+            color: #3399ff;
+        }
+
+
+
+        .navbar-brand {
+            padding: 13px 15px;
+        }
+
+        @media (max-width: 767px) {
+            .nav-tabs > li {
+                float: none;
+                border: 1px solid #dddddd;
+            }
+
+            .nav-tabs > li.active > a {
+                border: none;
+            }
+
+            .nav > li > a:hover, .nav > li > a:focus,
+            .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+                background: none;
+                border: none;
+            }
+        }
+
+        @media (max-width: 1020px) {
+            #ccc {
+                display: none;
+            }
+        }
+
+
+    </style>
+</head>
+
+<body data-ng-app="dataSyncManager">
+
+<div id="coverLoad">
+    <image class="loadImage" src="images/loader.gif"/>
+</div>
+
+<div class="container" id="main">
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+
+
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse"
+                aria-expanded="false" aria-controls="navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><img id="ccc" src="images/syncicon.png" class="img-responsive"
+                                              style="width:400px; margin-top: 10px;" alt="Your Logo"></a>
+
+
+        <div id="navbar" class="navbar-collapse collapse navbar-responsive-collapse">
+
+
+            <ul class="navig pull-right">
+                <li><a href="index.html" class="col-sm-2" data-toggle="tooltip" data-placement="bottom"
+                       title="Instances"><span class="glyphicon glyphicon-inbox"></span></a></li>
+                <li><a href="basicSettings.html" class="col-sm-2" data-toggle="tooltip" data-placement="bottom"
+                       title="Synchronize"><span class="glyphicon glyphicon-refresh"></span></a></li>
+                <li><a href="notifications.html" class="col-sm-2" data-toggle="tooltip" data-placement="bottom"
+                       title="Notifications"><span class="glyphicon glyphicon-globe"></span></a></li>
+                <li><a href="history.html" class="col-sm-2" data-toggle="tooltip" data-placement="bottom"
+                       title="History"><span class="glyphicon glyphicon-time"></span></a></li>
+            </ul>
+
+
+        </div>
+        <!--/.nav-collapse -->
+
+    </nav>
+
+    </br></br><br/><br/><br/><br/><br/><br/>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabbable" style="text-align:center;"> <!--All the tabs-->
+                <ul class="nav nav-tabs " id="myTab">
+                    <li class="active"><a href="#orgunit" data-toggle="tab"><h5 style="font-family:verdana">Organisation
+                        Units</h5></a></li>
+                    <li><a href="#de" data-toggle="tab"><h5 style="font-family:verdana">Data Elements</h5></a></li>
+                    <li><a href="#in" data-toggle="tab"><h5 style="font-family:verdana">Indicators</h5></a></li>
+                    <li><a href="#vr" data-toggle="tab"><h5 style="font-family:verdana">Validation Rules</h5></a></li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">        <!-- Tab content -->
+
+
+                    <!-- ********************************First tab content goes here************************************ -->
+
+                    <div class="tab-pane active in" id="orgunit" data-ng-controller="orgUnitController">
+
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form id="tab1">
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h2 style="font-family:verdana"> Manual Organisation Units
+                                                Synchronization </h2>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+
+                                <div class="row" style="margin-top:40px;">
+                                    <div class="col-sm-4">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title"><strong>Filter by Period</strong></h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div ng-show="loading" class="loading">
+                                                    <image src="images/loader.gif"/>
+                                                </div>
+                                                <div class="form-group"></div>
+                                                <h4>
+                                                    <small><strong>Select a Date</strong></small>
+                                                </h4>
+                                                <select class="form-control" ng-options="fil.name for fil in filter"
+                                                        ng-change="getdate(OUselectedFilter)"
+                                                        ng-model="OUselectedFilter" title="Select the period Updations">
+                                                    <!--<option  value="" disabled selected style="font-family:verdana">&#45;&#45;&#45;&#45;Select a Filter Date&#45;&#45;&#45;&#45;</option>-->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title"><strong>Filter by Organisation Unit
+                                                    Group</strong></h3>
+                                            </div>
+
+                                            <div class="panel-body">
+                                                <div ng-show="loading" class="loading">
+                                                    <image src="images/loader.gif"/>
+                                                </div>
+                                                <div class="form-group"></div>
+                                                <h4>
+                                                    <small><strong>Select a Group</strong></small>
+                                                </h4>
+                                                <select class="form-control" ng-options="ORG.name for ORG in ORGGroup"
+                                                        ng-change=" getGroup(ORGgroupFilter.id)"
+                                                        ng-model="ORGgroupFilter" title="Select a Group">
+                                                    <option selected="false" value=""> </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <!--tabel panel for organit unit-->
+
+
+                        <div class="row">
+                            <div class="col-sm-8">
+
+
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group has-feedback has-feedback left">
+                                    <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                    <input ng-model="ou" placeholder="Search" class="form-control" type="text"/>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover table-condensed table-bordered ">
+                                                <thead>
+                                                <tr>
+                                                    <th><h5><strong>Select All/None</strong></h5><br>
+                                                        <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                        <input type="checkbox" ng-model="selectedAll"
+                                                               ng-click="checkAll2()"/>
+                                                    </th>
+                                                    <th ng-click="sort('name')">Name
+																<span class="glyphicon sort-icon"
+                                                                      ng-show="sortKey=='name'"
+                                                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+																</span>
+                                                    </th>
+                                                    <th>Updated</th>
+													<th style="text-align:center;"><h5><strong>Select All/None</strong></h5><br>
+                                                                <div >
+																	<span   data-ng-repeat="item in setting.instances"  >
+                                                                       <li style="display:inline-block">    <input type="checkbox"    ng-model="sel[item.id]" ng-click="checkAll(item.id)"  />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr dir-paginate="y in organisationUnits|orderBy:sortKey:reverse | filter:ou |itemsPerPage:20 track by $index"
+                                                    pagination-id="ouTab">
+                                                    <td>
+                                                        <input type="checkbox" ng-model="orgid[y.id]"/>
+                                                    </td>
+                                                    <td>{{ y.name }}</td>
+                                                    <td>{{ y.lastUpdated.split("T")[0] + " ("
+                                                        +y.lastUpdated.split("T")[1].split(".")[0] + ")"}}
+                                                    </td>
+													<td>
+															<div  >
+																	<span   data-ng-repeat="item in setting.instances" >
+																		<li style="display:inline-block"><input type="checkbox"    ng-model="select[y.id][item.id]"   />
+																		{{ item.name }}</li> 
+																	</span>
+															</div>
+														</td>
+
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <dir-pagination-controls pagination-id="ouTab"
+                                                         max-size="5"
+                                                         direction-links="true"
+                                                         boundary-links="true">
+                                </dir-pagination-controls>
+                                <br>
+                                <!--<input type="button" style="align-content: center" value="SET MAPPING" class="btn btn-primary" title="Set Mapping" data-ng-click="coc()"/>-->
+                            </div>
+                        </div>
+                        
+
+
+                        <!--tabel panel for organit unit-->
+                        <!--<button class="btn btn-success btn-lg btn3d">Success Green</button>	-->
+                        <input type="button"
+                               style="align-content: center;margin-bottom:50px;width:200px;height:50px;font-size:18px;"
+                               value="Sync" class="btn btn-success btn-lg btn3d" title="Synchronization"
+                               ng-click="syncAll()"/>
+
+
+                    </div>
+
+                    <!-- ================= END OF TAB 1===================-->
+
+                    <!-- ===================  TAB 2 START ====================== -->
+
+                    <div class="tab-pane fade" id="de" data-ng-controller="dataElementController"> <!--tab pane -->
+
+                        <div class="row"> <!-- row-->
+                            <div class="col-sm-12">
+                                <form id="tab">
+
+                                    <div class="row">
+                                        <div class="col-sm-12"><h2 style="font-family:verdana"> Manual Data Elements
+                                            Synchronization </h2>
+                                        </div>
+
+                                    </div>
+                                    <!-- </div> -->
+                                </form>
+
+                                <div class="row" style="margin-top:40px;">
+                                    <div class="col-sm-4">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title"><strong>Filter by Period </strong></h3>
+                                            </div>
+
+                                            <div class="panel-body">
+                                                <div ng-show="loading" class="loading">
+                                                    <image src="images/loader.gif"/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <h4>
+                                                        <small><strong>Select a Date</strong></small>
+                                                    </h4>
+                                                    <select class="form-control" ng-options="fil.name for fil in filter"
+                                                            ng-change="getdate(DEselectedFilter)"
+                                                            ng-model="DEselectedFilter"
+                                                            title="Select the period Updations">
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title"><strong>Filter by Data Element Group</strong>
+                                                </h3>
+                                            </div>
+
+                                            <div class="panel-body">
+                                                <div ng-show="loading" class="loading">
+                                                    <image src="images/loader.gif"/>
+                                                </div>
+                                                <div class="form-group">
+                                                    <h4>
+                                                        <small><strong>Select a Group</strong></small>
+                                                    </h4>
+                                                    <select class="form-control"
+                                                            ng-options="DEG.name for DEG in DEGroup"
+                                                            ng-change=" getGroup(DEgroupFilter.id)"
+                                                            ng-model="DEgroupFilter" title="Select a Group">
+                                                        <option value=""> </option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!--Accordian panel goes here-->
+
+
+                        <div id="dee" class="panel panel-default ">
+                            <div class="panel-heading ">
+                                <h4 class="panel-title ">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"
+                                       style="font-family:verdana">Direct Updations</a>
+                                </h4>
+                            </div>
+                            <div id="collapse1" class="panel-collapse collapse ">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                        </div>
+                                        <div class="col-sm-4">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group has-feedback has-feedback left">
+                                                <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                                <input ng-model="DE" placeholder="Search" class="form-control"
+                                                       type="text"/>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="panel panel-default">
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped table-hover table-condensed table-bordered">
+                                                            <thead>
+                                                            <tr>
+                                                                <th><h5><strong>Select All/None</strong></h5><br>
+                                                                    <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                                    <input type="checkbox" ng-model="selectedAll1"
+                                                                           ng-click="checkAllDe()"/>
+                                                                </th>
+                                                                <th ng-click="sort('name')">Name<span
+                                                                        class="glyphicon sort-icon"
+                                                                        ng-show="sortKey=='name'"
+                                                                        ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                                                </th>
+                                                                <th>Updated</th>
+																<th style="text-align:center;"><h5><strong>Select All/None</strong></h5><br>
+                                                                <div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+                                                                           <li style="display:inline-block"><input type="checkbox"    ng-model="sel[item.id]" ng-click="checkAllInsDe(item.id)"  />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr dir-paginate="x in dataElements|orderBy:sortKey:reverse | filter:DE |itemsPerPage:20 track by $index"
+                                                                pagination-id="sdeTab">
+                                                                <td>
+                                                                    <input type="checkbox" ng-model="deid[x.id]"
+                                                                           ng-checked="toggle"/>
+                                                                </td>
+                                                                <td >{{ x.name }}</td>
+                                                                <td>{{ x.lastUpdated.split("T")[0] + " ("
+                                                                    +x.lastUpdated.split("T")[1].split(".")[0] + ")"}}
+                                                                </td>
+																<td>
+															<div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+																		<li style="display:inline-block"><input type="checkbox"    ng-model="select[x.id][item.id]"    />
+																		{{ item.name }}</li>
+																	</span>
+															</div>
+														</td>
+
+                                                            </tr>
+                                                            <!--x-->
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!--<table class="table table-striped ">-->
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <dir-pagination-controls pagination-id="sdeTab"
+                                                                 max-size="5"
+                                                                 direction-links="true"
+                                                                 boundary-links="true">
+                                        </dir-pagination-controls>
+                                        <br>
+                                        <!--<input type="button" style="align-content: center" value="SET MAPPING" class="btn btn-primary" title="Set Mapping" ng-click="syncde()"/>-->
+                                    </div>
+                                    <br/>
+                                    
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="coc">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"
+                                       style="font-family:verdana">Category Combo Updations</a>
+                                </h4>
+                            </div>
+                            <div id="collapse2" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group has-feedback has-feedback left">
+                                                    <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                                    <input ng-model="COC" placeholder="Search" class="form-control"
+                                                           type="text"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-hover table-condensed table-bordered">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th><h5><strong>Select All/None</strong></h5><br>
+                                                                        <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                                        <input type="checkbox" ng-model="selectedAll2"
+                                                                               ng-click="checkAllCoc()"/>
+                                                                    </th>
+                                                                    <th  ng-click="sort('name')">Name
+																<span class="glyphicon sort-icon"
+                                                                      ng-show="sortKey=='name'"
+                                                                      ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+																</span>
+                                                                    </th>
+                                                                    <th>Updated</th>
+                                                                    <th> Info</th>
+																	<th style="text-align:center;"><h5><strong>Select All/None</strong></h5><br>
+                                                                <div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+                                                                            <li style="display:inline-block"><input type="checkbox"    ng-model="selcoc[item.id]" ng-click="checkAllInsCoc(item.id)"  />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr dir-paginate="y in categoryCombos|orderBy:sortKey:reverse | filter:COC |itemsPerPage:20 track by $index"
+                                                                    pagination-id="scocTab">
+                                                                    <td>
+                                                                        <input type="checkbox"
+                                                                               ng-model="cocid[y.id]"
+                                                                               ng-checked="toggle">
+                                                                    </td>
+                                                                    <td>{{ y.name }}</td>
+                                                                    <td>{{ y.lastUpdated.split("T")[0] + " ("
+                                                                        +y.lastUpdated.split("T")[1].split(".")[0] +
+                                                                        ")"}}
+                                                                    </td>
+                                                                    <td><input type="button" class="btn btn-primary"
+                                                                               title="Info about Updations" value="Info"
+                                                                               ng-click="viewCOCdataElements(y.id)"/>
+                                                                    </td>
+																	<td>
+															<div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+																		<li style="display:inline-block"><input type="checkbox"    ng-model="selectcoc[y.id][item.id]"   />
+																		{{ item.name }}</li>
+																	</span>
+															</div>
+														</td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                                <dir-pagination-controls pagination-id="scocTab"
+                                                                         max-size="5"
+                                                                         direction-links="true"
+                                                                         boundary-links="true">
+                                                </dir-pagination-controls>
+                                                <br>
+                                                <!--<input type="button" style="align-content: center" value="SET MAPPING" class="btn btn-primary" title="Set Mapping" data-ng-click="coc()"/>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="c" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse3"
+                                       style="font-family:verdana">Categories Updations</a>
+                                </h4>
+                            </div>
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group has-feedback has-feedback left">
+                                                    <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                                    <input ng-model="C" placeholder="Search" class="form-control"
+                                                           type="text"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-hover table-condensed table-bordered ">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th><h5><strong>Select All/None</strong></h5><br>
+                                                                        <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                                        <input type="checkbox" ng-model="selectedAll3"
+                                                                               ng-click="checkAllC()"/>
+                                                                    </th>
+                                                                    <th ng-click="sort('name')">
+                                                                        Name<span class="glyphicon sort-icon"
+                                                                                  ng-show="sortKey=='name'"
+                                                                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                                                    </th>
+                                                                    <th>Updated</th>
+                                                                    <th> Info</th>
+																	<th style="text-align:center;"><h5><strong>Select All/None</strong></h5><br>
+                                                                <div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+                                                                           <li style="display:inline-block"><input type="checkbox"    ng-model="selc[item.id]" ng-click="checkAllInsC(item.id)"  />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr dir-paginate="y in categories|orderBy:sortKey:reverse | filter:C |itemsPerPage:20 track by $index"
+                                                                    pagination-id="scTab"
+                                                                    ng-click="t.isChecked=!t.isChecked">
+                                                                    <td>
+                                                                        <input type="checkbox" ng-model="cid[y.id]"
+                                                                               ng-checked="toggle">
+                                                                    </td>
+                                                                    <td >{{ y.name }}</td>
+                                                                    <td>{{ y.lastUpdated.split("T")[0] + " ("
+                                                                        +y.lastUpdated.split("T")[1].split(".")[0] +
+                                                                        ")"}}
+                                                                    </td>
+                                                                    <td><input type="button" class="btn btn-primary"
+                                                                               title="Info about Updations" value="Info"
+                                                                               ng-click="viewCAdataElements(y.id)"/>
+                                                                    </td>
+																	<td>
+															<div >
+																	<span   data-ng-repeat="item in setting.instances"  >
+																		<li style="display:inline-block"><input type="checkbox"    ng-model="selectc[y.id][item.id]"   />
+																		{{ item.name }}</li>
+																	</span>
+															</div>
+														</td>
+
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <dir-pagination-controls pagination-id="scTab"
+                                                                         max-size="5"
+                                                                         direction-links="true"
+                                                                         boundary-links="true">
+                                                </dir-pagination-controls>
+                                                <br/>
+                                                <!--<input type="button" style="align-content: center" value="SET MAPPING" class="btn btn-primary" title="Set Mapping" data-ng-click="syncc()"/>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="co" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse4"
+                                       style="font-family:verdana">Category Options Updations</a>
+                                </h4>
+                            </div>
+                            <div id="collapse4" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group has-feedback has-feedback left">
+                                                    <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                                    <input ng-model="CO" placeholder="Search" class="form-control"
+                                                           type="text"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-hover table-condensed table-bordered ">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th><h5><strong>Select All/None</strong></h5><br>
+                                                                        <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                                        <input type="checkbox" ng-model="selectedAll4"
+                                                                               ng-click="checkAllCo()"/>
+                                                                    </th>
+                                                                    <th  ng-click="sort('name')">
+                                                                        Name<span class="glyphicon sort-icon"
+                                                                                  ng-show="sortKey=='name'"
+                                                                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                                                    </th>
+                                                                    <th>Updated</th>
+                                                                    <th> Info</th>
+																	<th style="text-align:center;"><h5><strong>Select All/None</strong></h5><br>
+                                                                <div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+                                                                           <li style="display:inline-block"><input type="checkbox"    ng-model="selco[item.id]"  ng-click="checkAllInsCo(item.id)"  />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr dir-paginate="y in categoryOptions|orderBy:sortKey:reverse | filter:CO |itemsPerPage:20 track by $index"
+                                                                    pagination-id="scoTab"
+                                                                    ng-click="t.isChecked=!t.isChecked">
+                                                                    <td>
+                                                                        <input type="checkbox"
+                                                                               ng-model="coid[y.id]"
+                                                                               ng-checked="toggle">
+                                                                    </td>
+                                                                    <td >{{ y.name }}</td>
+                                                                    <td>{{ y.lastUpdated.split("T")[0] + " ("
+                                                                        +y.lastUpdated.split("T")[1].split(".")[0] +
+                                                                        ")"}}
+                                                                    </td>
+                                                                    <td><input type="button" class="btn btn-primary"
+                                                                               title="Info about Updations" value="Info"
+                                                                               ng-click="viewCOdataElements(y.id)"/>
+                                                                    </td>
+																<td>
+															<div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+																		<li style="display:inline-block"><input type="checkbox"    ng-model="selectco[y.id][item.id]"    />
+																		{{ item.name }}</li>
+																	</span>
+															</div>
+														</td>
+                                                                </tr>
+                                                                <!--x-->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <dir-pagination-controls pagination-id="scoTab"
+                                                                         max-size="5"
+                                                                         direction-links="true"
+                                                                         boundary-links="true">
+                                                </dir-pagination-controls>
+                                                <br>
+                                                <!--<input type="button" style="align-content: center" value="SET MAPPING" class="btn btn-primary" title="Set Mapping" data-ng-click="syncco()"/>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="os" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse5"
+                                       style="font-family:verdana">Option Sets Updations</a>
+                                </h4>
+                            </div>
+                            <div id="collapse5" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group has-feedback has-feedback left">
+                                                    <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                                    <input ng-model="OS" placeholder="Search" class="form-control"
+                                                           type="text"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-hover table-condensed table-bordered">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th><h5><strong>Select All/None</strong></h5><br>
+                                                                        <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                                        <input type="checkbox" ng-model="selectedAll5"
+                                                                               ng-click="checkAllOs()"/>
+                                                                    </th>
+                                                                    <th  ng-click="sort('name')">
+                                                                        Name<span class="glyphicon sort-icon"
+                                                                                  ng-show="sortKey=='name'"
+                                                                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                                                    </th>
+                                                                    <th>Updated</th>
+                                                                    <th> Info</th>
+																	<th style="text-align:center;"><h5><strong>Select All/None</strong></h5><br>
+                                                                <div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+                                                                           <li style="display:inline-block"><input type="checkbox"    ng-model="selos[item.id]" ng-click="checkAllInsOs(item.id)"  />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr dir-paginate="y in optionSets|orderBy:sortKey:reverse | filter:OS |itemsPerPage:20 track by $index"
+                                                                    pagination-id="sOSTab"
+                                                                    ng-click="t.isChecked=!t.isChecked">
+                                                                    <td>
+                                                                        <input type="checkbox"
+                                                                               ng-model="osid[y.id]"
+                                                                               ng-checked="toggle">
+                                                                    </td>
+                                                                    <td >{{ y.name }}</td>
+                                                                    <td>{{ y.lastUpdated.split("T")[0] + " ("
+                                                                        +y.lastUpdated.split("T")[1].split(".")[0] +
+                                                                        ")"}}
+                                                                    </td>
+                                                                    <td><input type="button" class="btn btn-primary"
+                                                                               title="Info about Updations" value="Info"
+                                                                               ng-click="viewOSdataElements(y.id)"/>
+                                                                    </td>
+																<td>
+															<div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+																		<li style="display:inline-block"><input type="checkbox"    ng-model="selectos[y.id][item.id]"    />
+																		{{ item.name }}</li>
+																	</span>
+															</div>
+														</td>
+                                                                </tr>
+                                                                <!--x-->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <dir-pagination-controls pagination-id="sOSTab"
+                                                                         max-size="5"
+                                                                         direction-links="true"
+                                                                         boundary-links="true">
+                                                </dir-pagination-controls>
+                                                <br>
+                                                <!--<input type="button" style="align-content: center" value="SET MAPPING" class="btn btn-primary" title="Set Mapping" data-ng-click="syncos()"/>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                   
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div id="o" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse6"
+                                       style="font-family:verdana">Option Updations</a>
+                                </h4>
+                            </div>
+                            <div id="collapse6" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group has-feedback has-feedback left">
+                                                    <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                                    <input ng-model="O" placeholder="Search" class="form-control"
+                                                           type="text"/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-hover table-condensed table-bordered ">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th><h5><strong>Select All/None</strong></h5><br>
+                                                                        <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                                        <input type="checkbox" ng-model="selectedAll6"
+                                                                               ng-click="checkAllO()"/>
+                                                                    </th>
+                                                                    <th  ng-click="sort('name')">
+                                                                        Name<span class="glyphicon sort-icon"
+                                                                                  ng-show="sortKey=='name'"
+                                                                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}"></span>
+                                                                    </th>
+                                                                    <th>Updated</th>
+                                                                    <th> Info</th>
+																	<th style="text-align:center;"><h5><strong>Select All/None</strong></h5><br>
+                                                                <div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+                                                                          <li style="display:inline-block"><input type="checkbox"    ng-model="selo[item.id]" ng-click="checkAllInsO(item.id)"  />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr dir-paginate="y in options|orderBy:sortKey:reverse | filter:O |itemsPerPage:20 track by $index"
+                                                                    pagination-id="sOTab"
+                                                                    ng-click="t.isChecked=!t.isChecked">
+                                                                    <td>
+                                                                        <input type="checkbox" ng-model="oid[y.id]"
+                                                                               ng-checked="toggle">
+                                                                    </td>
+                                                                    <td >{{ y.name }}</td>
+                                                                    <td>{{ y.lastUpdated.split("T")[0] + " ("
+                                                                        +y.lastUpdated.split("T")[1].split(".")[0] +
+                                                                        ")"}}
+                                                                    </td>
+                                                                    <td><input type="button" class="btn btn-primary"
+                                                                               title="Info about Updations" value="Info"
+                                                                               ng-click="viewOdataElements(y.id)"/></td>
+																			   <td>
+															<div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+																		<li style="display:inline-block"><input type="checkbox"    ng-model="selecto[y.id][item.id]"    />
+																		{{ item.name }}</li>
+																	</span>
+															</div>
+														</td>
+
+                                                                </tr>
+                                                                <!--x-->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <dir-pagination-controls pagination-id="sOTab"
+                                                                         max-size="5"
+                                                                         direction-links="true"
+                                                                         boundary-links="true">
+                                                </dir-pagination-controls>
+                                                <br/>
+                                                <!--<input type="button" style="align-content: center" value="SET MAPPING" class="btn btn-primary" title="Set Mapping" data-ng-click="synco()"/>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="button"
+                               style="align-content: center;margin-bottom:50px;width:200px;height:50px;font-size:18px;"
+                               value="Sync" class="btn btn-success btn-lg btn3d" title="Synchronization"
+                               ng-click="syncall()"/>
+
+                    </div>
+
+
+                    <!-- ============= END OF TAB 2 ===============================================================================================================================================================================================================================================================-->
+
+
+                    <!--================ TAB 3 START =============== -->
+
+                    <div class="tab-pane fade" id="in" data-ng-controller="indicatorController">
+
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form id="tab3">
+
+                                    <div class="row">
+                                        <div class="col-sm-12"><h2 style="font-family:verdana"> Manual Indicators
+                                            Synchronization </h2>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                                <div class="container-fluid">
+                                    <div class="row" style="margin-top:40px;">
+                                        <div class="col-sm-4">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title"><strong>Filter by Period</strong></h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div ng-show="loading" class="loading">
+                                                        <image src="images/loader.gif"/>
+                                                    </div>
+                                                    <h4>
+                                                        <small><strong>Select a Date</strong></small>
+                                                    </h4>
+                                                    <div class="form-group">
+                                                        <select class="form-control"
+                                                                ng-options="fil.name for fil in filter"
+                                                                ng-change="getdate(INselectedFilter)"
+                                                                ng-model="INselectedFilter"
+                                                                title="Select the period Updations">
+                                                            <!--<option  value=""  style="font-family:verdana">&#45;&#45;&#45;&#45;Select a Filter Date&#45;&#45;&#45;&#45;</option>-->
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title"><strong>Filter by Indicator Group</strong>
+                                                    </h3>
+                                                </div>
+
+                                                <div class="panel-body">
+                                                    <div ng-show="loading" class="loading">
+                                                        <image src="images/loader.gif"/>
+                                                    </div>
+                                                    <h4>
+                                                        <small><strong>Select a Group</strong></small>
+                                                    </h4>
+                                                    <div class="form-group">
+                                                        <select class="form-control"
+                                                                ng-options="IND.name for IND in INGroup"
+                                                                ng-change=" getGroup(INgroupFilter.id)"
+                                                                ng-model="INgroupFilter" title="Select a Group">
+                                                            <option value=""> </option>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!--tabel panel for Indicators-->
+
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                </div>
+                                <div class="col-sm-4">
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group has-feedback has-feedback left">
+                                        <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                        <input ng-model="ind" placeholder="Search" class="form-control" type="text"/>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped table-hover table-condensed table-bordered  ">
+                                                    <thead>
+                                                    <tr>
+                                                        <th> <h5><strong>Select All/None</strong></h5><br>
+                                                            <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                            <input type="checkbox" ng-model="selectedAll"
+                                                                   ng-click="checkAll2()"/>
+                                                        </th>
+                                                        <th  ng-click="sort('name')">Name
+															<span class="glyphicon sort-icon" ng-show="sortKey=='name'"
+                                                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+															</span>
+                                                        </th>
+                                                         <th>Updated</th>
+														 <th style="text-align:center;"><h5><strong>Select All/None</strong></h5><br>
+                                                                <div  >
+																	<span   data-ng-repeat="item in setting.instances"  >
+                                                                           <li style="display:inline-block"> <input type="checkbox"    ng-model="sel[item.id]" ng-click="checkAll(item.id)" ng-init="sel[item.id]=false" />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr dir-paginate="y in indicators|orderBy:sortKey:reverse | filter:ind |itemsPerPage:20 track by $index"
+                                                        pagination-id="indTab">
+                                                        <td>
+                                                            <input type="checkbox" ng-model="indid[y.id]"/>
+                                                        </td>
+                                                        <td >{{ y.name }}</td>
+                                                        <td>{{ y.lastUpdated.split("T")[0] + " ("
+                                                            +y.lastUpdated.split("T")[1].split(".")[0] + ")"}}
+                                                        </td>
+														<td>
+															<div>
+																	<span   data-ng-repeat="item in setting.instances"  >
+																		<li style="display:inline-block"> <input type="checkbox"    ng-model="select[y.id][item.id]"    />
+																		{{ item.name }}</li>
+																	</span>
+															</div>
+														</td>
+                                                        <!--<td><input type="button" class="btn btn-primary" title="Info about Updations" value="Info" ng-click="viewCOCdataElements(y.id)"/></td>-->
+
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <dir-pagination-controls pagination-id="indTab"
+                                                             max-size="5"
+                                                             direction-links="true"
+                                                             boundary-links="true">
+                                    </dir-pagination-controls>
+                                    <br>
+
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+
+                        <input type="button"
+                               style="align-content: center;margin-bottom:50px;width:200px;height:50px;font-size:18px;"
+                               value="Sync" class="btn btn-success btn-lg btn3d" title="Synchronization"
+                               ng-click="syncAll()"/>
+
+                    </div>
+
+                    <!-- ============= END OF TAB 3 ============-->
+
+                    <!--================ TAB 4 START =============== -->
+
+                    <div class="tab-pane fade" id="vr" data-ng-controller="validationController">
+
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form id="tab4">
+
+                                    <div class="row">
+                                        <div class="col-sm-12"><h2 style="font-family:verdana"> Manual Validation Rules
+                                            Synchronization </h2>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+
+                                <div class="row" style="margin-top:40px;">
+                                    <div class="col-sm-4">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title"><strong>Filter by Period</strong></h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div ng-show="loading" class="loading">
+                                                    <image src="images/loader.gif"/>
+                                                </div>
+                                                <h4>
+                                                    <small><strong>Select a Date</strong></small>
+                                                </h4>
+                                                <div class="form-group">
+                                                    <select class="form-control" ng-options="fil.name for fil in filter"
+                                                            ng-change="getdate(VRselectedFilter)"
+                                                            ng-model="VRselectedFilter"
+                                                            title="Select the period Updations">
+                                                        <!--<option  value=""  style="font-family:verdana">&#45;&#45;&#45;&#45;Select a Filter Date&#45;&#45;&#45;&#45;</option>-->
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title"><strong>Filter by Validation Group</strong></h3>
+                                            </div>
+
+                                            <div class="panel-body">
+                                                <div ng-show="loading" class="loading">
+                                                    <image src="images/loader.gif"/>
+                                                </div>
+                                                <h4>
+                                                    <small><strong>Select a Group </strong></small>
+                                                </h4>
+                                                <div class="form-group">
+                                                    <select class="form-control"
+                                                            ng-options="VAL.name for VAL in VALGroup"
+                                                            ng-change=" getGroup(VALgroupFilter.id)"
+                                                            ng-model="VALgroupFilter" title="Select a Group">
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <!--tabel panel for Indicators-->
+
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group has-feedback has-feedback left">
+                                    <i class="glyphicon glyphicon-search form-control-feedback "></i>
+                                    <input ng-model="val" placeholder="Search" class="form-control" type="text"/>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover table-condensed table-bordered  ">
+                                                <thead>
+                                                <tr>
+                                                    <th><h5><strong>Select All/None</strong></h5><br>
+                                                        <!------------------------/////////////////////////Here add this check box////------------------------------------------>
+                                                        <input type="checkbox" ng-model="selectedAll"
+                                                               ng-click="checkAll2()"/>
+                                                    </th>
+                                                    <th  ng-click="sort('name')">Name
+															<span class="glyphicon sort-icon" ng-show="sortKey=='name'"
+                                                                  ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}">
+															</span>
+                                                    </th>
+                                                    <!-- =================================================================================================================================================================================================================================================================================================================================-->
+
+                                                    <th>Updated</th>
+													<th style="text-align:center;">
+                                                                <div><h5><strong>Select All/None</strong></h5><br>
+																	<span   data-ng-repeat="item in setting.instances" >
+                                                                          <li style="display:inline-block"> <input type="checkbox"    ng-model="sel[item.id]" ng-click="checkAll(item.id)" />
+																		{{ item.name }}</li>
+																	</span>
+                                                                </div>
+                                                            </th>
+
+
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr dir-paginate="y in validationRules|orderBy:sortKey:reverse | filter:val |itemsPerPage:20 track by $index"
+                                                    pagination-id="valTab">
+                                                    <td>
+                                                        <input type="checkbox" ng-model="valid[y.id]"/>
+                                                    </td>
+                                                    <td >{{ y.name }}</td>
+                                                    <td>{{ y.lastUpdated.split("T")[0] + " ("
+                                                        +y.lastUpdated.split("T")[1].split(".")[0] + ")"}}
+                                                    </td>
+													<td>
+															<div >
+																	<span   data-ng-repeat="item in setting.instances"  >
+																		<li style="display:inline-block"> <input type="checkbox"    ng-model="select[y.id][item.id]"    />
+																		{{ item.name }}</li>
+																	</span>
+															</div>
+														</td>
+                                                    <!--<td><input type="button" class="btn btn-primary" title="Info about Updations" value="Info" ng-click="viewCOCdataElements(y.id)"/></td>-->
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <dir-pagination-controls pagination-id="valTab"
+                                                         max-size="5"
+                                                         direction-links="true"
+                                                         boundary-links="true">
+                                </dir-pagination-controls>
+                                <br>
+
+                            </div>
+                        </div>
+
+                       <!--<div class="row">
+                            <div class="col-sm-12">
+                                <form  class="form-inline">
+                                    <div class="panel" style="margin-bottom: 0px;">
+
+                                           <h4 style="margin: 0px"><strong>Instances</strong></h4>
+
+                                      
+                                    </div>
+                                    <div data-ng-repeat="item in setting.instances" class="form-group form-bordered">
+
+                                            <input class="form-control" type="checkbox" ng-model="select.valins[item.id]" checklist-model="setting.instances" checklist-value="item.id"/><label
+                                             ></label>{{" "+ item.name+" " }}&nbsp;
+
+
+
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>-->
+                        <br/>
+
+                        <input type="button"
+                               style="align-content: center;margin-bottom:50px;width:200px;height:50px;font-size:18px;"
+                               value="Sync" class="btn btn-success btn-lg btn3d" title="Synchronization"
+                               ng-click="syncAll()"/>
+
+                    </div>
+
+                    <!-- ============= END OF TAB 4 ============-->
+                </div>
+                <!-- Tab content div-->
+            </div>
+            <!-- container class-->
+        </div>
+    </div>
+
+
+    <!--------//////END OF TABS///////////////// END OF TABS ////END OF TABS///////////////END OF TABS/////////////////-->
+
+
+    <!-- --------------------------------------------------------------------------------------------------- -->
+</div>
+<footer class="footer">
+    <div class="container">
+        Powered by <a href="www.dhis2.org">DHIS2</a>
+    </div>
+</footer>
+<!-- Alert modal -->
+<div class="modal fade bs-example-modal-lg" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Alert</h4>
+            </div>
+            <div class="modal-body">
+                <div id="share_list_popup">
+
+                </div>
+                <!--<div class="alert alert-warning alert-dismissible" role="alert" id="alertBox">
+                    <div id="alertMsg">  </div>
+                </div>-->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" style="width:75px" data-dismiss="modal">OK</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!--Set mapping modal-->
+<div class="modal fade bs-example-modal-lg" id="mapModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Confirmation.!</h4>
+            </div>
+            <div class="modal-body" id="share_list">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script src="scripts/controllers/app.js"></script>
+<script src="scripts/controllers/orgUnitController.js"></script>
+<script src="scripts/controllers/dataElementController.js"></script>
+<script src="scripts/controllers/indicatorController.js"></script>
+<script src="scripts/controllers/validationController.js"></script>
+<script src="scripts/controllers/saveEdit.js"></script>
+<script src="scripts/controllers/validateLogin.js"></script>
+<script src="js/validations.js"></script>
+<script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
+
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $(window).load(function () {
+        $("#coverLoad").hide();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,574 @@
+﻿<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+     <title>DHIS META-DATA SYNC MANAGER</title>
+	
+	
+	
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/style.css">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/font-awesome/css/font-awesome.css" rel="stylesheet"></link>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/dataTables.tableTools.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+<link href="css/font-awesome.css" rel="stylesheet">
+<link href="css/jquery.dataTables.css" rel="stylesheet">
+<link href="css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="js/jquery-2.1.3.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/style.js"></script>
+<script  src="js/jquery.js"></script>
+<script type="text/javascript"src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/dataTables.tableTools.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+	
+	
+	<style>
+		.pndLbl
+		{
+			width:150px;
+		}
+		
+		th
+		{
+			text-align:center;
+		}
+		
+		select,option
+		{
+			padding-top:0;
+		}
+		
+		.navbar-brand
+		{
+			font-size:30px;
+		}
+		
+		.glyphicon.glyphicon-pencil,.glyphicon.glyphicon-trash,.glyphicon.glyphicon-link
+		{
+			font-size: 15px;
+		}
+		
+		.glyphicon.glyphicon-inbox,.glyphicon.glyphicon-refresh,.glyphicon.glyphicon-globe,.glyphicon.glyphicon-time
+		{
+			font-size: 35px;
+			margin-top:18px;
+		}
+	</style>
+</head>
+
+<body data-ng-app="sampleapp">
+
+
+	<style>
+		#coverLoad
+		{
+			position:fixed;
+			width:100%;
+			height:100%;
+			background:rgba(0,0,0,0.5);
+			z-index:2147483647;
+		}
+		
+		.loadImage
+		{
+			width:150px;
+			height:150px;
+			position:fixed;
+			top:50%;
+			left:50%;
+			margin-top:-75px;
+			margin-left:-75px;
+		}
+	</style>
+	
+	<div id="coverLoad">
+		<image class="loadImage" src="images/loader.gif"/>
+	</div>
+
+	 <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img class="img-responsive" src="images/syncicon.png" width="350px" ></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="navBack">
+				<nav>
+					<ul class="navig">
+						<li><a href="index.html" class="" data-toggle="tooltip" data-placement="bottom" title="Instances"><b class="glyphicon glyphicon-inbox"></b></a></li>
+						<li><a href="basicSettings.html" class="" data-toggle="tooltip" data-placement="bottom" title="Synchronize"><b class="glyphicon glyphicon-refresh"></b></a></li>
+						<li><a href="notifications.html" class="" data-toggle="tooltip" data-placement="bottom" title="Notifications"><b class="glyphicon glyphicon-globe"></b></a></li>
+						<li><a href="history.html" class="" data-toggle="tooltip" data-placement="bottom" title="History"><b class="glyphicon glyphicon-time"></b></a></li>
+					</ul>
+				</nav>
+			</div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> </br></br>
+	
+	
+		
+	<div class="container" style="text-align:center;margin-top:145px">	
+		<!--All the tabs-->
+		<ul class="nav nav-tabs" id="myTab">
+			<li class="active"><a href="#orgunit" data-toggle="tab">Organization Units</a></li>
+			<li><a href="#de" data-toggle="tab">Data Elements</a></li>
+			<li><a href="#in" data-toggle="tab">Indicators</a></li>
+			<li><a href="#vr" data-toggle="tab">Validation Rules</a></li>
+		</ul>
+	  	 
+<!-- ********************************First tab content goes here************************************ -->	  
+		<div id="myTabContent" class="tab-content" >
+            <div class="tab-pane active in" id="orgunit" ng-controller="orgUnitController">
+                <p>Tab 1 </p>
+
+                <form id="tab">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div style="text-align:left; font-size: 25px;  margin-left:300px;color:#3399FF">
+                                <b>Manual Organization Units Synchronization </b>
+                            </div> <br />
+
+                        </div>
+                    </div>
+                </form>
+                <div class="container-fluid">
+                    <div class="row" style="margin-top:50px;">
+                        <div class="col-sm-4">
+                            <div class="radio" style="margin-right:900px">
+                                <label><input type="radio" ng-model="category" value="1" ng-change="setCategory()" />New</label>
+                            </div>
+                            <div class="radio" style="margin-right:877px">
+                                <label><input type="radio" ng-model="category" value="2" ng-change="setCategory()" />Updates</label>
+                            </div>
+                            <label><b>Province Instances</b></label>
+                            <select style="height:30px;width:200px;">
+							
+                                <option data-ng-repeat="instance in setting.instances track by $index">{{instance.name}}</option>
+                            </select><br /><br />
+                            
+
+                        </div>
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-4">
+					   <div style="margin-top:40px;">
+					   <p><strong>Select the Period</strong></p>
+						<select ng-options="fil.name for fil in filter" ng-change="getdate(selectedFilter)" ng-model="selectedFilter" title="Select the period Updations" style="width:200px;height:30px;"></select>
+                        <input type="button" value="Set Filter"  class="btn btn-primary" data-ng-click="setFilter()" />
+                       </div>
+					   </div>
+
+                    </div>
+                </div>
+
+
+                <div class="container-fluid" style="margin-top:80px;float:left">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-4">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" class="form-control" style="width:320px;" placeholder="Search " ng-model="org" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                            <form>
+                                
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" >
+                    <div class="col-sm-12">
+                        <table class="table table-striped table-hover table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <td>Organization Unit</td>
+                                    <td>Name</td>
+                                    <td>Last Updated / Created</td>
+                                </tr>
+                            </thead>
+                            <tbody id="hs">
+                                <tr ng-repeat="x in OrgUnits|orderBy:sortType:sortReverse | filter:org" ng-click="t.isChecked=!t.isChecked">
+                                    <td>
+                                        <input type="checkbox" ng-model="t.isChecked" ng-click="$event.stopPropagation()">
+                                    </td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.lastUpdated }}</td>                                   
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input type="button" value="Synchronization" class="btn btn-success" data-ng-click="sync()" />
+                    </div>
+                </div>
+            </div>		
+			<!-- ================= END OF TAB 1===================-->
+		
+			<!-- ===================  TAB 2 START ====================== -->
+			
+			
+            <div class="tab-pane fade" id="de" data-ng-controller="dataElementController">
+                <p>Tab 2 </p>
+                <form id="tab">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div style="text-align:left; font-size: 25px;  margin-left:300px;color:#3399FF">
+                                <b>Manual Data Elements Synchronization </b>
+                            </div> <br />
+
+                        </div>
+                    </div>
+                </form>
+                 <div class="container-fluid">
+                    <div class="row" style="margin-top:50px;">
+                        <div class="col-sm-4">
+                            <div class="radio" style="margin-right:900px">
+                                <label><input type="radio" ng-model="category" value="1" ng-change="setCategory()" />New</label>
+                            </div>
+                            <div class="radio" style="margin-right:877px">
+                                <label><input type="radio" ng-model="category" value="2" ng-change="setCategory()" />Updates</label>
+                            </div>
+                            <label><b>Province Instances</b></label>
+                            <select style="height:30px;width:200px;">
+							
+                                <option data-ng-repeat="instance in setting.instances track by $index">{{instance.name}}</option>
+                            </select><br /><br />
+                            
+
+                        </div>
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-4">
+					   <div style="margin-top:40px;">
+					    <p><strong>Select the Period</strong></p>
+						<select ng-options="fil.name for fil in filter" ng-change="getdate(selectedFilter)" ng-model="selectedFilter" title="Select the period Updations" style="width:200px;height:30px;"></select>
+                        <input type="button" value="Set Filter"  class="btn btn-primary" data-ng-click="setFilter()" />
+                       </div>
+					   </div>
+
+                    </div>
+                </div>
+
+
+                <div class="container-fluid" style="margin-top:80px;float:left">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-4">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" class="form-control" style="width:320px;" placeholder="Search " ng-model="org" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                            <form>
+                                
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" >
+                    <div class="col-sm-12">
+                        <table class="table table-striped table-hover table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <td>Organization Unit</td>
+                                    <td>Name</td>
+                                    <td>Last Updated / Created</td>
+                                </tr>
+                            </thead>
+                            <tbody id="hs">
+                                <tr ng-repeat="x in DataElements|orderBy:sortType:sortReverse | filter:org" ng-click="t.isChecked=!t.isChecked">
+                                    <td>
+                                        <input type="checkbox" ng-model="t.isChecked" ng-click="$event.stopPropagation()">
+                                    </td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.lastUpdated }}</td>                                  
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input type="button" value="Synchronization" class="btn btn-success" data-ng-click="sync()" />
+                    </div>
+                </div>
+            </div>
+				
+				<!-- ============= END OF TAB 2 ============-->
+				
+                <!--================ TAB 3 START =============== -->
+
+            <div class="tab-pane fade" id="in" data-ng-controller="indicatorController">
+                <p>TAB 3 </p>
+                <form id="tab">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div style="text-align:left; font-size: 25px;  margin-left:300px;color:#3399FF">
+                                <b>Manual Indicators Synchronization </b>
+                            </div> <br />
+
+                        </div>
+                    </div>
+                </form>
+                <div class="container-fluid">
+                    <div class="row" style="margin-top:50px;">
+                        <div class="col-sm-4">
+                            <div class="radio" style="margin-right:900px">
+                                <label><input type="radio" ng-model="category" value="1" ng-change="setCategory()" />New</label>
+                            </div>
+                            <div class="radio" style="margin-right:877px">
+                                <label><input type="radio" ng-model="category" value="2" ng-change="setCategory()" />Updates</label>
+                            </div>
+                            <label><b>Province Instances</b></label>
+                            <select style="height:30px;width:200px;">
+							
+                                <option data-ng-repeat="instance in setting.instances track by $index">{{instance.name}}</option>
+                            </select><br /><br />
+                            
+
+                        </div>
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-4">
+					   <div style="margin-top:40px;">
+					    <p><strong>Select the Period</strong></p>
+						<select ng-options="fil.name for fil in filter" ng-change="getdate(selectedFilter)" ng-model="selectedFilter" title="Select the period Updations" style="width:200px;height:30px;"></select>
+                        <input type="button" value="Set Filter"  class="btn btn-primary" data-ng-click="setFilter()" />
+                       </div>
+					   </div>
+
+                    </div>
+                </div>
+
+
+                <div class="container-fluid" style="margin-top:80px;float:left">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-4">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" class="form-control" style="width:320px;" placeholder="Search " ng-model="org" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                            <form>
+                                
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row" >
+                    <div class="col-sm-12">
+                        <table class="table table-striped table-hover table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <td>Organization Unit</td>
+                                    <td>Name</td>
+                                    <td>Last Updated / Created</td>
+                                </tr>
+                            </thead>
+                            <tbody id="hs">
+                                <tr ng-repeat="x in Indicators|orderBy:sortType:sortReverse | filter:org" ng-click="t.isChecked=!t.isChecked">
+                                    <td>
+                                        <input type="checkbox" ng-model="t.isChecked" ng-click="$event.stopPropagation()">
+                                    </td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.lastUpdated }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input type="button" value="Synchronization" class="btn btn-success" data-ng-click="sync()" />
+                    </div>
+                </div>
+            </div>
+
+                 <!-- ============= END OF TAB 3 ============-->
+
+				<!--================ TAB 4 START =============== -->
+				
+				
+            <div class="tab-pane fade" id="vr" data-ng-controller="validationRuleController">
+                <p>TAB 4 </p>
+                <form id="tab">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div style="text-align:left; font-size: 25px;  margin-left:300px;color:#3399FF">
+                                <b>Manual Validation Rules Synchronization </b>
+                            </div> <br />
+
+                        </div>
+                    </div>
+                </form>
+                 <div class="container-fluid">
+                    <div class="row" style="margin-top:50px;">
+                        <div class="col-sm-4">
+                            <div class="radio" style="margin-right:900px">
+                                <label><input type="radio" ng-model="category" value="1" ng-change="setCategory()" />New</label>
+                            </div>
+                            <div class="radio" style="margin-right:877px">
+                                <label><input type="radio" ng-model="category" value="2" ng-change="setCategory()" />Updates</label>
+                            </div>
+                            <label><b>Province Instances</b></label>
+                            <select style="height:30px;width:200px;">
+							
+                                <option data-ng-repeat="instance in setting.instances track by $index">{{instance.name}}</option>
+                            </select><br /><br />
+                            
+
+                        </div>
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-4">
+					   <div style="margin-top:40px;">
+					    <p><strong>Select the Period</strong></p>
+						<select ng-options="fil.name for fil in filter" ng-change="getdate(selectedFilter)" ng-model="selectedFilter" title="Select the period Updations" style="width:200px;height:30px;"></select>
+                        <input type="button" value="Set Filter"  class="btn btn-primary" data-ng-click="setFilter()" />
+                       </div>
+					   </div>
+
+                    </div>
+                </div>
+
+
+                <div class="container-fluid" style="margin-top:80px;float:left">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-4">
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-search"></i>
+                                        </div>
+                                        <input type="text" class="form-control" style="width:320px;" placeholder="Search " ng-model="org" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                            <form>
+                                
+                            </form>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row" >
+                    <div class="col-sm-12">
+                        <table class="table table-striped table-hover table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <td>Organization Unit</td>
+                                    <td>Name</td>
+                                    <td>Last Updated / Created</td>
+                                </tr>
+                            </thead>
+                            <tbody id="hs">
+                                <tr ng-repeat="x in Validations|orderBy:sortType:sortReverse | filter:org" ng-click="t.isChecked=!t.isChecked">
+                                    <td>
+                                        <input type="checkbox" ng-model="t.isChecked" ng-click="$event.stopPropagation()">
+                                    </td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.lastUpdated }}</td>                                  
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input type="button" value="Synchronization" class="btn btn-success" data-ng-click="sync()" />
+                    </div>
+                </div>
+            </div>
+				
+				<!-- ============= END OF TAB 4 ============-->		
+			
+		</div> <!-- Tab content div-->
+	</div><!-- container class-->
+
+			
+<!--------//////END OF TABS///////////////// END OF TABS ////END OF TABS///////////////END OF TABS/////////////////-->
+	  
+		
+		
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+	
+	<!-- --------------------------------------------------------------------------------------------------- -->
+    <footer class="footer">
+        <div class="container">
+            Powered by <a href="www.dhis2.org">DHIS2</a>
+        </div>
+    </footer>
+	
+	 <!-- jQuery -->
+    <script src="js/jquery-2.1.3.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+	
+	<!-- Angular JavaScript -->
+    <script src="js/angular.min.js"></script>
+    <script src="js/dirPagination.js"></script>
+	<script src= "js/jquery-ui.js"></script>
+	<script src= "scripts/controllers/syncsettingController.js"></script>
+	<script src= "scripts/controllers/app.js"></script>
+	<script src= "scripts/controllers/basicSettingController.js"></script>
+	<script src= "scripts/controllers/saveEdit.js"></script>
+	<script src= "scripts/controllers/validateLogin.js"></script>
+	<script src= "js/validations.js"></script>
+	<script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
+	
+	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+		
+		$(window).load(function() {
+			$("#coverLoad").hide();
+		});
+	</script>
+	
+</body>
+</html>

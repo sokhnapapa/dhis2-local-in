@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Selectivity.js Demo Use Cases</title>
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <link href="plugins/searchDropDown/dist/selectivity-full.css" rel="stylesheet">
+
+		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/style.css">
+		
+		<!-- Latest compiled and minified CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/font-awesome/css/font-awesome.css" rel="stylesheet"></link>
+	
+        <script src="plugins/searchDropDown/vendor/jquery.js"></script>
+        <script src="plugins/searchDropDown/dist/selectivity-full.js"></script>
+        <script>
+            function escape(string) {
+                return string ? String(string).replace(/[&<>"']/g, function(match) {
+                    return {
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        '"': '&quot;',
+                        "'": '&#39;'
+                    }[match];
+                }) : '';
+            }
+
+            $(document).ready(function() {
+
+                var transformText = $.fn.selectivity.transformText;
+
+                // example query function that returns at most 10 cities matching the given text
+                function queryFunction(query) {
+                    var selectivity = query.selectivity;
+                    var term = query.term;
+                    var offset = query.offset || 0;
+                    var results;
+                    
+					results = cities.filter(function(city) {
+						return transformText(city).indexOf(transformText(term)) > -1;
+					});
+					
+                    results.sort(function(a, b) {
+                        a = transformText(a);
+                        b = transformText(b);
+                        var startA = (a.slice(0, term.length) === term),
+                            startB = (b.slice(0, term.length) === term);
+                        if (startA) {
+                            return (startB ? (a > b ? 1 : -1) : -1);
+                        } else {
+                            return (startB ? 1 : (a > b ? 1 : -1));
+                        }
+                    });
+                    setTimeout(function() {
+                        query.callback({
+                            more: results.length > offset + 10,
+                            results: results.slice(offset, offset + 10)
+                        });
+                    }, 500);
+                }
+
+                $('#single-input').selectivity({
+                    allowClear: true,
+                    placeholder: 'No city selected',
+                    query: queryFunction,
+                    searchInputPlaceholder: 'Type to search a city'
+                });
+
+
+
+                $('.selectivity-input').selectivity();
+
+              
+            });
+        </script>
+    </head>
+    <body>
+     
+		
+ <select id="df" class="selectivity-input" data-placeholder="No city selected" name="eg">
+		<option value="f">rdwbrwb</option>
+		<option value="g">te3b</option>
+		<option value="h">beerw</option>
+		<option value="i">rwbrb</option>
+		<option value="j">wrb</option>
+		<option value="k">ymy5</option>
+		<option value="l">das v</option>
+		<option value="m">rwnr</option>
+		<option value="n">n4n4</option>
+	</select>
+       
+
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+	
+	<!-- Angular JavaScript -->
+    <script src="js/angular.min.js"></script>
+	
+	<script src= "js/jquery-ui.js"></script>
+    </body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>DHIS DATA SYNC MANAGER</title>
+	
+	
+	
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/style.css">
+	
+	<!-- Latest compiled and minified CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/font-awesome/css/font-awesome.css" rel="stylesheet"></link>
+	
+	<link rel="stylesheet" type="text/css" href="css/jquery.dataTables.css">
+	
+	<style>
+		.pndLbl
+		{
+			width:150px;
+		}
+		
+		th
+		{
+			text-align:center;
+		}
+		
+		select,option
+		{
+			padding-top:0;
+		}
+		
+		.navbar-brand
+		{
+			font-size:30px;
+		}
+		
+		.glyphicon.glyphicon-pencil,.glyphicon.glyphicon-trash,.glyphicon.glyphicon-link
+		{
+			font-size: 15px;
+		}
+		
+		.glyphicon.glyphicon-inbox,.glyphicon.glyphicon-refresh,.glyphicon.glyphicon-globe,.glyphicon.glyphicon-time
+		{
+			font-size: 35px;
+			margin-top:18px;
+		}
+	</style>
+</head>
+
+<body data-ng-app="dataSyncManager">
+
+
+	<style>
+		#coverLoad
+		{
+			position:fixed;
+			width:100%;
+			height:100%;
+			background:rgba(0,0,0,0.5);
+			z-index:2147483647;
+		}
+		
+		.loadImage
+		{
+			width:150px;
+			height:150px;
+			position:fixed;
+			top:50%;
+			left:50%;
+			margin-top:-75px;
+			margin-left:-75px;
+		}
+	</style>
+	
+	<div id="coverLoad">
+		<image class="loadImage" src="images/loader.gif"/>
+	</div>
+
+	 <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img class="img-responsive" src="images/syncicon.png" width="270px" ></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="navBack">
+				<nav>
+					<ul class="navig">
+						<li><a href="index.html" class="" data-toggle="tooltip" data-placement="bottom" title="Instances"><b class="glyphicon glyphicon-inbox"></b></a></li>
+						<li><a href="syncStatus.html" class="" data-toggle="tooltip" data-placement="bottom" title="Synchronize"><b class="glyphicon glyphicon-refresh"></b></a></li>
+						<li><a href="notifications.html" class="" data-toggle="tooltip" data-placement="bottom" title="Notifications"><b class="glyphicon glyphicon-globe"></b></a></li>
+						<li><a href="history.html" class="" data-toggle="tooltip" data-placement="bottom" title="History"><b class="glyphicon glyphicon-time"></b></a></li>
+					</ul>
+				</nav>
+			</div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav> </br></br>
+	
+	
+		
+	<div class="container" style="text-align:center;margin-top:145px">	
+		
+		<!-- ***************************************************************************************** -->
+		
+		<div class="col-md-12" data-ng-controller="mappingController" style="text-align:center">
+		<div style="float:left;text-align:left; margin-top:-20px; font-size: 20px; color:#3399FF"> <b> Map Data Elements </b> </div> </br>
+			<table class="table table-striped table-hover table-condensed table-bordered" id="mapping">
+				<thead>
+					<th>National DE</th>
+					<th>Instance DE</th>
+					<th>Periodicity</th>
+				</thead>
+				<tbody id="mapInputs">
+					
+				</tbody>
+			</table>
+			<a href="index.html" class="btn btn-warning" style="position:fixed; bottom:40px; right:5px;width:100px"> Back </a>
+			<input type="button" value="Save" class="btn btn-success" style="position:fixed; bottom:80px; right:5px;width:100px" data-ng-click="mapInstance()"/>
+			</br></br>
+		</div>
+		
+		<!-- ***************************************************************************************** -->
+		
+	</div>
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+	<!-- Error modal -->
+	<div class="modal fade bs-example-modal-lg" id="loginErrModal" tabindex="-1" role="dialog" aria-labelledby="loginErrModal">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+		  <a href="index.html" style="width:75px"><span aria-hidden="true">&times;</span></a>
+			<h4 class="modal-title" id="myModalLabel">Server Unavailable</h4>
+		  </div>
+			<div class="modal-body">
+				<div class="alert alert-warning alert-dismissible" role="alert" id="alertBox">
+				  <div id="loginErrMsg"></div>
+				</div>
+			</div>
+			  <div class="modal-footer">
+				<a href="index.html" class="btn btn-info" style="width:75px">OK</a>
+			  </div>
+		  
+
+		</div>
+	  </div>
+	</div>
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	
+    <footer class="footer">
+        <div class="container">
+            Powered by <a href="www.dhis2.org">DHIS2</a>
+        </div>
+    </footer>
+	
+	 <!-- jQuery -->
+    <script src="js/jquery-2.1.3.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+	
+	<!-- Angular JavaScript -->
+    <script src="js/angular.min.js"></script>
+	
+	<script src= "js/jquery-ui.js"></script>
+	
+	<script src= "scripts/controllers/app.js"></script>
+	<script src= "scripts/controllers/mappingController.js"></script>
+	<script src= "scripts/controllers/validateSettings.js"></script>
+	<script src= "scripts/controllers/saveEdit.js"></script>
+	<script src= "scripts/controllers/validateLogin.js"></script>
+	<script src= "js/validations.js"></script>
+	<script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
+	
+	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+	
+</body>
+</html>
