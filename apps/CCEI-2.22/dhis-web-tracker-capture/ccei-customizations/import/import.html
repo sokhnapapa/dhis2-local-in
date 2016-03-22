@@ -1,0 +1,96 @@
+<div id="leftBar">
+    <div class="left-bar-menu" ng-controller="LeftBarMenuController">
+        <ul class="nav nav-pills nav-stacked">
+            <li><a href ng-click="showHome()">{{'equipment_manager'| translate}}</a></li>
+            <li><a href ng-click="showModal()">{{'modal_manager'| translate}}</a></li>
+            <li><a href ng-click="showConfiguration()">{{'ccei_configuration'| translate}}</a></li>
+            <li><a href ng-click="showImport()">{{'import'| translate}}</a></li>
+            <!--      <li><a href ng-click="showReportTypes()">{{'reports'| translate}}</a></li> -->
+
+        </ul>
+    </div>
+</div>
+<div id="mainPage">
+
+
+
+    <div class="vertical-spacing col-md-10" >
+        <form name="outerForm" novalidate>
+            <h2>Import Parameter Configuration</h2><br>
+
+            <table class="dhis2-list-table-striped dhis2-table-hover">
+                <tr ng-repeat="parameter in importParameters.parameters" ng-switch="parameter.valueType">
+            
+
+                    <td>
+                        {{parameter.key | translate}}
+                    </td>
+      <!--
+                    <td ng-switch-when="trackedEntity">
+                        <select class="form-control" ng-change="update()" ng-model="configurationParameters.parameters[$index].value" ng-options="trackedEntity.id as trackedEntity.name for trackedEntity in trackedEntityList"></select>
+                    </td>
+                    <td ng-switch-when="programMapping">
+                        <table class="dhis2-list-table-striped dhis2-table-hover ">
+                            <tr ng-repeat="map in parameter.programToProgramMapping">
+                                <td>
+                                    {{map.modelProgram[0].name}}
+                                </td>
+                                <td>
+                                    <select class="form-control" ng-model="map.equipmentProgram[0].UID" ng-options="program.id as program.name for program in equipmentProgramList"></select>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>  
+					-->
+                    <td ng-switch-when="attribute">
+                        <select class="form-control"  ng-model="importParameters.parameters[$index].value" ng-options="attribute.id as attribute.name for attribute in attributes"></select>
+                    </td>
+<!--
+                    <td ng-switch-when="dataelement">
+                        <select class="form-control"  ng-model="configurationParameters.parameters[$index].value" ng-options="dataElement.id as dataElement.name for dataElement in trackerDataElements"></select>
+                    </td>
+-->
+                </tr>
+            </table><br>
+            <div class="vertical-spacing" >
+                <button type="button"  class="btn btn-primary" ng-click="saveImportAndGo()">{{'save'| translate}}</button>
+                <button type="button"  class="btn btn-default small-horizonal-spacing" onclick="javascript:history.go(-1);">{{'back'| translate}}</button>
+                <button type="button"  class="btn btn-danger" ng-click="showImportDialog()">{{'IMPORT'| translate}}</button>
+
+            </div>
+        </form>
+        <div ng-show="showSuccess" class="alert alert-success">{{'success'| translate}}</div>
+     
+	 
+	 		<!-- Modal -->
+		<div ng-show="showModal" id="importDialogModal"  role="dialog">
+		<div class="modal-dialog">
+			<!--Modal content-->
+			<div class="modal-content">
+				<div id="importModalHeader" class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">
+						<span id="ucMsgTitle">Import File</span>
+					</h4>
+				</div>
+				<div id="importModalContent" class="modal-body" style="max-height:300px;overflow-y:auto">
+					<p id="importedFilePara" class="alert alert-success"></p>
+					<p id="alertMsgPara" class="alert alert-warning"></p>
+				</div>
+				<div class="modal-footer">
+					<input id="fileUpload" type="file" style="display: none;" />
+                    <button id="btnUpload" type="button" class="btn btn-success"  style="width:150px; display: inline-block;" data-ng-click="uploadFile()">BROUSE</button>
+					<button id="btnSave" type="button" class="btn btn-primary"  style="width:150px; display: inline-block;" data-ng-click="parseData()">UPLOAD</button>
+				    <button id="btnOK" type="button" class="btn btn-primary"  style="width:150px; display: inline-block;" data-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	 
+
+    </div>
+	
+	
+
+</div>
