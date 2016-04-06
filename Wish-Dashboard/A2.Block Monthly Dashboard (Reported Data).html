@@ -1,0 +1,2746 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html #if( $manifest ) manifest="$manifest" #end class="ie7"><![endif]-->
+<!--[if IE 8]>
+<html #if( $manifest ) manifest="$manifest" #end class="ie8"><![endif]-->
+<!--[if IE 9]>
+<html #if( $manifest ) manifest="$manifest" #end class="ie9"><![endif]-->
+<![if !IE]>
+<html #if( $manifest ) manifest="$manifest" #end><![endif]>
+<head>
+    <title>SCALE MIS Dashboard</title>
+    <meta name="description" content="DHIS 2">
+    <meta name="keywords" content="DHIS 2">
+    <style>
+        #header {
+            background-color: #276696;
+            height: 05px;
+            position: fixed;
+            z-index: 15;
+            top: 0;
+            left: 0;
+            right: 0;
+            box-shadow: 0 0 3px #222;
+
+        }
+        #headerText {
+            margin-left: 30%;
+            position: absolute;
+            top: 12px;
+            left: 175px;
+            font-weight: bold;
+            color: #fff;
+            font-size: 16px;
+        }
+        * {
+            font-family: LiberationSans, arial, sans-serif;
+            line-height: 200%;
+        }
+        .clearfix:after {
+            content: ".";
+            display: block;
+            font-size: 0;
+            line-height: 0;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .clearfix {
+            display: inline-block;
+        }
+
+        * html .clearfix {
+            height: 1%;
+        }
+
+        .clearfix {
+            display: block;
+        }
+
+        body {
+            margin: 0;
+            -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            padding: 10px 2%;
+            font: 14px/24px 'Open Sans', Helvetica, Arial, sans-serif;
+            color: #000;
+        }
+
+        #printing {
+            background: #FFF;
+            width: 1200px;
+            margin: 0 auto;
+            border: solid 0px #E7E7E7;
+            border-top: 5px solid #0088cc;
+            border-radius: 6px;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.2), inset 0 4px 0 #ededed
+        }
+
+        #header {
+            padding: 30px 20px;
+            border-bottom: solid 1px #e0e0e0;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        section {
+            padding: 0 20px 20px
+        }
+
+        button {
+            background-color: #36648B;
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .classname {
+            display: block;
+            padding: 20px;
+            border: solid 2px #CCC;
+            text-align: center;
+        }
+
+        .demo select {
+            border: 2px !important;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: #0088cc;
+            width: 250px;
+            text-indent: 0.01px;
+            text-overflow: "";
+            color: #FFF;
+            border-radius: 15px;
+            padding: 5px;
+            box-shadow: inset 0 0 5px rgba(000, 000, 000, 0.5);
+        }
+
+        .demo select.balck {
+            background-color: #000;
+        }
+
+        .demo select.option3 {
+            border-radius: 10px 0;
+        }
+
+        .container2 {
+            clear: left;
+            float: left;
+            width: 100%;
+            overflow: hidden;
+            /*background: #ffa7a7;*/
+            /* column 2 background colour */
+        }
+
+        .container1 {
+            float: left;
+            width: 100%;
+            position: relative;
+            right: 50%;
+            /*background: #fff689;*/
+            /* column 1 background colour */
+        }
+
+        .col1 {
+            float: left;
+            width: 46%;
+            position: relative;
+            left: 52%;
+            overflow: hidden;
+        }
+
+        .col2 {
+            float: left;
+            width: 46%;
+            position: relative;
+            left: 56%;
+            overflow: hidden;
+        }
+
+        .footer {
+            clear: both;
+            float: left;
+            width: 100%;
+        }
+
+    </style>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <!--<script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>-->
+
+
+    <script type="text/javascript" src="../dhis-web-commons/js/highcharts.js"></script>
+    <script type="text/javascript" src="../dhis-web-commons/js/modules/exporting.js"></script>
+
+    <script>
+        /*Declare global variable at here*/
+        var TESTING = 0;
+        var PRODUCTION = 1;
+        /********************************/
+        var configDeploy = PRODUCTION;
+        /********************************/
+
+        var facility = "Ff8x7tCAgRq";
+        //    var apiAnalyticTemplate = "../api/analytics.json?dimension=dx:";
+        var apiOrgUnits = "../api/organisationUnitGroups/c95xBxcwdJx.json?fields=organisationUnits[id,name,shortName]";
+        var apiDataElementGroups = "../api/dataElementGroups.json?fields=id,name";
+        var apiDataElement = "../api/dataElementGroups/";
+        var apichildh1,apichildh2,apichildh3,apideaths1,apifpchart1,apifpchart2,apihighrisk1,apihighrisk2;
+        var apiChart1, apiChart2, apiChart3, apiChart4, apiChart5, apiChart6, apiChart7, apiChart8, apiChart9, apiChart10, apiChart11, apiChart12, apiChart13, apiChart14, apiChart15;
+        var apiHchart1, apiHchart2, apiHchart3, apiHchart4, apiHchart5, apiHchart6, apiHchart7, apiHchart8;
+        var period = [], a, b, c;
+        var period_a = [], period_b = [], period_c = [];
+        var organisationUnits, organisationUnitsSort = [];
+        var periodsStrChart = "-1";
+        var strPeriod = "";
+        var organtionname = [];
+        function initial() {
+
+            $("#dropdown").change(function () {
+                selectedText = $(this).find("option:selected").text();
+                orgUid = $(this).find("option:selected").val();
+            });
+
+
+            $("#ddlMonth").change(function () {
+                selectedText_month = $(this).find("option:selected").text();
+            });
+
+            $("#year").change(function () {
+                selectedText_yr = $(this).find("option:selected").text();
+            });
+
+            populateDropDownList("ddlMonth", "year");
+
+        }
+        /*function calcLastSixMonths(monthId,yearId){
+         //var monthNames = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+
+         //var today = new Date();
+         //var today = monthId;
+         var d;
+         var month, year;
+
+         for(var i = 0; i < 6; i+= 1) {
+
+         d = new Date(yearId, monthId, 0);
+
+         year = yearId.toString();
+
+         month = monthId.toString();
+
+
+
+         if((month-i)>06)
+         {
+         month=(month-i).toString();
+
+
+         year = yearId.toString();
+
+         d = new Date(yearId.toString(), monthId.toString() , 0);
+
+         if(month >= 10){
+         a = year + month;
+         }
+         else{
+         a = year + "0" + month;
+         }
+         period_a.push(a);
+         console.log("a--"+period_a);
+         }
+         else{
+         if((month-i).toString()<01){
+         month=(month-i+12).toString();
+
+         year = yearId.toString()-1;
+
+
+         d = new Date(yearId.toString(), monthId.toString(), 0);
+
+         if(month >= 10){
+         b = year + month;
+         }
+         else{
+         b = year + "0" + month;
+         }
+         period_b.push(b);
+         console.log("b--"+period_b);
+         }
+         else{
+         month=(month-i).toString();
+
+
+         year = yearId.toString();
+
+         d = new Date(yearId.toString(), monthId.toString(), 0);
+
+
+         if(month >= 10){
+         c = year + month;
+         }
+         else{
+         c = year + "0" + month;
+         }
+         period_c.push(c);
+         console.log("c--"+period_c);
+         }
+         }
+
+
+         }
+         period.push(period_a,period_b,period_c);
+         console.log("period--"+period);
+
+         periodsStrChart  += ";" + period;
+         console.log("period for chart is--"+periodsStrChart);
+         }*/
+
+
+
+
+
+
+        function formatNum2digit(num) {
+            return ("0" + num).slice(-2);
+        }
+        function calcLastSixMonths(yearId, monthId) {
+            var result = [];
+
+            var d = new Date(yearId, monthId);
+            for (var i = 0; i < 6; i++) {
+                d.setMonth(d.getMonth() - 1);
+                result.push(d.getFullYear() + '' + formatNum2digit(d.getMonth()+1));
+            }
+            for (var i = 0; i < result.length; i++) {
+                strPeriod+=";"+result[i];
+            }
+            console.log(strPeriod);
+        }
+
+        function populateDropDownList(_monthfield, _yearfield) {
+            //get org data
+            $.getJSON(apiOrgUnits, function (data) {
+                organisationUnits = data.organisationUnits;
+
+                for (var i = 0; i < organisationUnits.length; i++) {
+                    organisationUnitsSort.push(organisationUnits[i].name);
+                }
+
+
+                organisationUnits.sort(function(a, b) {
+                    var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+                    if (nameA < nameB) //sort string ascending
+                        return -1
+                    if (nameA > nameB)
+                        return 1
+                    return 0 //default return value (no sorting)
+                });
+                $.each(organisationUnits, function (index, item) {
+                    $('#dropdown').append(
+                            $('<option></option>').val(item.id).html(item).text(item.name)
+                    );
+                });
+            });
+
+
+            //  var monthtext = ['Select Quarter', '1st quater', '2nd quater', '3rd quater', '4th quater'];
+            var monthtext = ['Select Month', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+            var yeartext = ['Select Year', '2014', '2015','2016'];
+            var monthfield = document.getElementById(_monthfield);
+            var yearfield = document.getElementById(_yearfield);
+            for (var m = 0; m <= 12; m++) {
+                monthfield.options[m] = new Option(monthtext[m], m)
+            }
+            for (var y = 0; y <= 3; y++) {
+                yearfield.options[y] = new Option(yeartext[y], yeartext[y]);
+            }
+        }
+
+    </script>
+    <script>
+        /*begin import function files*/
+        function generateApiChart1(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*  var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                // apiChart1 = apiAnalyticTemplate + peGen + "&filter=ou:" + orgUnitID + ";OU_GROUP-lBQUJ9K4wQK&filter=dx:" + dataElementID + "&displayProperty=NAME&outputIdScheme=ID";
+
+                apiChart1 = "../api/analytics.json?dimension=dx:nlyO8gj4uHd;wsYVhfyrUzO&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&displayProperty=NAME&outputIdScheme=ID";
+
+            } else {
+            }
+        }
+
+        function generateApiChart2(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*  var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                // apiChart2 = apiAnalyticTemplate + peGen + "&filter=ou:" + orgUnitID + ";OU_GROUP-lBQUJ9K4wQK&filter=dx:" + dataElementID + "&displayProperty=NAME&outputIdScheme=ID";
+                apiChart2 = "../api/analytics.json?dimension=dx:EimorkPYMQs&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&displayProperty=NAME&outputIdScheme=ID";
+
+            } else {
+            }
+        }
+
+        function generateApiChart3(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*  var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                // apiChart3 = apiAnalyticTemplate + peGen + "&filter=ou:" + orgUnitID + ";OU_GROUP-lBQUJ9K4wQK&filter=dx:" + dataElementID + "&displayProperty=NAME&outputIdScheme=ID";
+                apiChart3 = "../api/analytics.json?dimension=Ff8x7tCAgRq:erJTmh496gJ;nYkU5JbrOqg&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=dx:nlyO8gj4uHd&displayProperty=NAME&outputIdScheme=ID";
+
+            } else {
+            }
+
+        }
+
+        function generateApiChart4(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*  var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart4 = "../api//analytics.json?dimension=Ff8x7tCAgRq:erJTmh496gJ;nYkU5JbrOqg&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=dx:wsYVhfyrUzO&displayProperty=NAME&outputIdScheme=ID"
+            } else {
+            }
+
+        }
+
+        function generateApiChart5(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }
+                 */
+                apiChart5 = "../api/analytics.json?dimension=Ff8x7tCAgRq:erJTmh496gJ;nYkU5JbrOqg&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=dx:EimorkPYMQs&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+
+        function generateApiChart6(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart6 = "../api/analytics.json?dimension=dx:cva1dsjoeTp&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+        function generateApiChart7(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*   var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart7 = "../api/analytics.json?dimension=Ff8x7tCAgRq:erJTmh496gJ;nYkU5JbrOqg&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=dx:cva1dsjoeTp&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+
+        function generateApiChart8(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart8 = "../api/analytics.json?dimension=dx:d2q5FWQv00D&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+
+
+        function generateApiChart9(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /* var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart9 = "../api/analytics.json?dimension=Ff8x7tCAgRq:erJTmh496gJ;nYkU5JbrOqg&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=dx:d2q5FWQv00D&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+
+
+        function generateApiChart10(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*  var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart10 = "../api/analytics.json?dimension=dx:CKMPE7RrCLn&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+        function generateApiChart11(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart11 = "../api/analytics.json?dimension=Ff8x7tCAgRq:nYkU5JbrOqg;erJTmh496gJ&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=dx:CKMPE7RrCLn&displayProperty=NAME&outputIdScheme=ID ";
+            } else {
+            }
+
+        }
+
+        function generateApiChart12(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart12 = "../api/analytics.json?dimension=Ff8x7tCAgRq:nYkU5JbrOqg;erJTmh496gJ&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=dx:eSLLUQQO47o&displayProperty=NAME&outputIdScheme=ID ";
+            } else {
+            }
+
+        }
+
+        function generateApiChart13(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart13 = "../api/analytics.json?dimension=dx:eSLLUQQO47o&dimension=pe:"+strPeriod+"&filter=ou:"+orgUnitID+"&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+
+        function generateApiChart14(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart14 = "../api/analytics.json?dimension=dx:XMzLKfYiLLG&dimension=pe:"+strPeriod+"&filter=ou:"+orgUnitID+"&displayProperty=NAME&outputIdScheme=ID ";
+            } else {
+            }
+
+        }
+
+        function generateApiChart15(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apiChart15 = "../api/analytics.json?dimension=Ff8x7tCAgRq:erJTmh496gJ;nYkU5JbrOqg&dimension=pe:"+strPeriod+"&filter=ou:"+orgUnitID+"&filter=dx:XMzLKfYiLLG&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+
+        function generateApiChart16(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apichildh1 = "../api/analytics.json?dimension=dx:Cigpw6Kel7p;EgsJuMTPAs3&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID  +";OU_GROUP-lBQUJ9K4wQK" + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+        function generateApiChart17(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apichildh2 = "../api/analytics.json?dimension=dx:Cigpw6Kel7p;kY3D92WC1Ix&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID +";OU_GROUP-lBQUJ9K4wQK" + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+        function generateApiChart18(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apichildh3 = "../api/analytics.json?dimension=dx:gQme8Y3RGft&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID +";OU_GROUP-lBQUJ9K4wQK" + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+        function generateApiChart19(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apideaths1 = "../api/analytics.json?dimension=dx:taIcC5CKZgf;n2k4h2eMRGi;uFg3mamWmg6&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID +";OU_GROUP-lBQUJ9K4wQK" + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+        function generateApiChart20(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apifpchart1 = "../api/analytics.json?dimension=dx:kNWJaDf4pof&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID +";OU_GROUP-lBQUJ9K4wQK" + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+        function generateApiChart21(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apifpchart2 = "../api/analytics.json?dimension=dx:ORPQ5YjkrjS;Z3EH21ckmRo&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID +";OU_GROUP-lBQUJ9K4wQK" + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+
+        function generateApiChart23(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apihighrisk1 = "../api/analytics.json?dimension=dx:nlyO8gj4uHd;pekGuea8ITY&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID +";OU_GROUP-lBQUJ9K4wQK" + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+        function generateApiChart24(orgUnitID, year) {
+            if (configDeploy == PRODUCTION) {
+                /*var quarterArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                 var peGen = "";
+                 for (var i = 0; i < quarterArr.length; i++) {
+                 peGen += (year + quarterArr[i]);
+                 if (i < quarterArr.length - 1) peGen += ";";
+                 }*/
+                apihighrisk2 = "../api/analytics.json?dimension=dx:nlyO8gj4uHd;GH2TDDVTDAJ&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID +";OU_GROUP-lBQUJ9K4wQK" + "&displayProperty=NAME&outputIdScheme=ID";
+            } else {
+            }
+
+        }
+
+
+
+        //get the all selected dropdown ids and name
+        function validateDashboard() {
+
+            var groupSelect = false;
+            //orgUnit Related
+            var orgUnitList = document.getElementById('dropdown');
+            var tempOrgUnitUid = orgUnitList.options[orgUnitList.selectedIndex].value;
+
+
+            // month related
+            var tempMonthList = document.getElementById('ddlMonth');
+            var tempMonthUid = tempMonthList.options[tempMonthList.selectedIndex].value;
+            console.log(tempMonthUid);
+
+            // year related
+            var tempYearList = document.getElementById('year');
+            var tempYearUid = tempYearList.options[tempYearList.selectedIndex].value;
+
+            if (tempOrgUnitUid == "base" || tempOrgUnitUid == undefined) {
+                alert("Select OrganisationUnit");
+                return;
+            }
+
+
+            else if (tempMonthUid == "Select Month" || tempMonthUid == undefined) {
+                alert("Select Month");
+                return;
+            }
+
+            else if (tempYearUid == "Select Year" || tempYearUid == undefined) {
+                alert("Select Year");
+                return;
+            }
+
+
+            myFunction(organisationUnits, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+        }
+
+        function getNamebyId(id, list) {
+            var res = '';
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id == id) {
+                    res = list[i].name;
+                }
+            }
+            return res;
+        }
+
+        function myFunction(organisationUnits, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+
+            var tempOrgUnitText = getNamebyId(tempOrgUnitUid, organisationUnits);
+
+            calcLastSixMonths(tempYearUid,tempMonthUid);
+
+            generateApiChart1(tempOrgUnitUid, tempYearUid);
+            generateApiChart2(tempOrgUnitUid, tempYearUid);
+            generateApiChart3(tempOrgUnitUid, tempYearUid);
+
+            generateApiChart4(tempOrgUnitUid, tempYearUid);
+            generateApiChart5(tempOrgUnitUid, tempYearUid);
+            generateApiChart6(tempOrgUnitUid, tempYearUid);
+
+
+            generateApiChart7(tempOrgUnitUid, tempYearUid);
+            generateApiChart8(tempOrgUnitUid, tempYearUid);
+            generateApiChart9(tempOrgUnitUid, tempYearUid);
+
+
+            generateApiChart10(tempOrgUnitUid, tempYearUid);
+            generateApiChart11(tempOrgUnitUid, tempYearUid);
+
+            generateApiChart12(tempOrgUnitUid, tempYearUid);
+            generateApiChart13(tempOrgUnitUid, tempYearUid);
+
+            generateApiChart14(tempOrgUnitUid, tempYearUid);
+            generateApiChart15(tempOrgUnitUid, tempYearUid);
+
+            generateApiChart16(tempOrgUnitUid, tempYearUid);
+            generateApiChart17(tempOrgUnitUid, tempYearUid);
+
+            generateApiChart18(tempOrgUnitUid, tempYearUid);
+            generateApiChart19(tempOrgUnitUid, tempYearUid);
+
+            generateApiChart20(tempOrgUnitUid, tempYearUid);
+            generateApiChart21(tempOrgUnitUid, tempYearUid);
+
+
+            generateApiChart23(tempOrgUnitUid, tempYearUid);
+
+            generateApiChart24(tempOrgUnitUid, tempYearUid);
+
+
+            //var titleDe = getNamebyId(tempDataElementUid, chartDataGroup);
+
+            createChart1({
+                chartId: "chart1",
+                //  title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+            createChart2({
+                chartId: "chart2",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+            createChart3({
+                chartId: "chart3",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart4({
+                chartId: "chart4",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart5({
+                chartId: "chart5",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart6({
+                chartId: "chart6",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart7({
+                chartId: "chart7",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart8({
+                chartId: "chart8",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart9({
+                chartId: "chart9",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart10({
+                chartId: "chart10",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart11({
+                chartId: "chart11",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart12({
+                chartId: "chart12",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart13({
+                chartId: "chart13",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart14({
+                chartId: "chart14",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart15({
+                chartId: "chart15",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart16({
+                chartId: "chart16",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+            createChart17({
+                chartId: "chart17",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+            createChart18({
+                chartId: "chart18",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+            createChart19({
+                chartId: "chart19",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+            createChart20({
+                chartId: "chart20",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+            createChart21({
+                chartId: "chart21",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart23({
+                chartId: "chart23",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+
+            createChart24({
+                chartId: "chart24",
+                //   title: titleDe,
+                subtitle: tempOrgUnitText
+            }, tempOrgUnitUid, tempMonthUid, tempYearUid);
+        }
+
+        function createChart1(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart1, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts1(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart2(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+
+            //  var count = tempMonthUid * 3;
+            var count = 6;
+            $.getJSON(apiChart2, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts2(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart3(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid * 3;
+            var count = 6;
+            $.getJSON(apiChart3, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, facility);
+                var chartData = preparingDataforChart(json, count, facility);
+                createLineCharts3(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart4(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //  var count = tempMonthUid * 2;
+            var count = 6;
+            $.getJSON(apiChart4, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, facility);
+                // json = swapAlternativePe(json);
+                //   count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, facility);
+                createLineCharts4(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart5(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //  var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart5, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, facility);
+                // json = swapAlternativePe(json);
+                // count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, facility);
+                createLineCharts5(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart6(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart6, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, "dx");
+                // json = swapAlternativePe(json);
+                // count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, "dx");
+                createBarCharts6(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart7(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart7, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, facility);
+                //  json = swapAlternativePe(json);
+                // count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, facility);
+                createLineCharts7(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart8(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart8, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, "dx");
+                //json = swapAlternativePe(json);
+                //  count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, "dx");
+                createBarCharts8(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart9(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart9, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, facility);
+                // json = swapAlternativePe(json);
+                // count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, facility);
+                createLineCharts9(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart10(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart10, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, "dx");
+                // json = swapAlternativePe(json);
+                //  count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, "dx");
+                createBarCharts10(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart11(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //  var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart11, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, facility);
+                // json = swapAlternativePe(json);
+                //  count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, facility);
+                createLineCharts11(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+
+        function createChart12(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //  var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart12, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, facility);
+                // json = swapAlternativePe(json);
+                //  count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, facility);
+                createLineCharts12(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart13(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //  var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart13, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, "dx");
+                // json = swapAlternativePe(json);
+                //  count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, "dx");
+                createBarCharts13(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart14(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //  var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart14, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, "dx");
+                // json = swapAlternativePe(json);
+                //  count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, "dx");
+                createBarCharts14(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart15(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //  var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apiChart15, function (jsonRes) {
+                var json = standardlizeData_1(jsonRes, facility);
+                // json = swapAlternativePe(json);
+                //  count = json.metaData.pe;
+                var chartData = preparingDataforChart(json, count, facility);
+                createLineCharts15(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+        function createChart16(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apichildh1, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts16(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+        function createChart17(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apichildh2, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts17(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+        function createChart18(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apichildh3, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts18(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+        function createChart19(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apideaths1, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts19(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+        function createChart20(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apifpchart1, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts20(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+        function createChart21(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apifpchart2, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts21(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+        function createChart23(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apihighrisk1, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts23(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+        function createChart24(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            $.getJSON(apihighrisk2, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createBarCharts24(chartInfo.chartId, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        Highcharts.theme = {
+            colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
+            chart: {
+                backgroundColor: {
+                    linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
+                    stops: [
+                        [0, 'rgb(255, 255, 255)'],
+                        [1, 'rgb(240, 240, 255)']
+                    ]
+                },
+                //borderWidth: 2,
+                plotBackgroundColor: 'rgba(255, 255, 255, .9)'
+                //plotShadow: true,
+                //plotBorderWidth: 1
+            },
+            title: {
+                style: {
+                    color: '#000',
+                    font: 'bold 16px "Trebuchet MS", Verdana, sans-serif'
+                }
+            },
+            subtitle: {
+                style: {
+                    color: '#666666',
+                    font: 'bold 12px "Trebuchet MS", Verdana, sans-serif'
+                }
+            },
+            tooltip: {
+                borderWidth: 0,
+                backgroundColor: 'rgba(219,219,216,0.8)',
+                shadow: false
+            },
+            legend: {
+                itemStyle: {
+                    fontWeight: 'bold',
+                    fontSize: '13px'
+                }
+            },
+            xAxis: {
+                gridLineWidth: 0,
+
+                lineColor: '#000',
+                // tickColor: '#000',
+                labels: {
+                    style: {
+                        color: '#000',
+                        font: '11px Trebuchet MS, Verdana, sans-serif'
+                    }
+                },
+                title: {
+                    style: {
+                        color: '#333',
+                        fontWeight: 'bold',
+                        fontSize: '12px',
+                        fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+
+                    }
+                }
+            },
+            yAxis: {
+                minorTickInterval: 'auto',
+                lineColor: '#000',
+                gridLineWidth: 0,
+                minorGridLineWidth:0,
+                lineWidth: 1,
+                labels: {
+                    style: {
+                        color: '#000',
+                        font: '11px Trebuchet MS, Verdana, sans-serif'
+                    }
+                },
+                title: {
+                    style: {
+                        color: '#333',
+                        fontWeight: 'bold',
+                        fontSize: '12px',
+                        fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+                    }
+                }
+            },
+            plotOptions: {
+                candlestick: {
+                    lineColor: '#404048'
+                }
+            },
+            legend: {
+                itemStyle: {
+                    font: '9pt Trebuchet MS, Verdana, sans-serif',
+                    color: 'black'
+
+                },
+                itemHoverStyle: {
+                    color: '#039'
+                },
+                itemHiddenStyle: {
+                    color: 'gray'
+                }
+            },
+            labels: {
+                style: {
+                    color: '#99b'
+                }
+            },
+
+
+            // General
+            background2: '#F0F0EA'
+
+        };
+
+        // Apply the theme
+        Highcharts.setOptions(Highcharts.theme);
+
+
+
+
+
+
+
+        function createBarCharts1(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "ANC Registration and Early ANC Registration"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+
+
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        }
+                    }
+                },
+
+                series: dataSeriesArrO
+            });
+        }
+
+
+        function createBarCharts2(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "3 ANC Checkups"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+
+        function createLineCharts3(view, subtitleStr, xAxisCategoriesArr, dataSeriesArr0) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: "ANC Registration"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    //series: {
+                    // lineColor: '#ff69b4'
+                    // },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArr0
+            });
+        }
+
+        function createLineCharts4(view, subtitleStr, xAxisCategoriesArr, dataSeriesArr0) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: "Early ANC Registration"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    //  series: {
+                    // lineColor: '#4169e1'
+                    // },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArr0
+            });
+        }
+
+        function createLineCharts5(view, subtitleStr, xAxisCategoriesArr, dataSeriesArr0) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: "3 ANC Checkups"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    // series: {
+                    // lineColor: '#ff69b4'
+                    //  },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArr0
+            });
+        }
+
+        function createBarCharts6(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "OPD Attendance"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: true
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+        function createLineCharts7(view, subtitleStr, xAxisCategoriesArr, dataSeriesArr0) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: "OPD Attendance"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    //  series: {
+                    //  lineColor: '#ff69b4'
+                    //  },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArr0
+            });
+        }
+
+        function createBarCharts8(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "IPD Admissions"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: true
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+        function createLineCharts9(view, subtitleStr, xAxisCategoriesArr, dataSeriesArr0) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: "IPD Admissions"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    series: {
+                        lineColor: '#ff69b4'
+                    },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArr0
+            });
+        }
+
+        function createBarCharts10(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "Institutional Deliveries"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: true
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+        function createLineCharts11(view, subtitleStr, xAxisCategoriesArr, dataSeriesArr0) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: "Institutional Deliveries"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    //   series: {
+                    // lineColor: '#ff69b4'
+                    //  },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArr0
+            });
+        }
+
+
+        function createLineCharts12(view, subtitleStr, xAxisCategoriesArr, dataSeriesArr0) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: "3 Postnatal Checkups"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    //   series: {
+                    // lineColor: '#ff69b4'
+                    //  },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArr0
+            });
+        }
+
+
+
+
+        function createBarCharts13(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "3 Postnatal Checkups"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: true
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+
+        function createBarCharts14(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "Full Immunization"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: true
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+
+        function createLineCharts15(view, subtitleStr, xAxisCategoriesArr, dataSeriesArr0) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: "Full Immunization"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    //   series: {
+                    // lineColor: '#ff69b4'
+                    //  },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize:"14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArr0
+            });
+        }
+
+
+        function createBarCharts16(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "Low Birth Weight Cases(Less than 2.5 kgs)"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: false
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+        function createBarCharts17(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "Live Birth vs Breastfeeding within 24 hours "
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: false
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+        function createBarCharts18(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "Malnutrition Cases (0-5 years)"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: false
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+        function createBarCharts19(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "Deaths"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: false
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+        function createBarCharts20(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "Sterilisation (Permanent Methods)"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: false
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+        function createBarCharts21(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "IUD & PPIUCD Insertions(Within 48 hours)"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: false
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+        function createBarCharts23(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "ANC-Hb Level(Less than 11mg/dl)"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: false
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+        function createBarCharts24(view, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: "Hypertension New Cases (BP>140/90))"
+                },
+                subtitle: {
+                    text: subtitleStr
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    series: {
+                        colorByPoint: false
+                    },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+        function standardlizeData(jsonRes) {
+            var json = jsonRes;
+            /*  var datarows = json.rows;
+             var peArr = json.metaData.pe;
+             var facilityArr = json.metaData[facility];
+             var dataResult = [];
+
+             for (var i = 0; i < peArr.length; i++) {
+             var pe = peArr[i];
+             for (var j = 0; j < facilityArr.length; j++) {
+             var fa = facilityArr[j];
+             var search = false;
+             for (var k = 0; k < datarows.length; k++) {
+             if (datarows[k][0] == fa && datarows[k][1] == pe) {
+             search = true;
+             break;
+             }
+             }
+             if (!search) {
+             datarows.push([fa, pe, "0"]);
+             }
+             }
+             }
+             json.rows = datarows;
+             json.metaData.pe = peArr;
+             json.metaData[facility] = facilityArr;*/
+            return json;
+        }
+
+
+        function standardlizeData_1(jsonRes, secondKey) {
+            var json = jsonRes;
+            var datarows = json.rows;
+            var peArr = json.metaData.pe;
+            var peArrNames = json.metaData.names;
+            var facilityArr = json.metaData[secondKey];
+            var dataResult = [];
+
+            for (var i = 0; i < peArr.length; i++) {
+                var pe = peArr[i];
+                for (var j = 0; j < facilityArr.length; j++) {
+                    var fa = facilityArr[j];
+                    var search = false;
+                    for (var k = 0; k < datarows.length; k++) {
+                        if (datarows[k][0] == fa && datarows[k][1] == pe) {
+                            search = true;
+                            break;
+                        }
+                    }
+                    if (!search) {
+                        datarows.push([fa, pe, "0"]);
+                    }
+                }
+            }
+            json.rows = datarows;
+            json.metaData.pe = peArr;
+            json.metaData[secondKey] = facilityArr;
+            return json;
+        }
+
+        function sortDataRowsbyPeArr(json) {
+            var datarows = json.rows;
+            var peArr = json.metaData.pe;
+            var dataResult = [];
+            for (var i = 0; i < peArr.length; i++) {
+                var minPe = peArr[i];
+                //  for (var k = 0; k < facilityArr.length; k++) {
+                //  var minF = facilityArr[k];
+                for (var j = 0; j < datarows.length; j++) {
+                    if (datarows[j][1] == minPe) {
+                        dataResult.push(datarows[j]);
+                    }
+                    //}
+                }
+            }
+            return dataResult;
+        }
+
+
+        function sortDataRowsbyPeArr_1(json, secondKey) {
+            var datarows = json.rows;
+            var peArr = json.metaData.pe;
+            var facilityArr = json.metaData[secondKey];
+            var dataResult = [];
+            for (var i = 0; i < peArr.length; i++) {
+                var minPe = peArr[i];
+                for (var k = 0; k < facilityArr.length; k++) {
+                    var minF = facilityArr[k];
+                    for (var j = 0; j < datarows.length; j++) {
+                        if (datarows[j][0] == minF && datarows[j][1] == minPe) {
+                            dataResult.push(datarows[j]);
+                        }
+                    }
+                }
+            }
+            return dataResult;
+        }
+
+        //rearrange json to fit into charts- without facility
+        function preparingDataforChart(json, count, secondKey) {
+
+            var peArr = json.metaData.pe;
+            var facilityArr = json.metaData[secondKey];
+            var dataResult = sortDataRowsbyPeArr_1(json, secondKey);
+
+
+            var xAxisCategoriesArr = [];
+            for (var i = 0; i < peArr.length; i++) {
+                xAxisCategoriesArr.push(json.metaData.names[peArr[i]])
+                if (xAxisCategoriesArr.length >= count) break;
+            }
+            var dataSeriesArrO = [];
+
+            for (var i = 0; i < facilityArr.length; i++) {
+                var name = json.metaData.names[facilityArr[i]];
+                var data = [];
+                for (var j = 0; j < dataResult.length; j++) {
+                    if (dataResult[j][0] == facilityArr[i]) {
+                        data.push(Number(dataResult[j][2]));
+                        if (data.length >= count) break;
+                    }
+                }
+                var seriO = {
+                    name: name,
+                    data: data
+                }
+                dataSeriesArrO.push(seriO);
+            }
+
+            return {xaxis: xAxisCategoriesArr, series: dataSeriesArrO};
+        }
+
+
+        function swapAlternativePe(json) {
+            var peArr = [];
+            var mid = json.metaData.pe.length / 2;
+            for (var i = 0; i < mid; i++) {
+                peArr.push(json.metaData.pe[i], json.metaData.pe[i + mid]);
+            }
+            json.metaData.pe = peArr;
+            return json;
+        }
+        /*end import function files*/
+    </script>
+</head>
+<body>
+
+<div id="printing">
+    <section class="clearfix">
+        <header id="header">
+
+            <a id="logo" target="_blank"
+               style="font-size: 22px; color:white ;margin-left:30%"><span id="headerText">SCALE Block Monthly Dashboard</span></a></header>
+
+        <form class="demo">
+
+            <select id="dropdown" style=" margin-left:20% ; margin-top:01%">
+                <option selected value="base">Select OrgUnit</option>
+
+            </select>
+
+            <select name="two" class="select2" id="ddlMonth" style="width: 250px;">
+                <option selected value="base"></option>
+            </select>
+            <select id="year" style="width: 250px;">
+                <option selected value="base"></option>
+            </select>
+
+        </form>
+    </section>
+</div>
+<button id="button" class="btn btn-primary" style="margin-left: 50%" onclick="validateDashboard()">Go</button>
+
+<div id="chartBody">
+    <div>
+        <p style="font-size: 24px; text-align: center; font-weight: bold">Antenatal Care</p>
+
+        <div id="chart1" style="float: left; width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart3" style="float: left;width: 50%;overflow: hidden;margin-top: 3%"></div>
+
+        <div id="chart2" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+
+        <div id="chart23" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart24" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart4" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart5" style="width: 100%;overflow: hidden;"></div>
+
+
+        <div id="chartH3" style="width: 100%;overflow: hidden;"></div>
+        <div id="chartH1" style="width: 100%;overflow: hidden;"></div>
+        <div id="chartH2" style="width: 100%;overflow: hidden;"></div>
+
+        <p style="font-size: 24px;text-align: center; font-weight: bold;margin-left: 7%;">
+            Institutional Deliveries</p>
+        <div id="chart10" style="float: left;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart11" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chartH6" style="width: 100%;overflow: hidden;"></div>
+        <p style="font-size: 24px;text-align: center; font-weight: bold;margin-left: 5%;">3 Postnatal Checkups</p>
+        <div id="chart13" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart12" style="float: left;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chartH7" style="width: 100%;overflow: hidden;"></div>
+        <p style="font-size: 24px;text-align: center; font-weight: bold;margin-left: 5%;">
+            Child Health</p>
+        <div id="chart16" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart17" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart18" style="float: right;width: 100%;overflow: hidden;margin-top: 3%"></div>
+        <p style="font-size: 16px;text-align: center; font-weight: bold;margin-left: 5%;">
+            Full Immunization</p>
+        <div id="chart14" style="float: left;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart15" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chartH8" style="width: 100%;overflow: hidden;"></div>
+
+        <p style="font-size: 24px;text-align: center; font-weight: bold;margin-left: 5%;">
+            Family Planning</p>
+        <div id="chart20" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart21" style="float: right;width: 50%;overflow: hidden;margin-top: 3%"></div>
+
+
+        <p style="font-size: 24px;text-align: center; font-weight: bold;margin-top: 5%">OPD Attendance</p>
+        <div id="chart7" style="float: right; width: 50%; overflow: hidden; margin-top: 3%"></div>
+        <div id="chart6" style="float: right; width: 50%; overflow: hidden; margin-top: 3%"></div>
+
+        <div id="chartH4" style="width: 100%;overflow: hidden;"></div>
+
+        <p style="font-size: 24px;text-align: center; font-weight: bold;margin-left: 5%;">
+            IPD Admissions</p>
+        <div id="chart8" style="float: left;width: 50%;overflow: hidden;margin-top: 3%"></div>
+        <div id="chart9" style="float: right;width: 50%;overflow: hidden; margin-top: 3%"></div>
+        <div id="chartH5" style="width: 100%;overflow: hidden;"></div>
+
+
+
+
+
+
+
+
+        <br/>
+
+
+
+
+        <p style="font-size: 24px;text-align: center; font-weight: bold;margin-left: 5%;">
+            Mortality </p>
+
+        <div id="chart19" style="float: right;width: 100%;overflow: hidden;margin-top: 1%"></div>
+
+
+
+
+
+
+    </div>
+
+</div>
+<script>
+    $(document).ready(function(){
+        $(".hideInPrint").hide();
+        $("p").hide();
+
+        $("#button").click(function(){
+            $("p").show();
+        });
+    });
+</script>
+<script>
+    $(function () {
+        initial();
+    });
+</script>
+
+</body>
+</html>

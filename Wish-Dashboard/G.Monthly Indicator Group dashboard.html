@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html #if( $manifest ) manifest="$manifest" #end class="ie7"><![endif]-->
+<!--[if IE 8]>
+<html #if( $manifest ) manifest="$manifest" #end class="ie8"><![endif]-->
+<!--[if IE 9]>
+<html #if( $manifest ) manifest="$manifest" #end class="ie9"><![endif]-->
+<![if !IE]>
+<html #if( $manifest ) manifest="$manifest" #end><![endif]>
+<head>
+    <title>SCALE MIS Dashboard</title>
+    <meta name="description" content="DHIS 2">
+    <meta name="keywords" content="DHIS 2">
+    <style>
+        #header {
+            background-color: #276696;
+            height: 05px;
+            position: fixed;
+            z-index: 15;
+            top: 0;
+            left: 0;
+            right: 0;
+            box-shadow: 0 0 3px #222;
+
+        }
+
+        #headerText {
+            margin-left: 30%;
+            position: absolute;
+            top: 12px;
+            left: 175px;
+            font-weight: bold;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        * {
+            font-family: LiberationSans, arial, sans-serif;
+            line-height: 200%;
+        }
+
+        .clearfix:after {
+            content: ".";
+            display: block;
+            font-size: 0;
+            line-height: 0;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        .clearfix {
+            display: inline-block;
+        }
+
+        * html .clearfix {
+            height: 1%;
+        }
+
+        .clearfix {
+            display: block;
+        }
+
+        body {
+            margin: 0;
+            -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            padding: 10px 2%;
+            font: 14px/24px 'Open Sans', Helvetica, Arial, sans-serif;
+            color: #000;
+        }
+
+        #printing {
+            background: #FFF;
+            width: 1200px;
+            margin: 0 auto;
+            border: solid 0px #E7E7E7;
+            border-top: 5px solid #0088cc;
+            border-radius: 6px;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.2), inset 0 4px 0 #ededed
+        }
+
+        #header {
+            padding: 30px 20px;
+            border-bottom: solid 1px #e0e0e0;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        section {
+            padding: 0 20px 20px
+        }
+
+        button {
+            background-color: #36648B;
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .classname {
+            display: block;
+            padding: 20px;
+            border: solid 2px #CCC;
+            text-align: center;
+        }
+
+        .demo select {
+            border: 2px !important;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: #0088cc;
+            width: 250px;
+            text-indent: 0.01px;
+            text-overflow: "";
+            color: #FFF;
+            border-radius: 15px;
+            padding: 5px;
+            box-shadow: inset 0 0 5px rgba(000, 000, 000, 0.5);
+        }
+
+        .demo select.balck {
+            background-color: #000;
+        }
+
+        .demo select.option3 {
+            border-radius: 10px 0;
+        }
+
+        .container2 {
+            clear: left;
+            float: left;
+            width: 100%;
+            overflow: hidden;
+            /*background: #ffa7a7;*/
+            /* column 2 background colour */
+        }
+
+        .container1 {
+            float: left;
+            width: 100%;
+            position: relative;
+            right: 50%;
+            /*background: #fff689;*/
+            /* column 1 background colour */
+        }
+
+        .col1 {
+            float: left;
+            width: 46%;
+            position: relative;
+            left: 52%;
+            overflow: hidden;
+        }
+
+        .col2 {
+            float: left;
+            width: 46%;
+            position: relative;
+            left: 56%;
+            overflow: hidden;
+        }
+
+        .footer {
+            clear: both;
+            float: left;
+            width: 100%;
+        }
+
+    </style>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript"
+            src="../../../dhis-web-commons/javascripts/jQuery/jquery.min.js?_rev=$!{buildRevision}"></script>
+    <!--<script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>-->
+    <script type="text/javascript" src="../dhis-web-commons/js/highcharts.js"></script>
+    <script type="text/javascript" src="../dhis-web-commons/js/modules/exporting.js"></script>
+
+    <script>
+        /*Declare global variable at here*/
+        var TESTING = 0;
+        var PRODUCTION = 1;
+        /********************************/
+        var configDeploy = PRODUCTION;
+        /********************************/
+
+        var facility = "Ff8x7tCAgRq";
+        var apiOrgUnits = "../api/organisationUnitGroups/lBQUJ9K4wQK.json?fields=organisationUnits[id,name,shortName]";
+        var apiIndicatorGroupsSets = "../api/indicatorGroupSets";
+        var apiIndicatorGroups = "../api/indicatorGroups/";
+        var apiChart1, apiChart2, apiChart3, apiChart4;
+        var groupUidList;
+        var uidList;
+        var strPeriod = "";
+        var groupSetName, indicatorGroupSetName;
+        var chartDataGroup;
+        var organisationUnits;
+        var indicatorGroupSetID;
+        var Group1 = ["uP1VRQfXX85", "B2KffdDTlY7", "Mj91lFszvMG"];
+        var Group2 = ["uP1VRQfXX85", "GJsW1lN15TJ", "ShiC0wOx83U"];
+        var Group3 = ["uP1VRQfXX85", "KU9kgJehdGc", "iqW9CPbOPc2"];
+        var Group4 = ["P8HvtbejGGg", "d3J54Mc0bH3", "dXn4wndoExy", "xyzhcLgkAiS"];
+        var Group5 = ["pQ75EsrNah0", "zvRWe7O4u9Y", "dfbrHe5TS7U"];
+
+        var LEVEL = {
+            GROUPSET: 0,
+            GROUP: 1,
+            ID: 2
+        };
+        var indicatorGroupFilter = {
+            cUhL1t5v6to: Group1,
+            dZJTBeW1OOz: Group2,
+            oEEg50Na7uH: Group3,
+            xv83tTnlpJe: Group4,
+            foFcsjl4bv0: Group5
+        }
+        function initial() {
+            //get org data
+            $.getJSON(apiOrgUnits, function (data) {
+                organisationUnits = data.organisationUnits;
+                $.each(data.organisationUnits, function (index, item) {
+                    $('#slOrgUnit').append(
+                            $('<option></option>').val(item.id).html(item).text(item.name)
+                    );
+                });
+            });
+
+            $.getJSON(apiIndicatorGroupsSets + ".json", function (data) {
+                $.each(data.indicatorGroupSets, function (index, item) {
+                    $('#slGroupSet').append(
+                            $('<option></option>').val(item.id).html(item).text(item.name)
+                    );
+                });
+            });
+
+            $("#slGroupSet").change(function () {
+                indicatorGroupSetID = $(this).find("option:selected").val();
+                indicatorGroupSetName = $(this).find("option:selected").html();
+                groupSetName = indicatorGroupSetName;
+                $.getJSON(apiIndicatorGroupsSets + "/" + indicatorGroupSetID + ".json", function (data) {
+                    $('#slGroup').html('<option selected value="base">Select Indicator Group</option>');
+                    groupUidList = data.indicatorGroups;
+                    $.each(data.indicatorGroups, function (index, item) {
+                        $('#slGroup').append(
+                                $('<option></option>').val(item.id).html(item).text(item.name)
+                        );
+                    });
+                });
+            });
+
+            $("#slGroup").change(function () {
+                var IndicatorGroupID = $(this).find("option:selected").val();
+                $.getJSON(apiIndicatorGroups + IndicatorGroupID + ".json", function (data) {
+                    var newData = data;
+                    if (indicatorGroupFilter.hasOwnProperty(IndicatorGroupID)) {
+                        newData = sortWithFilterArr(indicatorGroupFilter[IndicatorGroupID], data);
+                    }
+                    chartDataGroup = newData.indicators;
+                    uidList = newData.indicators;
+                    $('#slId').html('<option selected value="base">Select Indicator</option>');
+                    $.each(newData.indicators, function (index, item) {
+                        $('#slId').append(
+                                $('<option></option>').val(item.id).html(item).text(item.name)
+                        );
+                    });
+                });
+            });
+
+            var monthtext = ['Select Month', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+            var yeartext = ['Select Year', '2014', '2015', '2016'];
+            var monthfield = document.getElementById("slMonth");
+            var yearfield = document.getElementById("slYear");
+            for (var m = 0; m <= 12; m++) {
+                monthfield.options[m] = new Option(monthtext[m], m)
+            }
+            for (var y = 0; y <= 3; y++) {
+                yearfield.options[y] = new Option(yeartext[y], yeartext[y]);
+            }
+        }
+
+        var getDatabyGroupSetDataCallback = [];
+        function getDatabyGroupSet(index, groupUidList, callback) {
+            if (index == 0) {
+                getDatabyGroupSetDataCallback = [];
+            }
+            if (index == groupUidList.length) {
+                callback();
+                return;
+            }
+
+            $.getJSON(apiIndicatorGroups + groupUidList[index].id + ".json", function (data) {
+                var newData = data;
+                if (indicatorGroupFilter.hasOwnProperty(groupUidList[index].id)) {
+                    newData = sortWithFilterArr(indicatorGroupFilter[groupUidList[index].id], data);
+                }
+                var uidList = newData.indicators;
+                getDatabyGroupSetDataCallback.push({
+                    groupName: groupUidList[index].name,
+                    uidList: uidList
+                });
+                getDatabyGroupSet(index+1, groupUidList, callback);
+            });
+        }
+
+        function formatNum2digit(num) {
+            return ("0" + num).slice(-2);
+        }
+        function calcLastSixMonths(yearId, monthId) {
+            strPeriod = "";
+            var result = [];
+
+            var d = new Date(yearId, monthId);
+            for (var i = 0; i < 6; i++) {
+                d.setMonth(d.getMonth() - 1);
+                result.push(d.getFullYear() + '' + formatNum2digit(d.getMonth() + 1));
+            }
+            for (var i = 0; i < result.length; i++) {
+                strPeriod += ";" + result[i];
+            }
+            console.log(strPeriod);
+        }
+
+    </script>
+    <script>
+        /*begin import function files*/
+        function generateApiChart1(orgUnitID, dataElementID, year) {
+            if (configDeploy == PRODUCTION) {
+                apiChart1 = "../api/analytics.json?dimension=dx:" + dataElementID + "&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&displayProperty=NAME";
+            }
+        }
+
+        function generateApiChart2(orgUnitID, dataElementID, year) {
+            if (configDeploy == PRODUCTION) {
+                apiChart2 = "../api/analytics.json?dimension=dx:" + dataElementID + "&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=Ff8x7tCAgRq:erJTmh496gJ&displayProperty=NAME&outputIdScheme=ID";
+            }
+        }
+
+        function generateApiChart3(orgUnitID, dataElementID, year) {
+            if (configDeploy == PRODUCTION) {
+                apiChart3 = "../api/analytics.json?dimension=dx:" + dataElementID + "&dimension=pe:" + strPeriod + "&filter=ou:" + orgUnitID + "&filter=Ff8x7tCAgRq:nYkU5JbrOqg&displayProperty=NAME&outputIdScheme=ID";
+            }
+        }
+
+        function autoGenerateChartHtml(numChartGroup) {
+            $('#chartBody').html('');
+            var count = 1;
+            var chartGroupId = [];
+            for (var i = 0; i < numChartGroup; i++) {
+                chartGroupId.push([count++, count++, count++]);
+            }
+            for (var i = 0; i < numChartGroup; i++) {
+                var chartBody = '<br><div class="container2"> ' +
+                        '<div class="container1"> ' +
+                        '<div class="col1"> ' +
+                        '<div id="chart' + chartGroupId[i][0] + '" style="min-width: 310px; height: 400px;" class="floating-box"></div>' +
+                        '</div>' +
+                        '<div class="col2">' +
+                        '<div id="chart' + chartGroupId[i][1] + '" style="min-width: 310px; height: 400px;" class="floating-box"></div>' +
+                        '</div> ' +
+                        '</div>' +
+                        '</div> ' +
+                        '<br><div class="footer">' +
+                        '<div id="chart' + chartGroupId[i][2] + '" style="min-width: 310px; height: 400px " class="floating-box"></div>' +
+                        '</div><br><hr>';
+                $('#chartBody').append(chartBody);
+            }
+            return chartGroupId;
+        }
+
+        //get the all selected dropdown ids and name
+        function validateDashboard() {
+
+            var selectLevel = LEVEL.ID;
+            //org unit Related
+            var orgUnitElement = document.getElementById('slOrgUnit');
+            var orgUnitUid = orgUnitElement.options[orgUnitElement.selectedIndex].value;
+
+            // group set related
+            var groupSetElement = document.getElementById('slGroupSet');
+            var groupSetUid = groupSetElement.options[groupSetElement.selectedIndex].value;
+
+            // group related
+            var groupElement = document.getElementById('slGroup');
+            var groupUid = groupElement.options[groupElement.selectedIndex].value;
+
+
+            // id related
+            var idElement = document.getElementById('slId');
+            var idUid = idElement.options[idElement.selectedIndex].value;
+
+            // month related
+            var monthElement = document.getElementById('slMonth');
+            var monthUid = monthElement.options[monthElement.selectedIndex].value;
+
+            // year related
+            var yearElement = document.getElementById('slYear');
+            var yearUid = yearElement.options[yearElement.selectedIndex].value;
+
+            if (orgUnitUid == "base" || orgUnitUid == undefined) {
+                alert("Select OrganisationUnit");
+                return;
+            }
+
+            else if (groupSetUid == "base" || groupSetUid == undefined) {
+                alert("Select Indicator Group Set");
+                return;
+            }
+//            else if (groupUid == "base" || groupUid == undefined) {
+//                alert(" Select Indicator Group");
+//                return;
+//            }
+
+            else if (monthUid == "Select Month" || monthUid == undefined) {
+                alert("Select Month");
+                return;
+            }
+
+            else if (yearUid == "Select Year" || yearUid == undefined) {
+                alert("Select Year");
+                return;
+            }
+
+            if (groupUid == "base" || groupUid == undefined) {
+                selectLevel = LEVEL.GROUPSET;
+            } else {
+                selectLevel = LEVEL.GROUP;
+            }
+
+            document.getElementById('divHead').innerHTML = groupSetName;
+
+            myFunction(selectLevel, chartDataGroup, organisationUnits, orgUnitUid, groupSetUid, groupUid, idUid, monthUid, yearUid);
+
+        }
+
+        function getNamebyId1(id, list) {
+            var res = '';
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id == id) {
+                    res = list[i].name;
+                    // res = list[i].shortName;
+                }
+            }
+            return res;
+        }
+
+
+        function getNamebyId(id, list) {
+            var res = '';
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].id == id) {
+                    // res = list[i].name;
+                    res = list[i].shortName;
+                }
+            }
+            return res;
+        }
+
+
+        function myFunction(selectLevel, chartDataGroup, organisationUnits, orgUnitUid, groupSetUid, groupUid, idUid, monthUid, yearUid) {
+
+            var tempOrgUnitText = getNamebyId(orgUnitUid, organisationUnits);
+            calcLastSixMonths(yearUid, monthUid);
+
+            if (selectLevel == LEVEL.GROUP) { //there is only one data element in data element group
+
+                if (idUid == undefined || idUid == "base") {
+                    var temp = "";
+                    for (var i = 0; i < uidList.length; i++) {
+                        temp += uidList[i].id;
+                        if (i < uidList.length - 1) temp += ";";
+                    }
+                    idUid = temp;
+                }
+                autoGenerateChartHtml(1);
+
+                generateApiChart1(orgUnitUid, idUid, yearUid);
+                generateApiChart2(orgUnitUid, idUid, yearUid);
+                generateApiChart3(orgUnitUid, idUid, yearUid);
+
+                var titleDe = getNamebyId1(groupUid, chartDataGroup);
+
+                createChart1({
+                    chartId: "chart1",
+                    title: titleDe,
+                    subtitle: tempOrgUnitText
+                }, orgUnitUid, monthUid, yearUid);
+                createChart2({
+                    chartId: "chart2",
+                    title: titleDe,
+                    subtitle: "PHC" + " " + tempOrgUnitText
+                }, orgUnitUid, monthUid, yearUid);
+                createChart3({
+                    chartId: "chart3",
+                    title: titleDe,
+                    subtitle: "SC" + " " + tempOrgUnitText
+                }, orgUnitUid, monthUid, yearUid);
+
+            } else {
+                getDatabyGroupSet(0, groupUidList, function () {
+
+                    var numChartGroup = getDatabyGroupSetDataCallback.length;
+                    var chartGroupId = autoGenerateChartHtml(numChartGroup);
+                    for (var i = 0; i < numChartGroup; i++) {
+
+                        var uidList = getDatabyGroupSetDataCallback[i].uidList;
+                        var groupName = getDatabyGroupSetDataCallback[i].groupName;
+                        var temp = "";
+                        for (var j = 0; j < uidList.length; j++) {
+                            temp += uidList[j].id;
+                            if (j < uidList.length - 1) temp += ";";
+                        }
+
+                        generateApiChart1(orgUnitUid, temp, yearUid);
+                        generateApiChart2(orgUnitUid, temp, yearUid);
+                        generateApiChart3(orgUnitUid, temp, yearUid);
+
+                        createChart1({
+                            chartId: "chart" + chartGroupId[i][0],
+                            title: groupName,
+                            subtitle: tempOrgUnitText
+                        }, orgUnitUid, monthUid, yearUid);
+                        createChart2({
+                            chartId: "chart" + chartGroupId[i][1],
+                            title: groupName,
+                            subtitle: "PHC" + " " + tempOrgUnitText
+                        }, orgUnitUid, monthUid, yearUid);
+                        createChart3({
+                            chartId: "chart" + chartGroupId[i][2],
+                            title: groupName,
+                            subtitle: "SC" + " " + tempOrgUnitText
+                        }, orgUnitUid, monthUid, yearUid);
+
+
+                    }
+                });
+            }
+        }
+
+        function createChart1(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            // var count = tempMonthUid;
+            var count = 6;
+            /*   $.getJSON(apiChart1, function (jsonRes) {
+             var json = standardlizeData(jsonRes);
+             var chartData = preparingDataforChart(json, count);*/
+
+            $.getJSON(apiChart1, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+
+                createBarCharts1(chartInfo.chartId, chartInfo.title, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart2(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            var count = 6;
+            // var count = tempMonthUid * 3;
+            /*$.getJSON(apiChart2, function (jsonRes) {
+             var json = standardlizeData(jsonRes);
+             var chartData = preparingDataforChart(json, count);*/
+            $.getJSON(apiChart2, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+                createLineCharts2(chartInfo.chartId, chartInfo.title, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+        function createChart3(chartInfo, tempOrgUnitUid, tempMonthUid, tempYearUid) {
+            //  var count = tempMonthUid;
+            var count = 6;
+            /* $.getJSON(apiChart3, function (jsonRes) {
+             var json = standardlizeData(jsonRes);
+             json = swapAlternativePe(json);
+             count = json.metaData.pe;
+             var chartData = preparingDataforChart(json, count);*/
+
+            $.getJSON(apiChart3, function (jsonRes) {
+                var json = standardlizeData(jsonRes, "dx");
+                var chartData = preparingDataforChart(json, count, "dx");
+
+                createLineCharts3(chartInfo.chartId, chartInfo.title, chartInfo.subtitle, chartData.xaxis, chartData.series);
+            });
+        }
+
+
+        function createBarCharts1(view, titleStr, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: titleStr,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: "22px"
+                    }
+                },
+
+                subtitle: {
+                    text: subtitleStr,
+                    style: {
+
+                        fontSize: "18px"
+                    }
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    //series: {
+                    //colorByPoint: true
+                    //  },
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        }
+                    }
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+        function createLineCharts2(view, titleStr, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: titleStr,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: "22px"
+                    }
+                },
+                subtitle: {
+                    text: subtitleStr,
+                    style: {
+
+                        fontSize: "18px"
+                    }
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    //  series: {
+                    //  lineColor: '#ff0000'
+                    // },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+        function createLineCharts3(view, titleStr, subtitleStr, xAxisCategoriesArr, dataSeriesArrO) {
+            $("#" + view).highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: titleStr,
+                    style: {
+                        fontWeight: 'bold',
+                        fontSize: "22px"
+                    }
+                },
+                subtitle: {
+                    text: subtitleStr,
+                    style: {
+
+                        fontSize: "18px"
+                    }
+                },
+                xAxis: {
+                    categories: xAxisCategoriesArr,
+                    crosshair: true
+                },
+                plotOptions: {
+                    // series: {
+                    //   lineColor: '#AA00FF'
+                    //   },
+                    line: {
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                fontSize: "14px"
+                            }
+                        },
+                        enableMouseTracking: false
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                series: dataSeriesArrO
+            });
+        }
+
+        function standardlizeData(jsonRes, secondKey) {
+            var json = jsonRes;
+            var datarows = json.rows;
+            var peArr = json.metaData.pe;
+            var peArrNames = json.metaData.names;
+            var facilityArr = json.metaData[secondKey];
+            var dataResult = [];
+
+            for (var i = 0; i < peArr.length; i++) {
+                var pe = peArr[i];
+                for (var j = 0; j < facilityArr.length; j++) {
+                    var fa = facilityArr[j];
+                    var search = false;
+                    for (var k = 0; k < datarows.length; k++) {
+                        if (datarows[k][0] == fa && datarows[k][1] == pe) {
+                            search = true;
+                            break;
+                        }
+                    }
+                    if (!search) {
+                        datarows.push([fa, pe, "0"]);
+                    }
+                }
+            }
+            json.rows = datarows;
+            json.metaData.pe = peArr;
+            json.metaData[secondKey] = facilityArr;
+            return json;
+        }
+
+        function sortDataRowsbyPeArr(json, secondKey) {
+            var datarows = json.rows;
+            var peArr = json.metaData.pe;
+            var facilityArr = json.metaData[secondKey];
+            var dataResult = [];
+            for (var i = 0; i < peArr.length; i++) {
+                var minPe = peArr[i];
+                for (var k = 0; k < facilityArr.length; k++) {
+                    var minF = facilityArr[k];
+                    for (var j = 0; j < datarows.length; j++) {
+                        if (datarows[j][0] == minF && datarows[j][1] == minPe) {
+                            dataResult.push(datarows[j]);
+                        }
+                    }
+                }
+            }
+            return dataResult;
+        }
+        //rearrange json to fit into charts
+        function preparingDataforChart(json, count, secondKey) {
+
+            var peArr = json.metaData.pe;
+            var facilityArr = json.metaData[secondKey];
+            var dataResult = sortDataRowsbyPeArr(json, secondKey);
+
+
+            var xAxisCategoriesArr = [];
+            for (var i = 0; i < peArr.length; i++) {
+                xAxisCategoriesArr.push(json.metaData.names[peArr[i]])
+                if (xAxisCategoriesArr.length >= count) break;
+            }
+            var dataSeriesArrO = [];
+
+            for (var i = 0; i < facilityArr.length; i++) {
+                var name = json.metaData.names[facilityArr[i]];
+                var data = [];
+                for (var j = 0; j < dataResult.length; j++) {
+                    if (dataResult[j][0] == facilityArr[i]) {
+                        data.push(Number(dataResult[j][2]));
+                        if (data.length >= count) break;
+                    }
+                }
+                var seriO = {
+                    name: name,
+                    data: data
+                }
+                dataSeriesArrO.push(seriO);
+            }
+
+            return {xaxis: xAxisCategoriesArr, series: dataSeriesArrO};
+        }
+
+        function swapAlternativePe(json) {
+            var peArr = [];
+            var mid = json.metaData.pe.length / 2;
+            for (var i = 0; i < mid; i++) {
+                peArr.push(json.metaData.pe[i], json.metaData.pe[i + mid]);
+            }
+            json.metaData.pe = peArr;
+            return json;
+        }
+
+        function sortWithFilterArr(filterArr, jsonData) {
+            var resFilter = {};
+            var resTemp = [];
+            var jsonDataElementArr = jsonData.indicators;
+            for (var i = 0; i < filterArr.length; i++) {
+                for (var j = 0; j < jsonDataElementArr.length; j++) {
+                    if (filterArr[i] == jsonDataElementArr[j].id) {
+                        resFilter[filterArr[i]] = 1;
+                        resTemp.push(jsonDataElementArr[j]);
+                        break;
+                    }
+                }
+            }
+            for (var i = 0; i < jsonDataElementArr.length; i++) {
+                if (!resFilter.hasOwnProperty(jsonDataElementArr[i].id)) {
+                    resTemp.push(jsonDataElementArr[i]);
+                }
+            }
+            jsonData.indicators = resTemp;
+            return jsonData;
+        }
+
+        /*end import function files*/
+    </script>
+</head>
+<body>
+
+<div id="printing">
+    <section class="clearfix">
+
+        <header id="header">
+
+            <a id="logo" target="_blank"
+               style="font-size: 22px; color:white ;margin-left:30%"><span
+                    id="headerText">SCALE PHC Monthly Indicator Group Dashboard</span></a></header>
+
+        <form class="demo">
+
+            <select id="slOrgUnit" style=" margin-left:10%">
+                <option selected value="base">Select OrgUnit</option>
+            </select>
+
+            <select id="slGroupSet">
+                <option selected value="base">Select Indicator Group Set</option>
+            </select>
+
+            <select id="slGroup">
+                <option selected value="base">Select Indicator Group</option>
+            </select>
+
+            <select id="slId">
+                <option selected value="base">Select Indicator</option>
+            </select>
+
+            <select id="slMonth" class="select2" style="width: 100px;margin-top: 3%;margin-left: 40%">
+                <option selected value="base"></option>
+            </select>
+
+            <select id="slYear" style="width: 100px;">
+                <option selected value="base"></option>
+            </select>
+
+        </form>
+    </section>
+</div>
+<button id="button" class="btn btn-primary" style="margin-left: 50%" onclick="validateDashboard()">Go</button>
+<div id="divHead" style="margin-left: 45%; font-weight: bold;font-size: 22px;text-decoration: underline;"></div>
+<div id="chartBody" style="margin-top: 3%"></div>
+
+<script>
+    $(document).ready(function () {
+        $(".hideInPrint").hide();
+
+    });
+</script>
+<script>
+    $(function () {
+        initial();
+    });
+</script>
+
+</body>
+</html>
